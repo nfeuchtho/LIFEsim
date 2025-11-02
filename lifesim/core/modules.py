@@ -3,6 +3,7 @@ import numpy as np
 from typing import Union
 
 from lifesim.core.core import Module
+from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
 
 
 class InstrumentModule(Module):
@@ -87,16 +88,20 @@ class PhotonNoiseStarModule(Module):
     """
     @abc.abstractmethod
     def noise(self,
-              index: Union[int, type(None)]):
+              index: Union[int, type(None)],
+              model: Union[ParametricModel, type(None)] = None):
         """
-        Calculates the photon shot noise contribution.
+        Simulates the amount of photon noise originating from the star of the observed system
+        leaking into the LIFE array measurement.
 
         Parameters
         ----------
-        index : Union[int, type(None)]
-            If an integer is given, the photon noise of the planet corresponding to the respective
-            interger row position in the catalog is given. If `None` is given, the photon noise is
-            calculated for the parameters found in `bus.data.single`.
+        index: Union[int, type(None)]
+            Specifies the planet for which to calculate the noise contribution. If an integer n is
+            given, the noise will be calculated for the n-th row in the `data.catalog`. If `None`
+            is given, the noise is caluculated for the parameters located in `data.single`.
+        model: Union[ParametricModel, type(None)]
+            Specifies a parametric model to use. If None is given, the default calculation method is taken instead.
         """
         pass
 

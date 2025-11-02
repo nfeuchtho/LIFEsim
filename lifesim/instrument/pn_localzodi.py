@@ -3,6 +3,7 @@ from typing import Union
 import numpy as np
 
 from lifesim.core.modules import PhotonNoiseStarModule
+from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
 from lifesim.util.radiation import black_body
 
 
@@ -24,10 +25,11 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
         super().__init__(name=name)
 
     def noise(self,
-              index: Union[int, type(None)]):
+              index: Union[int, type(None)],
+              model: Union[ParametricModel, type(None)] = None):
         """
-        Simulates the amount of photon noise originating from the localzodi leaking into the LIFE
-        array measurement.
+        Simulates the amount of photon noise originating from the star of the observed system
+        leaking into the LIFE array measurement.
 
         Parameters
         ----------
@@ -35,6 +37,9 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
             Specifies the planet for which to calculate the noise contribution. If an integer n is
             given, the noise will be calculated for the n-th row in the `data.catalog`. If `None`
             is given, the noise is caluculated for the parameters located in `data.single`.
+        model: Union[ParametricModel, type(None)]
+            Specifies a parametric model to use. If None is given,
+            the default calculation method is taken instead.
 
         Returns
         -------

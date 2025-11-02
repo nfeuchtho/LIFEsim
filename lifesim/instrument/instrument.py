@@ -1,11 +1,15 @@
 from warnings import warn
 
+import lifesim
+
 import numpy as np
 from tqdm import tqdm
 from spectres import spectres
 from PyQt5.QtGui import QGuiApplication
 
 from lifesim.core.modules import InstrumentModule
+from lifesim.parametric_models.contrast_constraints.objects.star import Star
+from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
 from lifesim.util.habitable import single_habitable_zone
 from lifesim.util.radiation import black_body
 
@@ -258,6 +262,40 @@ class Instrument(InstrumentModule):
         star_mask = np.zeros_like(self.data.catalog.nstar, dtype=bool)
         star_mask[temp] = True
 
+        # Init the parametric model if desired
+        parametric_model = None
+        if self.data.options.snr_decoupling['stellar_leakage_decoupling']:
+            life_instrument = lifesim.parametric_models.contrast_constraints.objects.instrument.Instrument(
+                self.data.options.array['wl_min'] * 1e-6,
+                self.data.options.array['wl_min'] * 1e-6,
+                self.data.options.array['bl_min'],
+                self.data.options.array['bl_max'],
+                12,
+                self.data.options.array['ratio'])
+
+            stars = []
+            found_stars = set()
+            for i, n in enumerate(tqdm(np.where(star_mask)[0])):
+                radius_s = self.data.catalog.radius_s.iloc[n]
+                temp_s = self.data.catalog.temp_s.iloc[n]
+                if (temp_s, radius_s) not in found_stars:
+                    stars.append(Star('n/a', temp_s, radius_s, life_instrument))
+                    found_stars.add((temp_s, radius_s))
+
+            stars.sort(key=lambda x: x.temperature)
+
+            container_size = len(stars)
+
+            wl_containers = (
+                np.linspace(life_instrument.min_wavelength, life_instrument.max_wavelength, container_size))
+            wl_widths = (np.ones(container_size) *
+                         (life_instrument.max_wavelength - life_instrument.min_wavelength) / container_size)
+
+            parametric_model = ParametricModel()
+            parametric_model.setup(stars,
+                                   np.linspace(2, 30, len(wl_containers)),
+                                   wl_containers, wl_widths)
+
         # iterate over all stars to calculate noise specific to stars
         for i, n in enumerate(tqdm(np.where(star_mask)[0])):
             # if i == 10:
@@ -276,7 +314,7 @@ class Instrument(InstrumentModule):
             # calculate the noise from the background sources specific to star
             noise_bg_list_star = self.run_socket(s_name='photon_noise_star',
                                                  method='noise',
-                                                 index=n)
+                                                 index=n, model=parametric_model)
 
             if type(noise_bg_list_star) == list:
                 noise_bg_star = np.zeros_like(noise_bg_list_star[0])

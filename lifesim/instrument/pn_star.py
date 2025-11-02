@@ -3,6 +3,7 @@ from typing import Union
 import numpy as np
 
 from lifesim.core.modules import PhotonNoiseStarModule, TransmissionModule
+from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
 from lifesim.util.radiation import black_body
 
 
@@ -25,8 +26,10 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
         self.add_socket(s_name='transmission_star',
                         s_type=TransmissionModule)
 
+
     def noise(self,
-              index: Union[int, type(None)]):
+              index: Union[int, type(None)],
+              model: Union[ParametricModel, type(None)] = None):
         """
         Simulates the amount of photon noise originating from the star of the observed system
         leaking into the LIFE array measurement.
@@ -37,6 +40,8 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
             Specifies the planet for which to calculate the noise contribution. If an integer n is
             given, the noise will be calculated for the n-th row in the `data.catalog`. If `None`
             is given, the noise is caluculated for the parameters located in `data.single`.
+        model: Union[ParametricModel, type(None)]
+            Specifies a parametric model to use. If None is given, the default calculation method is taken instead.
 
         Returns
         -------
@@ -79,6 +84,19 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
             distance_s = self.data.catalog.distance_s.iloc[index]
             temp_s = self.data.catalog.temp_s.iloc[index]
 
+        # Find unfiltered stellar black body radiation.
+        radiation = black_body(bins=self.data.inst['wl_bins'],
+                               width=self.data.inst['wl_bin_widths'],
+                               temp=temp_s,
+                               radius=radius_s,
+                               distance=distance_s,
+                               mode='star')
+
+        # Use the parametric model if available.
+        if model is not None:
+            return np.array([model.evaluate_at(temp_s, distance_s, wl) * radiation[i]
+                             for (i, wl) in enumerate(self.data.inst['wl_bins'])])
+
         # check if the specified map exists
         if map_selection not in ['tm1', 'tm2', 'tm3', 'tm4']:
             raise ValueError('Nonexistent transmission map')
@@ -105,12 +123,8 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
         star_px = np.where(r_square_map < (image_size / 2) ** 2, 1, 0)
 
         # get the stellar leakage
-        sl_leak = (star_px * tm_star).sum(axis=(-2, -1)) / star_px.sum(
-        ) * black_body(bins=self.data.inst['wl_bins'],
-                       width=self.data.inst['wl_bin_widths'],
-                       temp=temp_s,
-                       radius=radius_s,
-                       distance=distance_s,
-                       mode='star') * self.data.inst['telescope_area']
+        sl_leak = (star_px * tm_star).sum(axis=(-2, -1)) / star_px.sum() * radiation * self.data.inst['telescope_area']
+
+        print(sl_leak / radiation)
 
         return sl_leak

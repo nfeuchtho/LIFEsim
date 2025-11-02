@@ -44,6 +44,11 @@ class Options(object):
               ``'darwinsim'``
             - ``'habitable'`` : Model used for calculating the habitable zone, possible options are
               ``'MS'`` and ``'POST_MS'``
+    snr_decoupling : dict
+        Options concerning the decoupling of the signal-to-noise ratio calculations from the instrument.
+        They are connected to parametric models instead of instrument simulation to enable forward models and are
+            - ``'stellar_leakage_decoupling'`` : If true, the stellar leakage is decoupled from the instrument.
+
     optimization : dict
         Options concerning the methods used to optimally distribute the observing time.
             - ``'N_pf'`` : Number of sampling locations per orbit.
@@ -82,6 +87,8 @@ class Options(object):
                        'habitable': '',
                        'fov_taper': ''}
 
+        self.snr_decoupling = {'stellar_leakage_decoupling': None}
+
         self.optimization = {'N_pf': 0.,
                              'snr_target': 0.,
                              'experiments': None,
@@ -117,6 +124,8 @@ class Options(object):
         self.models['localzodi'] = 'darwinsim'
         self.models['habitable'] = 'MS'
         self.models['fov_taper'] = 'gaussian'
+
+        self.snr_decoupling['stellar_leakage_decoupling'] = False
 
         self.optimization['N_pf'] = 25
         self.optimization['snr_target'] = 7
@@ -182,7 +191,7 @@ class Options(object):
             option_set = False
 
             # check if the key exists in any of the options dictionaries
-            for sub_dict in [self.array, self.other, self.models, self.optimization]:
+            for sub_dict in [self.array, self.other, self.models, self.snr_decoupling, self.optimization]:
                 if key in sub_dict:
 
                     # set the option
