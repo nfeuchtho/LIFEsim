@@ -8,8 +8,8 @@ from spectres import spectres
 from PyQt5.QtGui import QGuiApplication
 
 from lifesim.core.modules import InstrumentModule
-from lifesim.parametric_models.contrast_constraints.objects.star import Star
-from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
+from lifesim.parametric_models.stellar_contrast.objects.star import Star
+from lifesim.parametric_models.stellar_contrast.utils.parametric_model import ParametricModel
 from lifesim.util.habitable import single_habitable_zone
 from lifesim.util.radiation import black_body
 
@@ -267,7 +267,7 @@ class Instrument(InstrumentModule):
         if self.data.options.snr_decoupling['stellar_leakage_decoupling']:
             life_instrument = lifesim.parametric_models.contrast_constraints.objects.instrument.Instrument(
                 self.data.options.array['wl_min'] * 1e-6,
-                self.data.options.array['wl_min'] * 1e-6,
+                self.data.options.array['wl_max'] * 1e-6,
                 self.data.options.array['bl_min'],
                 self.data.options.array['bl_max'],
                 12,

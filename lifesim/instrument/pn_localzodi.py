@@ -3,7 +3,7 @@ from typing import Union
 import numpy as np
 
 from lifesim.core.modules import PhotonNoiseStarModule
-from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
+from lifesim.parametric_models.stellar_contrast.utils.parametric_model import ParametricModel
 from lifesim.util.radiation import black_body
 
 

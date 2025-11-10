@@ -3,7 +3,7 @@ import numpy as np
 from typing import Union
 
 from lifesim.core.core import Module
-from lifesim.parametric_models.contrast_constraints.utils.parametric_model import ParametricModel
+from lifesim.parametric_models.stellar_contrast.utils.parametric_model import ParametricModel
 
 
 class InstrumentModule(Module):
