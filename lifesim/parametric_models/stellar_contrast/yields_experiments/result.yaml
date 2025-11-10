@@ -1,0 +1,69 @@
+array:
+  baseline: 20.0
+  bl_max: 100.0
+  bl_min: 10.0
+  diameter: 2.0
+  quantum_eff: 0.7
+  ratio: 6.0
+  spec_res: 20.0
+  t_efficiency: 0.8
+  t_slew: 36000.0
+  throughput: 0.05
+  wl_max: 18.5
+  wl_min: 4.0
+connections:
+- - inst
+  - transm
+- - opt
+  - transm
+- - opt
+  - inst
+- - opt
+  - ahgs
+models:
+  fov_taper: gaussian
+  habitable: MS
+  localzodi: darwinsim
+modules:
+  ahgs: <class 'lifesim.optimize.ahgs.AhgsModule'>
+  inst: <class 'lifesim.instrument.instrument.Instrument'>
+  opt: <class 'lifesim.optimize.optimizer.Optimizer'>
+  transm: <class 'lifesim.instrument.transmission.TransmissionMap'>
+optimization:
+  N_pf: 25
+  experiments:
+    Experiment_1:
+      in_HZ: true
+      radius_p_max: 1.5
+      radius_p_min: 0.5
+      sample_size: 30
+      temp_s_max: 7310.0
+      temp_s_min: 4370.0
+    Experiment_2:
+      in_HZ: true
+      radius_p_max: 1.5
+      radius_p_min: 0.5
+      sample_size: 15
+      temp_s_max: 4370.0
+      temp_s_min: 3320.0
+  habitable: true
+  limit:
+    A: .inf
+    F: .inf
+    G: .inf
+    K: .inf
+    M: .inf
+  limit_mode: experiments
+  snr_target: 7
+  t_search: 78840000.0
+other:
+  fov_threshold: 0.01
+  image_size: 256
+  n_plugins: 5
+  output_filename: result
+  output_path: ''
+  wl_optimal: 15
+version:
+  git_branch: fov_taper
+  git_sha: 8a71bf47ea34200b4bc64678df69aa450d42a3b8
+  version: 0.2.32

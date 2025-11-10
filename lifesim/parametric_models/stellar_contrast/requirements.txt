@@ -1,0 +1,8 @@
+pandas~=2.3.2
+pyyaml~=6.0.2
+lifesim~=0.2.32
+astroconst~=0.0.13
+scipy~=1.13.1
+numpy~=1.26.4
+matplotlib~=3.9.4
+tqdm~=4.67.1

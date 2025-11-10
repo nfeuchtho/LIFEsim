@@ -1,0 +1,21 @@
+####################################
+###### INSTRUMENT PARAMETERS #######
+####################################
+
+# Minimum wavelength imaged during the mission in microns
+min_wavelength: 4.0
+
+# Maximum wavelength imaged during the mission in microns
+max_wavelength: 18.0
+
+# Baseline length in meters
+baseline: 12.0
+
+# Minimum baseline length in meters
+min_baseline: 10.0
+
+# Maximum baseline length in meters
+max_baseline: 100.0
+
+# Nulling baseline ratio
+baseline_ratio: 6.0
