@@ -84,6 +84,11 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
             distance_s = self.data.catalog.distance_s.iloc[index]
             temp_s = self.data.catalog.temp_s.iloc[index]
 
+
+        # check if the specified map exists
+        if map_selection not in ['tm1', 'tm2', 'tm3', 'tm4']:
+            raise ValueError('Nonexistent transmission map')
+
         # Find unfiltered stellar black body radiation.
         radiation = black_body(bins=self.data.inst['wl_bins'],
                                width=self.data.inst['wl_bin_widths'],
@@ -92,14 +97,10 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
                                distance=distance_s,
                                mode='star')
 
-        # Use the parametric model if available.
-        if model is not None:
-            return np.array([model.evaluate_at(temp_s, distance_s, wl) * radiation[i]
-                             for (i, wl) in enumerate(self.data.inst['wl_bins'])])
-
-        # check if the specified map exists
-        if map_selection not in ['tm1', 'tm2', 'tm3', 'tm4']:
-            raise ValueError('Nonexistent transmission map')
+        x_map = np.tile(np.array(range(0, image_size)), (image_size, 1))
+        y_map = x_map.T
+        r_square_map = (x_map - (image_size - 1) / 2) ** 2 + (y_map - (image_size - 1) / 2) ** 2
+        star_px = np.where(r_square_map < (image_size / 2) ** 2, 1, 0)
 
         # convert units
         Rs_au = 0.00465047 * radius_s
@@ -107,24 +108,22 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
         Rs_mas = float(Rs_as)
         Rs_rad = Rs_mas / (3600. * 180.) * np.pi
 
-        # TODO Instead of recalculating the transmission map for the stellar radius here, one could try
-        #   to reuse the inner part of the transmission map already calculated in the get_snr function
-        #   of the instrument class
-        # TODO: why are we not reusing the maps calculated in the instrument class
-        tm_star = self.run_socket(method='transmission_map',
-                                  s_name='transmission_star',
-                                  map_selection=[map_selection],
-                                  image_angle=Rs_rad,
-                                  image_size=image_size)[int(map_selection[-1]) - 1]
+        if model is None:
+            # TODO Instead of recalculating the transmission map for the stellar radius here, one could try
+            #   to reuse the inner part of the transmission map already calculated in the get_snr function
+            #   of the instrument class
+            # TODO: why are we not reusing the maps calculated in the instrument class
+            tm_star = self.run_socket(method='transmission_map',
+                                      s_name='transmission_star',
+                                      map_selection=[map_selection],
+                                      image_angle=Rs_rad,
+                                      image_size=image_size)[int(map_selection[-1]) - 1]
+            sl_leak = ((star_px * tm_star).sum(axis=(-2, -1)) / star_px.sum() * radiation
+                       * self.data.inst['telescope_area'])
 
-        x_map = np.tile(np.array(range(0, image_size)), (image_size, 1))
-        y_map = x_map.T
-        r_square_map = (x_map - (image_size - 1) / 2) ** 2 + (y_map - (image_size - 1) / 2) ** 2
-        star_px = np.where(r_square_map < (image_size / 2) ** 2, 1, 0)
-
-        # get the stellar leakage
-        sl_leak = (star_px * tm_star).sum(axis=(-2, -1)) / star_px.sum() * radiation * self.data.inst['telescope_area']
-
-        print(sl_leak / radiation)
+        else:
+            # The transmission map now comes from the model instead
+            tm_star = np.array([model.evaluate_at(temp_s, distance_s, wl) for wl in self.data.inst['wl_bins']])
+            sl_leak = tm_star * radiation * self.data.inst['telescope_area']
 
         return sl_leak

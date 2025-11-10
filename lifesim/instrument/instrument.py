@@ -267,7 +267,7 @@ class Instrument(InstrumentModule):
         if self.data.options.snr_decoupling['stellar_leakage_decoupling']:
             life_instrument = lifesim.parametric_models.contrast_constraints.objects.instrument.Instrument(
                 self.data.options.array['wl_min'] * 1e-6,
-                self.data.options.array['wl_min'] * 1e-6,
+                self.data.options.array['wl_max'] * 1e-6,
                 self.data.options.array['bl_min'],
                 self.data.options.array['bl_max'],
                 12,
