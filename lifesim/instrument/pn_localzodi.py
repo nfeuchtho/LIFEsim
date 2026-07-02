@@ -73,7 +73,6 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
         ValueError
             If the specified localzodi model does not exits.
         """
-
         # TODO Implement longitude dependence of localzodi
         # TODO Find model after which this is calculated and reference
 
@@ -116,6 +115,7 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
             temp_sun = 5777
             a = 0.22
 
+
             b_tot = black_body(mode='wavelength',
                                bins=self.data.inst['wl_bins'],
                                width=self.data.inst['wl_bin_widths'],
@@ -125,6 +125,7 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
                                  width=self.data.inst['wl_bin_widths'],
                                  temp=temp_sun) \
                     * (radius_sun_au / 1.5) ** 2
+
             lz_flux_sr = tau * b_tot * np.sqrt(
                 np.pi / np.arccos(np.cos(long) * np.cos(lat)) /
                 (np.sin(lat) ** 2

@@ -51,9 +51,12 @@ class ElectronNoiseDarkCurrent(ElectronNoiseDetectorModule):
 
         # read data on detector
         dc_per_pix = self.data.options.array['dc_per_pix']
-        total_pixels = self.data.options.array['pix_per_wl'] * len(self.data.inst['wl_bins']) # minimum number of detector pixels (nyquist rate)
+        # each spectral bin is imaged onto its own pix_per_wl detector pixels
+        # (Nyquist rate); a bin only sees the dark current of *its* pixels, not
+        # of the whole detector.
+        pix_per_wl = self.data.options.array['pix_per_wl']
 
-        # calculate total dark current noise
-        dc_leak = np.full(self.data.inst['wl_bins'].shape, dc_per_pix * total_pixels)
+        # dark current leakage per wavelength bin [electron s-1]
+        dc_leak = np.full(self.data.inst['wl_bins'].shape, dc_per_pix * pix_per_wl)
 
         return dc_leak

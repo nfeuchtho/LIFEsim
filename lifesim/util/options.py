@@ -41,21 +41,61 @@ class Options(object):
             - ``'image_size'`` : Number of pixels (in one axis) which will be simulated.
             - ``'wl_optimal'`` : The wavelength to which the baseline is optimized in [micron].
             - ``'n_plugins'`` : Number of sockets the instrument class will feature.
+            - ``'fov_threshold'`` : Fraction of the field of view (relative to the habitable-zone
+              separation) below which a planet is considered too close to the star to be
+              resolved.
+            - ``'n_cpu'`` : Number of CPU cores used by
+              :meth:`lifesim.ams.core.ams.AgnosticMissionSimulator.run` to parallelize the SNR
+              computation across stars. ``1`` disables multiprocessing.
+            - ``'output_path'`` : Directory the catalog and configuration are written to by
+              :meth:`lifesim.core.core.Bus.save`.
+            - ``'output_filename'`` : Base filename (without extension) used when saving the
+              catalog and configuration.
     models : dict
         Options concerning different models used in the simulation. They are
             - ``'localzodi'`` : Model for the localzodi, possible options are ``'glasse'`` and
               ``'darwinsim'``
             - ``'habitable'`` : Model used for calculating the habitable zone, possible options are
               ``'MS'`` and ``'POST_MS'``
+            - ``'fov_taper'`` : Model for the field-of-view taper applied to the transmission map,
+              possible options are ``'gaussian'`` (Gaussian taper, see Birbacher et al.) and
+              ``'none'`` (hard cutoff at the edge of the simulated image).
     optimization : dict
-        Options concerning the methods used to optimally distribute the observing time.
+        Options concerning the methods used to optimally distribute the observing time. Several
+        of these are primarily used by the
+        :class:`~lifesim.ams.core.ams.AgnosticMissionSimulator` (AMS).
             - ``'N_pf'`` : Number of sampling locations per orbit.
-            - ``'snr_target'`` : Planets with a larger signal-to-noise ratio than `'snr_target'`
-              are counted as detections.
-            - ``'limit'`` : Limits the number of wanted detections for the different stellar host
-              star types.
+            - ``'snr_target'`` : Planets with a larger signal-to-noise ratio than ``'snr_target'``
+              are counted as detections during the search phase.
+            - ``'snr_char'`` : Signal-to-noise ratio (evaluated at the planet's maximum angular
+              separation) required for a successful spectral characterization of a target.
+            - ``'n_orbits'`` : Number of orbital positions sampled during the orbit-determination
+              follow-up of a detected planet. The AMS spends time on ``n_orbits - 1`` additional
+              visits (the detection itself counts as the first visit).
+            - ``'characterization'`` : If ``True``, the AMS additionally accounts for the time
+              needed to spectrally characterize follow-up targets and requires the catalog to
+              contain a ``'maxsep_snr_1h'`` column.
+            - ``'limit'`` : Dictionary mapping stellar host-star types (``'A'``, ``'F'``, ``'G'``,
+              ``'K'``, ``'M'``) to the maximum number of wanted detections of that type. Only used
+              when ``'limit_mode'`` is ``'legacy'``.
+            - ``'limit_mode'`` : Selects how target priorities are set up. ``'legacy'`` derives a
+              single experiment per stellar type from ``'limit'`` and ``'habitable'``.
+              ``'experiments'`` uses the user-defined ``'experiments'`` dictionary directly.
+            - ``'experiments'`` : Dictionary defining named target samples ("experiments") used by
+              the AMS to pre-select interesting targets and by the AHGS optimizer to allocate
+              follow-up time. Each entry maps an experiment name to a dictionary with the keys
+              ``'radius_p_min'``/``'radius_p_max'`` (planet radius range in Earth radii),
+              ``'temp_s_min'``/``'temp_s_max'`` (host-star effective temperature range in K),
+              ``'in_HZ'`` (whether the planet must lie in the habitable zone) and
+              ``'sample_size'`` (maximum number of follow-up targets for this experiment).
             - ``'habitable'`` : If true, the integration time is optimized towards planets residing
               in the habitable zone.
+            - ``'opt_limit'`` : Criterion that ends the AHGS time-allocation loop. ``'time'`` stops
+              once the available search time (``'t_search'`` * ``array['t_efficiency']``) is
+              exhausted; ``'experiments'`` stops once every experiment's ``'sample_size'`` has
+              been reached.
+            - ``'opt_limit_factor'`` : Additional scaling factor applied when ``'opt_limit'`` is
+              ``'time'``.
             - ``'t_search'`` : Duration of the search phase in [s].
     """
     def __init__(self):
@@ -174,13 +214,13 @@ class Options(object):
                                                              'temp_s_min': 4370.,
                                                              'temp_s_max': 7310.,
                                                              'in_HZ': True,
-                                                             'sample_size': 30},
+                                                             'sample_size': 50},
                                             'Experiment_2': {'radius_p_min': 0.5,
                                                                 'radius_p_max': 1.5,
                                                                 'temp_s_min': 3320.,
                                                                 'temp_s_max': 4370.,
                                                                 'in_HZ': True,
-                                                                'sample_size': 15},
+                                                                'sample_size': 25},
         }
         self.optimization['t_search'] = 2.5 * 365. * 24. * 60. * 60.
 

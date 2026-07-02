@@ -18,5 +18,5 @@ from lifesim.optimize.ahgs import AhgsModule
 
 from lifesim.gui.spectrum_gui import Gui
 
-from lifesim.analysis.yield_wrapper import ScienceYield
-from lifesim.analysis.etc import etc, SourceConfig
+#from lifesim.analysis.yield_wrapper import ScienceYield
+#from lifesim.analysis.etc import etc, SourceConfig

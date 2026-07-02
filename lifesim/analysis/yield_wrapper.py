@@ -15,7 +15,9 @@ import pandas as pd
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
+working_directory = os.getcwd()
 import lifesim
+os.chdir(working_directory)
 
 class ScienceYield:
     def __init__(self,
@@ -102,7 +104,7 @@ class ScienceYield:
         transm = lifesim.TransmissionMap(name='transm')
         bus.add_module(transm)
 
-        exo = lifesim.PhotonNoiseExozodi(name='exo')
+        exo = lifesim.PhotonNoiseExozodi(name='exo', instrument=instrument)
         bus.add_module(exo)
         local = lifesim.PhotonNoiseLocalzodi(name='local')
         bus.add_module(local)
@@ -140,6 +142,8 @@ class ScienceYield:
             
             bus.data.catalog = bus.data.catalog[bus.data.catalog.is_interesting]
             bus.data.catalog['angsep'] = bus.data.catalog['maxangsep']
+
+        exo.load_interpolator('exozodi_leakage.txt')
 
         instrument.get_snr()
         bus.save()

@@ -36,6 +36,7 @@ For more information, please visit the |LIFE Website|.
 
    core
    instrument
+   ams
    util
 
 .. |LIFE Website| raw:: html

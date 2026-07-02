@@ -24,6 +24,7 @@ class TransmissionMap(TransmissionModule):
                          direct_mode: bool = False,
                          d_alpha: np.ndarray = None,
                          d_beta: np.ndarray = None,
+                         hfov: np.ndarray = None,
                          image_angle: np.ndarray = None,
                          image_size: int = None,
                          fov_taper: Union[str, None] = None):
@@ -45,6 +46,8 @@ class TransmissionMap(TransmissionModule):
         d_beta: np.ndarray
             The y-positions of the points to be evaluated measured from the central viewing axis in
             [rad].
+        hfov : np.ndarray
+            Contains the field of view of the instrument. If no value is given, `data.inst['hfov']` is used.
         image_angle : np.ndarray
             Contains the maximum image angle that should be simulated in [rad] for each of the spectral
             bins. If no value is given, `data.inst['image_angle']` is used.
@@ -83,24 +86,25 @@ class TransmissionMap(TransmissionModule):
             are 'gaussian' and 'none'.
         """
 
-        hfov = self.data.inst['hfov']
+        if hfov is None:
+            hfov = self.data.inst['hfov']
         hfov = np.array([hfov])  # wavelength in m
         if hfov.shape[-1] > 1:
             hfov = np.reshape(hfov, (hfov.shape[-1], 1, 1))
 
         if image_angle is None:
             image_angle = self.data.inst['image_angle']
-            image_angle = np.array([image_angle])  # wavelength in m
-            if image_angle.shape[-1] > 1:
-                image_angle = np.reshape(image_angle, (image_angle.shape[-1], 1, 1))
+        image_angle = np.array([image_angle])  # wavelength in m
+        if image_angle.shape[-1] > 1:
+            image_angle = np.reshape(image_angle, (image_angle.shape[-1], 1, 1))
         if image_size is None:
             image_size = self.data.options.other['image_size']
+
 
         # reshape the wl_bins and hfov arrays for calculation (to (n, 1, 1))
         wl_bins = np.array([self.data.inst['wl_bins']])  # wavelength in m
         if wl_bins.shape[-1] > 1:
             wl_bins = np.reshape(wl_bins, (wl_bins.shape[-1], 1, 1))
-
         if direct_mode:
             alpha = d_alpha
             beta = d_beta
@@ -207,7 +211,6 @@ class TransmissionMap(TransmissionModule):
             Ratio between the nulling and the imaging baseline. E.g. if the imaging baseline is
             twice as long as the nulling baseline, the ratio will be 2.
         """
-
         if index is None:
             angsep = self.data.single['angsep']
         else:
@@ -218,6 +221,7 @@ class TransmissionMap(TransmissionModule):
         # integrate over angles to get transmission efficiency
         transm_eff = np.sqrt((tc_chop ** 2).mean(axis=(-2, -1)))
         transm_noise = np.sqrt((tc_tm4 ** 2).mean(axis=(-2, -1)))
+
         return transm_eff, transm_noise
 
     def transmission_curve(self,

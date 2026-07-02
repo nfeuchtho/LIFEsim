@@ -75,11 +75,9 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
         if index is None:
             l_sun = self.data.single['l_sun']
             distance_s = self.data.single['distance_s']
-            z = self.data.single['z']
         else:
             l_sun = self.data.catalog.l_sun.iloc[index]
             distance_s = self.data.catalog.distance_s.iloc[index]
-            z = self.data.catalog.z.iloc[index]
 
         # calculate the parameters required by Kennedy2015
         alpha = 0.34
@@ -110,7 +108,7 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
 
         # calculate the Sigma (Eq. 3) in Kennedy2015 and set everything inside the inner radius to 0
         sigma = np.where(r_cond,
-                         sigma_zero * z *
+                         sigma_zero *
                          (r_au / r_0) ** (-alpha), 0)
 
         wl_bins = np.array([self.data.inst['wl_bins']])
@@ -136,6 +134,7 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
         else:
             raise ValueError('Nonexistent fov taper model')
         # add the transmission map
+
         ez_leak = (f_nu_disk * self.data.inst['t_map'] * ap).sum(axis=(-2, -1))
 
         return ez_leak
