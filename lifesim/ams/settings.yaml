@@ -1,0 +1,49 @@
+array:
+  baseline: 20.0
+  bl_max: 100.0
+  bl_min: 10.0
+  diameter: 4.0
+  quantum_eff: 0.6
+  ratio: 6.0
+  spec_res: 10.0
+  t_efficiency: 0.8
+  t_slew: 36000.0
+  throughput: 0.15
+  wl_max: 18.5
+  wl_min: 4.0
+models:
+  fov_taper: gaussian
+  localzodi: darwinsim
+optimization:
+  N_pf: 25
+  characterization: True
+  experiments:
+    Experiment_1:
+      in_HZ: true
+      radius_p_max: 1.5
+      radius_p_min: 0.5
+      sample_size: 50
+      temp_s_max: 7310.0
+      temp_s_min: 4370.0
+  habitable: true
+  limit:
+    A: .inf
+    F: .inf
+    G: .inf
+    K: .inf
+    M: .inf
+  limit_mode: experiments
+  opt_limit: experiments
+  opt_limit_factor: 0.9
+  snr_target: 7
+  snr_char: 44.1
+  n_orbits: 5
+  t_search: 78840000.0
+other:
+  fov_threshold: 0.01
+  image_size: 100
+  n_cpu: 8
+  n_plugins: 5
+  output_filename: none
+  output_path: none
+  wl_optimal: 15
