@@ -34,6 +34,19 @@ the cost of halving efficiency exceeds the benefit of the deeper null by three t
 five times. The practical reading is the opposite of what the raw order-four
 column suggests.
 
+**The local-zodiacal correction turns out to matter more than its size suggests.**
+The factor is exactly 4/pi: the inherited tapered branch took the mean of the
+transmission over the square evaluation grid and multiplied it by the circular
+solid angle, and since a mean and an area must refer to the same domain, the
+transmission profile cancels entirely. That makes the pre-correction path exactly
+reproducible, so I could measure what the defect was worth. It shortens the
+zero-budget mission time by 0.5 to 0.8 yr, but it changes the tolerated noise
+allowance by factors of 1.5 to 11 — an order of magnitude for Hab2Min at null
+order two. The reason is that the allowance is defined where the completion curve
+is steep, so a modest background error is amplified in the derived requirement.
+The practical implication is in Section 6.3: a background correction should be
+treated as invalidating a requirement derived this way, not perturbing it.
+
 **Other substantive changes.**
 
 - A "Relation to Prior Work" subsection now states what is inherited and what is
@@ -56,8 +69,6 @@ column suggests.
 
 **Still to come before submission.**
 
-- Propagating the local-zodiacal correction into a published yield number, rather
-  than only reporting its effect on SNR.
 - A fidelity assessment for the aggregate-N_I reduction itself, which is
   currently argued rather than measured.
 - Repeating the penalized search at targets beyond 7.65 and 10.79 yr, to see
@@ -71,9 +82,10 @@ column suggests.
 2. Is the mission-time reading correct, that the returned quantity is integration
    plus slew with the observing efficiency inert? Everything downstream depends
    on it.
-3. Do you want the local-zodiacal correction traced through to a published yield
-   number? It affects results computed through the default tapered path, and I
-   have not attempted to quantify that beyond the SNR shift.
+3. Given the amplification above, is it worth checking whether any published LIFE
+   requirement was derived through the default tapered local-zodiacal path? I can
+   measure the effect inside my own configuration but not in the collaboration's,
+   since my stellar scaffold and operating point differ from LIFE VI's.
 
 Best regards,
 Nicolas

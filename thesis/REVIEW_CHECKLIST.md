@@ -170,10 +170,20 @@ waits for the post-diff fortnight.
       thesis as Section 5.7. The penalized configuration reaches no target at
       all, which is a stronger result than the intended separation of null depth
       from throughput and is now a headline finding rather than a control.
-- [ ] C2. **Local-zodi impact on published LIFE yields.** Extend the 10.9 % median
-      SNR shift into yield deltas for the published configuration. **Strongest
-      remaining novelty lever** — it turns a housekeeping footnote into a
-      contribution to the collaboration.
+- [x] C2. **Local-zodi impact.** DONE, in the tractable form. A published-yield
+      delta is not reachable: the stellar scaffold here is 4505 stars to 50 pc
+      against LIFE VI's 358 within 20 pc, the instrument-noise modules are absent,
+      and the operating point differs, so there is no published yield number to
+      perturb. Measured instead within this study, which is the quantity a reader
+      can act on: the defect shortens the zero-budget mission time by 0.50-0.84 yr
+      but changes the tolerated flat allowance by factors of 1.5 to 11. Reported
+      in Section 4.2 with Table 4.2, generalized in Section 6.3, and stated in the
+      abstract. The pi/4 factor is exact, so the pre-correction path is reproduced
+      identically rather than approximated.
+- [ ] C2b. **Optional follow-up:** the amplification result suggests re-examining
+      whether any published LIFE requirement was derived through the tapered
+      local-zodiacal path. Not attempted; would need the collaboration's own
+      configurations rather than this scaffold.
 - [ ] C3. **SQ3 aggregate-`N_I` fidelity assessment.** Split `N_I` into components,
       show the aggregate reproduces the split within a stated tolerance. Converts
       the one open research question into a result.
