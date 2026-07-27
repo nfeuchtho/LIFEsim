@@ -187,6 +187,72 @@ def run_sweep(catalogs, null_orders, throughputs):
     print(f'\nSweep results: {SWEEP_RESULTS}', flush=True)
 
 
+DEFECT_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
+                              'localzodi_defect_impact.tsv')
+DEFECT_COLUMNS = ('timestamp catalog null_order config localzodi_scale '
+                  'mtime_zero_budget_yr mtime_target_yr flat_endpoint_ph_s_um '
+                  'wall_s').split()
+
+# The pre-correction local-zodiacal path divided a circular pi*R^2 solid angle by
+# the area 4R^2 of its enclosing square, suppressing the uniform foreground by
+# pi/4. Multiplying the corrected term by pi/4 restores that behaviour exactly,
+# so the two configurations differ only in the defect.
+PI_OVER_4 = np.pi / 4.0
+DEFECT_CONFIGS = {'corrected': 1.0, 'pre_correction': PI_OVER_4}
+
+# primary mission-time target per catalog, as reported in the thesis
+PRIMARY_TARGET = {'hi': 5.5, 'lo': 7.5}
+
+
+def run_defect_impact(catalogs, null_orders, upper_start):
+    """What the inherited local-zodiacal normalization defect was worth.
+
+    Reports, for each catalog and null order, the mission time required with no
+    added budget and the largest tolerated flat allowance, computed once with the
+    corrected local-zodiacal normalization and once with the pre-correction one.
+    The difference converts the known median SNR shift into the quantities the
+    thesis actually reports.
+    """
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        widths = bus.data.inst['wl_bin_widths'] * 1e6
+        target = PRIMARY_TARGET[catalog]
+
+        for order in null_orders:
+            for config, scale in DEFECT_CONFIGS.items():
+                ams = AgnosticMissionSimulator(
+                    order, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
+                    verbose=False)
+                if scale != 1.0:
+                    ams.get_localzodi_budget().update_factors(
+                        multiplicative_factor=lambda args, s=scale: s)
+
+                t0 = time.time()
+                mtime_zero = ams.run(instrument, opt)
+
+                tse = TradeSpaceExplorer(ams, opt, instrument)
+                endpoint = tse.locate_mission_cutoff(
+                    target, upper_start=upper_start,
+                    setter_func=make_setter(bus, ams, 'No', widths),
+                    plot_data=None)
+                wall = round(time.time() - t0, 1)
+
+                print(f'>> hab2{catalog} | order {order} | {config}: '
+                      f'zero-budget {mtime_zero:.4f} yr | flat endpoint '
+                      f'{endpoint} ph/s/um at {target} yr ({wall} s)', flush=True)
+
+                os.makedirs(os.path.dirname(DEFECT_RESULTS), exist_ok=True)
+                new = not os.path.exists(DEFECT_RESULTS)
+                with open(DEFECT_RESULTS, 'a', encoding='utf8') as fh:
+                    if new:
+                        fh.write('\t'.join(DEFECT_COLUMNS) + '\n')
+                    fh.write('\t'.join(str(x) for x in [
+                        datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                        f'hab2{catalog}', order, config, round(scale, 6),
+                        round(mtime_zero, 6), target, endpoint, wall]) + '\n')
+    print(f'\nDefect-impact results: {DEFECT_RESULTS}', flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -199,6 +265,9 @@ def main():
     ap.add_argument('--sweep', action='store_true',
                     help='Run the zero-budget throughput sensitivity sweep '
                          'instead of the endpoint-search ablation.')
+    ap.add_argument('--defect-impact', action='store_true',
+                    help='Quantify the inherited local-zodiacal normalization '
+                         'defect by rerunning with and without it.')
     args = ap.parse_args()
 
     catalogs = args.catalog or ['hi', 'lo']
@@ -206,6 +275,10 @@ def main():
 
     if args.sweep:
         run_sweep(catalogs, [2, 4], SWEEP_THROUGHPUTS)
+        return
+
+    if args.defect_impact:
+        run_defect_impact(catalogs, [2, 4], args.upper_start)
         return
 
     for catalog in catalogs:

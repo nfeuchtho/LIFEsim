@@ -185,7 +185,7 @@
 \newpage
 
 \begin{abstract}
-    The Large Interferometer For Exoplanets (LIFE) aims to detect and characterize nearby terrestrial exoplanets in the mid-infrared. Its scientific return depends on how much additional instrumental random noise can be tolerated without making the required observing program too long. This thesis develops an Agnostic Mission Simulator (AMS) and a trade-space explorer that convert a wavelength-dependent aggregate random-noise allowance into a 90th-percentile mission time. The source calculation was reformulated analytically for circularly symmetric astrophysical backgrounds, eliminating the former spatial pixel grid, correcting the local-zodiacal normalization by about 27\%, and permitting accurate wavelength-bin quadrature. The AMS reproduces the shared LIFEsim source-model SNRs to floating-point precision.
+    The Large Interferometer For Exoplanets (LIFE) aims to detect and characterize nearby terrestrial exoplanets in the mid-infrared. Its scientific return depends on how much additional instrumental random noise can be tolerated without making the required observing program too long. This thesis develops an Agnostic Mission Simulator (AMS) and a trade-space explorer that convert a wavelength-dependent aggregate random-noise allowance into a 90th-percentile mission time. The source calculation was reformulated analytically for circularly symmetric astrophysical backgrounds, eliminating the former spatial pixel grid, correcting an exact $4/\pi$ error in the inherited local-zodiacal normalization, and permitting accurate wavelength-bin quadrature. That correction alters the derived noise allowance by factors of 1.5 to 11, an amplification of the underlying $27.3\%$ background error that follows from defining a requirement where the mission-completion curve is steep. The AMS reproduces the shared LIFEsim source-model SNRs to floating-point precision.
 
     Final calculations compare three additive budget shapes---flat, short-weighted, and long-weighted---for the Hab2Max and Hab2Min catalogs at limiting magnitude 7, field of regard $65^\circ$, and 12\,h slew time. For the second-order double-Bracewell reference, the short-weighted ramp admits the largest endpoint, consistent with geometric stellar leakage dominating the short-wavelength variance. In the fourth-order proxy, stellar leakage is suppressed by three to five orders of magnitude and the ordering reverses: zodiacal backgrounds dominate and the long-weighted ramp admits the largest endpoint. At the primary mission-time targets, the flat allowance rises from 140 to 640\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and from 65 to 590\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Min at 7.5\,yr when changing from null order two to four.
 
@@ -629,9 +629,31 @@ The decisive evidence that this is a defect rather than a modelling choice is in
 \begin{align}
 \frac{4}{\pi}=1.2732\ldots
 \end{align}
-in the uniform limit. That limit is exact only where the product of transmission and field-of-view taper is constant over the domain, which it is not; the ratio measured directly against the old grid is $1.268$. The correction is therefore an increase of approximately 27\%, and the analytic value should not be read as an exact prediction of the measured one. This is a normalization correction, not a new dust model.
+an increase of $27.3\%$. The factor is exact rather than approximate, and does not depend on the transmission map. The tapered branch formed the mean of the transmission over the square evaluation grid and then multiplied it by the circular solid angle; since a mean and an area must refer to the same domain, the two differ by the ratio of the areas alone, and any variation of the transmission across the field cancels between numerator and denominator. A direct measurement against the old grid returns $1.268$, and the residual $0.4\%$ is that grid's own discretization error rather than a departure from the identity. This is a normalization correction, not a new dust model.
 
 Because local-zodiacal shot noise is present for every target, the change propagates nonlinearly through SNR, target ranking, and the 90th-percentile mission time. Comparing the corrected and uncorrected paths over the full \mbox{Hab2Max} catalog gives a median relative SNR shift of about 10.9\%. The scope of that figure should be read carefully: it applies to results computed through the default tapered local-zodiacal path, and the present work does not attempt to propagate it into any previously published LIFE yield number. Doing so would require rerunning those studies and is left to future work.
+
+Within this study the effect can be measured directly, and it is far larger than the median shift in signal-to-noise ratio suggests. Because the multiplicative factor is exact, restoring it reproduces the pre-correction path identically, so the two configurations differ only in the defect. Table \ref{tab: localzodi impact} reports both quantities the thesis is built on. Under-counting the local-zodiacal foreground shortens the mission time required with no added budget by 0.50 to 0.84\,yr, between 10 and 16\%. The tolerated flat allowance, however, changes by factors of 1.5 to 11.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+        &            & \multicolumn{2}{c}{Zero-budget time [yr]} & \multicolumn{3}{c}{Flat allowance [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} \\
+Catalog & Null order & Pre-correction & Corrected & Pre-correction & Corrected & Ratio \\
+\midrule
+Hab2Max & 2 & 4.82 & 5.32 & 750 & 140 & 5.3 \\
+Hab2Max & 4 & 3.86 & 4.47 & 990 & 640 & 1.6 \\
+Hab2Min & 2 & 6.57 & 7.41 & 690 & 60  & 11.0 \\
+Hab2Min & 4 & 5.20 & 6.04 & 900 & 600 & 1.5 \\
+\bottomrule
+\end{tabular}
+\caption{Effect of the inherited local-zodiacal normalization defect on the two quantities this study reports, at the common operating point and each catalog's primary mission-time target. The pre-correction column is obtained by restoring the exact $\pi/4$ factor, so the two configurations differ only in the defect.}
+\label{tab: localzodi impact}
+\end{table}
+
+The disproportion is the important part. A $27.3\%$ error in a single background term produced up to an order-of-magnitude error in the derived requirement, because the amplitude is defined where the completion curve is steep: suppressing part of the background shortens the zero-budget time and leaves far more headroom before the target is reached. The Hab2Min second-order case is the extreme, where a corrected zero-budget time of 7.41\,yr against a 7.5\,yr target leaves almost no room, and the allowance collapses from 690 to 60. Had the defect gone unnoticed, the requirements reported here would have been up to an order of magnitude too permissive.
 
 Transmission and source spectra are integrated within every wavelength bin using an eight-point Gauss--Legendre rule in inverse wavelength $u=1/\lambda$. This coordinate is natural because interferometric phases are proportional to $b/\lambda$ and therefore vary nearly linearly with $u$. Across spectral resolutions 5, 10, 20, and 50 and sampled catalog stars, the stellar-leakage and exozodiacal terms agree with a 64-point reference to approximately machine precision. The adopted resolving power remains $R=\lambda/\Delta\lambda=20$, which produces 31 bins over 4--18.5\,$\upmu$m. That choice is a compute-accuracy trade rather than a physical one, and Figure \ref{fig: specres convergence} shows both sides of it. The compute cost of a full catalog pass grows steadily with $R$, since the number of bins sets the width of every per-target source evaluation. The accuracy side is regime-dependent. Referred to an $R=100$ evaluation, the SNR computed at $R=20$ is converged to a few parts in $10^4$ when the astrophysical background sets the bin variance, but departs by orders of magnitude more once the modeled per-detector and thermal instrument-noise terms dominate it. The production configuration used here is the former case: those instrument-noise modules are deliberately absent, since representing them by an aggregate allowance is precisely the reduction of Section \ref{sec: ts reduction: condensation}, so the reported results sit in the converged regime. The figure does not establish how an imposed $N_I$ of comparable magnitude would behave, because its spectral shape is prescribed rather than thermal; that remains a boundary of the retained binning rather than a demonstrated error.
 
@@ -909,6 +931,8 @@ The AMS separates its SNR and filter flows (Section \ref{sec: methods: AMS}). Ma
 
 \subsection{What the Reductions Buy}
 The first reduction combines only independent random terms that can be referred to the same single-output plane as $N_I(\lambda)$ (Section \ref{sec: ts reduction: condensation}). The second replaces spatial-grid evaluation of symmetric backgrounds with exact azimuthal averages and one-dimensional radial quadrature. Together they reduce a formally infinite-dimensional problem to explicit scalar searches, remove image size as a production-science parameter, expose the local-zodiacal normalization error, and provide the analytic null-order scaling used to interpret the result.
+
+That last exposure carries a caution that outlives this study. An iso-mission-time requirement is defined where the completion curve is steep, so it inherits an amplified version of any error in the background it is measured against: a $27.3\%$ error in one term moved the derived allowance by up to a factor of eleven (Table \ref{tab: localzodi impact}), and the amplification is largest exactly where the target is most demanding and the result therefore most interesting. Requirements derived this way should be quoted with the background model that produced them, and a background correction should be treated as invalidating them rather than perturbing them.
 
 \subsection{Limitations}
 Table \ref{tab: ranked limitations} ranks the remaining boundaries by their ability to change the numerical allowance or its engineering interpretation.
