@@ -444,7 +444,7 @@ PHYSICAL_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
 PHYSICAL_FIGDIR = os.path.join(REPO_ROOT, 'thesis', 'images', 'tse', 'physical')
 
 
-def run_physical(catalogs, upper_start):
+def run_physical(catalogs, upper_start, n_cpu=None):
     """Endpoint searches driven by a concrete beam combiner.
 
     Replaces the sin^n null-order proxy with the six-aperture double triple
@@ -458,6 +458,8 @@ def run_physical(catalogs, upper_start):
 
     for catalog in catalogs:
         bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        if n_cpu:
+            bus.data.options.other['n_cpu'] = int(n_cpu)
         ratio = bus.data.options.array['ratio']
         widths = bus.data.inst['wl_bin_widths'] * 1e6
         arch = double_triple_nuller(1.0, ratio)
@@ -615,7 +617,7 @@ def main():
         return
 
     if args.physical:
-        run_physical(catalogs, args.upper_start)
+        run_physical(catalogs, args.upper_start, n_cpu=args.n_cpu)
         return
 
     if args.stage_b:
