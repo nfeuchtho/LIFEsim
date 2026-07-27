@@ -183,7 +183,15 @@ class TradeSpaceExplorer:
         fig, ax = self.ams.run(self.instrument, self.optimizer)
         self.ams.plot_id = prev_id
 
-        ax.set_title(f'Astrophysical Noise and Error Budget ({cutoff} yrs, {gradient} Gradient)')
+        # Name the budget family by which end of the band carries the allowance,
+        # not by the direction the ramp travels. The two readings are opposite --
+        # 'Short-Long' rises towards long wavelengths and is therefore the
+        # long-weighted family -- and titles phrased the other way have been
+        # misread against their captions.
+        family = {'No': 'Flat', 'Short-Long': 'Long-Weighted',
+                  'Long-Short': 'Short-Weighted'}.get(gradient, gradient)
+        ax.set_title(f'Astrophysical Noise and Error Budget '
+                     f'({cutoff} yrs, {family} Budget)')
 
         # plt.yscale('log')
         ax.set_xlabel('Wavelength (micron)')
