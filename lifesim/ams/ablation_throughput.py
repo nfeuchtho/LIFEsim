@@ -501,6 +501,52 @@ def run_physical(catalogs, upper_start):
     print(f'\nPhysical-architecture results: {PHYSICAL_RESULTS}', flush=True)
 
 
+def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000):
+    """Two-dimensional operating-point scans with the physical combiner.
+
+    Each scan is a grid of endpoint searches -- 15 x 15 for the magnitude and
+    slew scans -- so a single scan is hours and all six are of order a day. They
+    are selectable individually so they can be submitted as separate jobs rather
+    than one long one, and each writes its figure as soon as it finishes.
+
+    Raising ``n_cpu`` is the main lever on a cluster: the SNR flow is dispatched
+    across that many workers, and the default of eight comes from settings.yaml
+    rather than from anything about the problem.
+    """
+    from lifesim.util.combiner import double_triple_nuller
+    os.makedirs(PHYSICAL_FIGDIR, exist_ok=True)
+
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        if n_cpu:
+            bus.data.options.other['n_cpu'] = int(n_cpu)
+        ratio = bus.data.options.array['ratio']
+        target = PRIMARY_TARGET[catalog]
+        arch = double_triple_nuller(1.0, ratio)
+
+        for scan in scans:
+            ams = AgnosticMissionSimulator(
+                4, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
+                architecture=arch, verbose=False)
+            tse = TradeSpaceExplorer(ams, opt, instrument)
+            tag = f'phys_{catalog}_{scan}_{str(target).replace(".", "p")}'
+            out = os.path.join(PHYSICAL_FIGDIR, tag + '.pdf')
+
+            print(f'\n=== hab2{catalog} | scan {scan} | target {target} yr | '
+                  f'n_cpu {bus.data.options.other["n_cpu"]} ===', flush=True)
+            t0 = time.time()
+            if scan == 'mag':
+                tse.plot_cutoff_for_mag(target, save_path=out)
+            elif scan == 'slew':
+                tse.plot_cutoff_for_slewtime(target, save_path=out)
+            elif scan == 'linear':
+                tse.plot_linear_regression_additive(save_path=out)
+            else:
+                raise ValueError(f'unknown scan: {scan}')
+            print(f'>> {scan} done in {(time.time()-t0)/3600:.2f} h -> {out}',
+                  flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -516,6 +562,12 @@ def main():
     ap.add_argument('--defect-impact', action='store_true',
                     help='Quantify the inherited local-zodiacal normalization '
                          'defect by rerunning with and without it.')
+    ap.add_argument('--stage-b', choices=['mag', 'slew', 'linear'], action='append',
+                    help='Two-dimensional operating-point scan with the physical '
+                         'combiner. Repeatable; each is hours, so prefer one per job.')
+    ap.add_argument('--n-cpu', type=int, default=None,
+                    help='Override the worker count for the SNR flow. The main '
+                         'lever on a cluster; settings.yaml defaults to 8.')
     ap.add_argument('--physical', action='store_true',
                     help='Run the endpoint searches with the six-aperture '
                          'physical beam combiner instead of the sin^n proxy.')
@@ -564,6 +616,11 @@ def main():
 
     if args.physical:
         run_physical(catalogs, args.upper_start)
+        return
+
+    if args.stage_b:
+        run_stage_b(catalogs, args.stage_b, n_cpu=args.n_cpu,
+                    upper_start=args.upper_start)
         return
 
     for catalog in catalogs:

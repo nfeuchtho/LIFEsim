@@ -328,7 +328,7 @@ class TradeSpaceExplorer:
 
         plt.show()
 
-    def plot_linear_regression_additive(self):
+    def plot_linear_regression_additive(self, save_path=None):
         """
         Scans the required mission time over a grid of linear additive leakage budgets.
 
@@ -402,9 +402,13 @@ class TradeSpaceExplorer:
         ax.set_ylabel('Short-Wavelength Budget [ph s$^{-1}$ micron$^{-1}$]')
         ax.set_title('Additive TSE with Linear Noise Budget')
 
-        plt.show()
+        if save_path:
+            plt.savefig(save_path, bbox_inches='tight')
+            plt.close('all')
+        else:
+            plt.show()
 
-    def plot_cutoff_for_mag(self, MT_goal):
+    def plot_cutoff_for_mag(self, MT_goal, save_path=None):
         """
         Maps the iso-mission-time additive leakage budget over limiting magnitude and
         field of regard.
@@ -485,9 +489,13 @@ class TradeSpaceExplorer:
 
         plt.title(f'Lim. Mag. / FoR vs. Iso-MT Budget ({MT_goal} yrs)')
 
-        plt.show()
+        if save_path:
+            plt.savefig(save_path, bbox_inches='tight')
+            plt.close('all')
+        else:
+            plt.show()
 
-    def plot_cutoff_for_slewtime(self, MT_goal):
+    def plot_cutoff_for_slewtime(self, MT_goal, save_path=None):
         """
         Maps the iso-mission-time additive leakage budget over slew time and field of regard.
 
@@ -563,9 +571,14 @@ class TradeSpaceExplorer:
 
         plt.title(f'Slew Time and Field of Regard vs. Iso-MT Budget ({MT_goal} yrs)')
 
-        plt.savefig(f'tse_iso_{MT_goal}yrs.png')
-
-        plt.show()
+        if save_path:
+            plt.savefig(save_path, bbox_inches='tight')
+            plt.close('all')
+        else:
+            # historical default; note plot_cutoff_for_mag documents the same
+            # filename, so an explicit save_path is preferable
+            plt.savefig(f'tse_iso_{MT_goal}yrs.png')
+            plt.show()
 
     def visualize_filters(self, consider_uninteresting=True):
         """
