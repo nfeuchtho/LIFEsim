@@ -393,6 +393,52 @@ def run_breakeven(catalogs, tol=2e-4):
     print(f'\nBreak-even results: {BREAKEVEN_RESULTS}', flush=True)
 
 
+SNRSHIFT_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
+                                'localzodi_snr_shift.tsv')
+
+
+def run_snr_shift(catalogs, null_orders):
+    """Catalog-wide SNR shift caused by the local-zodiacal correction.
+
+    Compares the one-hour SNR of every catalog target computed with the
+    corrected local-zodiacal normalization against the pre-correction one. The
+    thesis quotes a median shift for this quantity; this recomputes it from the
+    current code rather than inheriting it.
+    """
+    rows = []
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        for order in null_orders:
+            snr = {}
+            for config, scale in DEFECT_CONFIGS.items():
+                ams = AgnosticMissionSimulator(
+                    order, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60, verbose=False)
+                if scale != 1.0:
+                    ams.get_localzodi_budget().update_factors(
+                        multiplicative_factor=lambda args, s=scale: s)
+                ams.run(instrument, opt)
+                snr[config] = np.asarray(ams.snr_saved, dtype=float).copy()
+
+            a, b = snr['corrected'], snr['pre_correction']
+            good = np.isfinite(a) & np.isfinite(b) & (b > 0)
+            rel = (a[good] - b[good]) / b[good]      # negative: correction lowers SNR
+            med, p16, p84 = (float(np.median(rel)), float(np.percentile(rel, 16)),
+                             float(np.percentile(rel, 84)))
+            print(f'>> hab2{catalog} order {order}: median SNR shift '
+                  f'{100*med:+.2f}%  [16th {100*p16:+.2f}%, 84th {100*p84:+.2f}%]  '
+                  f'over {good.sum()} targets', flush=True)
+            rows.append([f'hab2{catalog}', order, int(good.sum()),
+                         round(med, 6), round(p16, 6), round(p84, 6)])
+
+    os.makedirs(os.path.dirname(SNRSHIFT_RESULTS), exist_ok=True)
+    with open(SNRSHIFT_RESULTS, 'w', encoding='utf8') as fh:
+        fh.write('catalog\tnull_order\tn_targets\tmedian_rel_shift\t'
+                 'p16_rel_shift\tp84_rel_shift\n')
+        for r in rows:
+            fh.write('\t'.join(str(x) for x in r) + '\n')
+    print(f'\nSNR-shift results: {SNRSHIFT_RESULTS}', flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -408,6 +454,9 @@ def main():
     ap.add_argument('--defect-impact', action='store_true',
                     help='Quantify the inherited local-zodiacal normalization '
                          'defect by rerunning with and without it.')
+    ap.add_argument('--snr-shift', action='store_true',
+                    help='Recompute the catalog-wide SNR shift caused by the '
+                         'local-zodiacal correction.')
     ap.add_argument('--breakeven', action='store_true',
                     help='Solve for the throughput at which a fourth-order null '
                          'ceases to shorten the mission relative to order two.')
@@ -442,6 +491,10 @@ def main():
 
     if args.breakeven:
         run_breakeven(catalogs)
+        return
+
+    if args.snr_shift:
+        run_snr_shift(catalogs, [2, 4])
         return
 
     for catalog in catalogs:
