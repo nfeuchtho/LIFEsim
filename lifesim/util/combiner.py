@@ -31,7 +31,7 @@ comes from: only some outputs carry the deep null.
 import numpy as np
 # numpy 2.0 renamed trapz to trapezoid and removed the old name; keep both
 # working so the package runs against either major version.
-_trapz = getattr(np, 'trapezoid', np.trapz)
+_trapz = np.trapezoid if hasattr(np, 'trapezoid') else np.trapz
 
 
 
