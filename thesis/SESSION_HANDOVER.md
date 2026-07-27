@@ -79,6 +79,60 @@ related-work section, the mission-time definition, the local-zodiacal correction
 and its amplification result, the background-scale context, the reproduction
 appendix. See `REVIEW_CHECKLIST.md`.
 
+## In flight as of 2026-07-28, early morning
+
+Six jobs are running on the bluesky cluster, launched with `--stage-b` and
+`nohup`, one per scan and catalogue. They write only their own figure and share
+no files, so they cannot collide.
+
+| Job | Cost per grid point | Estimate |
+|---|---|---|
+| `mag` hi / lo | endpoint search, ~165 s | ~2 h |
+| `slew` hi / lo | endpoint search, ~165 s | ~4 h |
+| `linear` hi / lo | single evaluation, ~22 s | ~1-1.5 h |
+
+Output lands in `thesis/images/tse/physical/` as
+`phys_<catalog>_<scan>_<target>.pdf`. These replace the order-four
+operating-point figures. **The order-two figures do not need regenerating**: the
+reference architecture is unchanged and the combiner framework reproduces its
+results to 0.012 %.
+
+If they are not there, check `stageb_<scan>_<catalog>.log` on the cluster.
+
+## Two results from the cluster run worth putting in the thesis
+
+**Cross-machine reproducibility.** The twelve-cell physical run was repeated on
+the cluster -- different machine, operating system, core count and numpy major
+version -- and the six Hab2Max endpoints agree with the local values to between
+2.6e-12 and 4.1e-11 relative. Since the search is stopped on a tolerance rather
+than converged to machine precision, that independence is worth stating in
+Appendix B; it is exactly what an examiner probes.
+
+**Parallelism no longer helps, and that is a consequence of the rewrite.**
+Measured on the cluster, one AMS evaluation takes essentially the same time at 4,
+8, 16 and 32 workers, with 32 marginally *slower* through dispatch overhead. The
+multiprocessing in `ams.py` was built when the per-star SNR was a pixel-grid
+integration; the analytic reduction made that part so cheap that only the serial
+stages remain -- scheduling, filtering, the percentile. Use eight workers and
+parallelise across scans instead. This belongs in the discussion of what the
+reductions buy.
+
+## Environment traps, all fixed but worth knowing
+
+Three failures appeared only on the cluster, each invisible locally because the
+working directory, the display and the numpy version all happened to be right:
+
+- LIFEsim was never pip-installed, so `import lifesim` worked only from the
+  repository root. Fixed with `pip install -e . --no-deps`; a batch job needs it.
+- `trade_space_explorer` called `mpl.use('Qt5Agg')` unconditionally at import,
+  overriding the Agg backend and failing on a headless node. It now leaves a
+  non-interactive backend alone and never raises if Qt is absent.
+- numpy 2.0 removed `np.trapz`. Five call sites now resolve the name at import.
+  Note `requirements.txt` pins numpy 1.20.3 for Linux, which cannot build on
+  Python 3.12, while `setup.py` asks for >=1.24.2 unbounded; those two disagree
+  and should be reconciled. A numpy 2 environment also needs astropy >= 6.1,
+  since older astropy references `np.trapz` at import.
+
 ## Next steps, in order
 
 1. **Stage B**: the six two-dimensional scans at order four, which feed the
