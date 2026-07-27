@@ -439,6 +439,68 @@ def run_snr_shift(catalogs, null_orders):
     print(f'\nSNR-shift results: {SNRSHIFT_RESULTS}', flush=True)
 
 
+PHYSICAL_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
+                                'physical_architecture.tsv')
+PHYSICAL_FIGDIR = os.path.join(REPO_ROOT, 'thesis', 'images', 'tse', 'physical')
+
+
+def run_physical(catalogs, upper_start):
+    """Endpoint searches driven by a concrete beam combiner.
+
+    Replaces the sin^n null-order proxy with the six-aperture double triple
+    nuller, sized to its own response peak rather than to the reference array's.
+    Produces the amplitudes the order-four half of the results table reports,
+    together with the budget-shape figures, from a physically realizable design.
+    """
+    from lifesim.util.combiner import (double_triple_nuller, baseline_constant,
+                                       double_bracewell)
+    os.makedirs(PHYSICAL_FIGDIR, exist_ok=True)
+
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        ratio = bus.data.options.array['ratio']
+        widths = bus.data.inst['wl_bin_widths'] * 1e6
+        arch = double_triple_nuller(1.0, ratio)
+        print(f'\n=== hab2{catalog} | six-aperture triple nuller | baseline '
+              f'constant {baseline_constant(*arch):.6f} (reference '
+              f'{baseline_constant(*double_bracewell(1.0, ratio)):.6f}) ===',
+              flush=True)
+
+        for target in TARGETS[catalog]:
+            for gradient, family in FAMILIES.items():
+                ams = AgnosticMissionSimulator(
+                    4, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
+                    architecture=arch, verbose=False)
+                tse = TradeSpaceExplorer(ams, opt, instrument)
+                setter = make_setter(bus, ams, gradient, widths)
+
+                tag = f'phys_{catalog}_{family}_{str(target).replace(".", "p")}'
+                t0 = time.time()
+                endpoint = tse.locate_mission_cutoff(
+                    target, upper_start=upper_start, setter_func=setter,
+                    plot_data={'cat': catalog, 'gradient': gradient,
+                               'save': os.path.join(PHYSICAL_FIGDIR, tag + '.pdf')})
+                setter(endpoint)
+                achieved = ams.run(instrument, opt)
+                wall = round(time.time() - t0, 1)
+
+                print(f'>> {target} yr | {family}: {endpoint} ph/s/um | '
+                      f'achieved {achieved:.4f} yr ({wall} s)', flush=True)
+
+                os.makedirs(os.path.dirname(PHYSICAL_RESULTS), exist_ok=True)
+                new = not os.path.exists(PHYSICAL_RESULTS)
+                with open(PHYSICAL_RESULTS, 'a', encoding='utf8') as fh:
+                    if new:
+                        fh.write('timestamp\tcatalog\tarchitecture\tmtime_target_yr\t'
+                                 'budget_family\tendpoint_ph_s_um\tmtime_achieved_yr\t'
+                                 'wall_s\n')
+                    fh.write('\t'.join(str(x) for x in [
+                        datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                        f'hab2{catalog}', 'triple_nuller_6ap', target, family,
+                        endpoint, round(achieved, 6), wall]) + '\n')
+    print(f'\nPhysical-architecture results: {PHYSICAL_RESULTS}', flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -454,6 +516,9 @@ def main():
     ap.add_argument('--defect-impact', action='store_true',
                     help='Quantify the inherited local-zodiacal normalization '
                          'defect by rerunning with and without it.')
+    ap.add_argument('--physical', action='store_true',
+                    help='Run the endpoint searches with the six-aperture '
+                         'physical beam combiner instead of the sin^n proxy.')
     ap.add_argument('--snr-shift', action='store_true',
                     help='Recompute the catalog-wide SNR shift caused by the '
                          'local-zodiacal correction.')
@@ -495,6 +560,10 @@ def main():
 
     if args.snr_shift:
         run_snr_shift(catalogs, [2, 4])
+        return
+
+    if args.physical:
+        run_physical(catalogs, args.upper_start)
         return
 
     for catalog in catalogs:

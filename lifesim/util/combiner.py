@@ -164,7 +164,11 @@ def azimuthal_spline(u_pos, U, out, x_max, n_phi=360, dx=0.01, chunk=2000):
     if cached is not None and cached[0] >= x_max:
         return cached[1]
 
-    x_top = float(max(x_max * 1.25, 10.0))
+    # Round the table's extent up a coarse ladder. Callers ask for whatever
+    # range their star and wavelength need, and rebuilding for each of them
+    # would cost far more than the table saves; snapping to powers of two means
+    # a handful of rebuilds at most over an entire catalogue.
+    x_top = float(2.0 ** np.ceil(np.log2(max(x_max * 1.1, 16.0))))
     n_x = int(np.ceil(x_top / dx)) + 1
     x_grid = np.linspace(0.0, x_top, n_x)
 

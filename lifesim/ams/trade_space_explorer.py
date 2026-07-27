@@ -197,7 +197,12 @@ class TradeSpaceExplorer:
         ax.set_xlabel('Wavelength (micron)')
         ax.set_ylabel('Noise Contribution (ph s$^{-1}$ micron$^{-1}$)')
 
-        plt.show()
+        save_path = plot_data.get('save')
+        if save_path:
+            plt.savefig(save_path, bbox_inches='tight')
+            plt.close(fig)
+        else:
+            plt.show()
 
         return guess
 
