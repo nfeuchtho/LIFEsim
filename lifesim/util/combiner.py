@@ -141,6 +141,71 @@ def null_order(positions, U, out, wl, scale, r_probe=None):
     return float(p[0])
 
 
+_AZ_CACHE = {}
+
+
+def azimuthal_spline(u_pos, U, out, x_max, n_phi=360, dx=0.01, chunk=2000):
+    """Cached spline of the rotation-averaged response against ``x``.
+
+    The rotation average of any array whose geometry scales with a single
+    baseline depends on ``x = pi * bl * theta / lambda`` alone, so it can be
+    tabulated once per architecture and interpolated thereafter. This is what
+    keeps an arbitrary combiner as cheap as the closed-form reference: the
+    expensive part, an average over rotation angle, is paid once on a grid
+    rather than per target and per wavelength.
+
+    The table is cached and grown on demand if a later call needs a larger
+    ``x_max``.
+    """
+    from scipy.interpolate import make_interp_spline
+
+    key = (u_pos.tobytes(), u_pos.shape, U.tobytes(), U.shape, int(out), n_phi, dx)
+    cached = _AZ_CACHE.get(key)
+    if cached is not None and cached[0] >= x_max:
+        return cached[1]
+
+    x_top = float(max(x_max * 1.25, 10.0))
+    n_x = int(np.ceil(x_top / dx)) + 1
+    x_grid = np.linspace(0.0, x_top, n_x)
+
+    phi = np.arange(n_phi) * 2.0 * np.pi / n_phi
+    proj = (u_pos[:, 0][:, None] * np.cos(phi)[None, :]
+            + u_pos[:, 1][:, None] * np.sin(phi)[None, :])
+    row = np.asarray(U, dtype=complex)[out]
+
+    vals = np.empty(n_x)
+    for lo in range(0, n_x, chunk):
+        hi = min(lo + chunk, n_x)
+        arg = 2.0 * x_grid[lo:hi][:, None, None] * proj[None, :, :]
+        amp = np.exp(1j * arg)
+        resp = np.abs(np.einsum('k,xkp->xp', row, amp)) ** 2 / u_pos.shape[0]
+        vals[lo:hi] = resp.mean(axis=-1)
+
+    spline = make_interp_spline(x_grid, vals, k=3)
+    _AZ_CACHE[key] = (x_top, spline)
+    return spline
+
+
+def azimuthal_average_general(u_pos, U, out, r, bl, wl_bins, n_phi=360):
+    """General-architecture counterpart of ``azimuthal_average_tm``.
+
+    Rotation average of one output's response at angular separation ``r``.
+    ``r`` and ``wl_bins`` broadcast against each other exactly as in the closed-
+    form version, so this is interchangeable at the call site. Used by the
+    extended-source terms, which integrate this against a radial profile.
+    """
+    u_pos = np.asarray(u_pos, dtype=float)
+    U = np.asarray(U, dtype=complex)
+    phi = np.arange(n_phi) * 2.0 * np.pi / n_phi
+    proj = (u_pos[:, 0][:, None] * np.cos(phi)[None, :]
+            + u_pos[:, 1][:, None] * np.sin(phi)[None, :])      # (n_ap, n_phi)
+
+    x = np.pi * bl * np.asarray(r, dtype=float) / np.asarray(wl_bins, dtype=float)
+    spline = azimuthal_spline(u_pos, U, out, float(np.nanmax(x)) if x.size else 1.0,
+                              n_phi=n_phi)
+    return spline(x)
+
+
 def radial_average_general(u_pos, U, out, R, bl, wl_bins, hfov=None,
                            fov_taper='none', n_r=200, n_phi=360):
     """General-architecture counterpart of ``transmission_analytic.radial_average_tm``.
@@ -161,18 +226,13 @@ def radial_average_general(u_pos, U, out, R, bl, wl_bins, hfov=None,
     R_b = np.broadcast_to(np.atleast_1d(np.asarray(R, dtype=float)), wl_bins.shape)
 
     u = np.linspace(0.0, 1.0, n_r)                       # radial quadrature nodes
-    phi = np.arange(n_phi) * 2.0 * np.pi / n_phi
-    proj = (u_pos[:, 0][:, None] * np.cos(phi)[None, :]
-            + u_pos[:, 1][:, None] * np.sin(phi)[None, :])    # (n_ap, n_phi)
 
-    # theta = u * R(lambda); phase = 2 pi bl * (u_k . theta) / lambda
+    # theta = u * R(lambda); the rotation average depends only on
+    # x = pi * bl * theta / lambda, so it comes from the cached table.
     r = u[:, None] * R_b[None, :]                        # (n_r, n_wl)
-    k = 2.0 * np.pi * bl / wl_bins                       # (n_wl,)
-    arg = (r * k[None, :])[:, :, None, None] * proj[None, None, :, :]
-    amp = np.exp(1j * arg)                               # (n_r, n_wl, n_ap, n_phi)
-
-    resp = np.abs(np.einsum('k,rwkp->rwp', U[out], amp)) ** 2 / u_pos.shape[0]
-    ang_avg = resp.mean(axis=-1)                         # (n_r, n_wl)
+    x = np.pi * bl * r / wl_bins[None, :]
+    spline = azimuthal_spline(u_pos, U, out, float(np.nanmax(x)), n_phi=n_phi)
+    ang_avg = spline(x)                                  # (n_r, n_wl)
 
     if fov_taper == 'none':
         weight = 1.0
@@ -226,6 +286,41 @@ def signal_noise_tables(positions, U, chop, x_grid, bl, n_phi=360, chunk=20000):
         n_grid[lo:hi] = np.sqrt((T[b_out] ** 2).mean(axis=-1))
 
     return s_grid, n_grid
+
+
+_BL_CACHE = {}
+
+
+def baseline_constant(u_pos, U, chop, x_hi=12.0, n=6000, n_phi=720):
+    """Baseline prescription constant for an architecture.
+
+    LIFEsim sizes the array so that the first peak of the chopped response falls
+    on the habitable-zone centre, via ``bl = c / theta_HZ * lambda_opt`` with a
+    constant ``c`` fixed for the double Bracewell. That constant is simply the
+    location of the response peak in units of ``pi``, and it is architecture
+    specific: a design with a different fringe pattern peaks elsewhere and is
+    badly mis-sized by another design's constant.
+
+    Returning it from the architecture itself lets every design be evaluated at
+    its own optimum, which is the only comparison that means anything.
+    """
+    key = (u_pos.tobytes(), u_pos.shape, np.asarray(U).tobytes(), tuple(chop),
+           x_hi, n, n_phi)
+    if key in _BL_CACHE:
+        return _BL_CACHE[key]
+
+    # coarse scan for the peak, then refine locally
+    x = np.linspace(1e-4, x_hi, n)
+    s, _ = signal_noise_tables(u_pos, U, chop, x, bl=1.0, n_phi=n_phi)
+    i = int(np.argmax(s))
+    lo = x[max(i - 2, 0)]
+    hi = x[min(i + 2, n - 1)]
+    xf = np.linspace(lo, hi, 400)
+    sf, _ = signal_noise_tables(u_pos, U, chop, xf, bl=1.0, n_phi=n_phi)
+
+    const = float(xf[int(np.argmax(sf))] / np.pi)
+    _BL_CACHE[key] = const
+    return const
 
 
 def double_bracewell(bl, ratio):

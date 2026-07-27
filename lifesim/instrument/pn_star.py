@@ -108,12 +108,22 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
         geom = np.pi * ((radius_s * constants.radius_sun)
                         / (distance_s * constants.m_per_pc)) ** 2
 
+        arch = self.data.inst.get('architecture')
+        if arch is not None:
+            from lifesim.util.combiner import radial_average_general
+            u_pos, U_mat, chop_pair = arch
+
         sl_leak = np.zeros_like(self.data.inst['wl_bins'])
         for wl_j, w_j in zip(wl_nodes, gl_weights):
             hfov_j = wl_j / (2. * diameter)
-            avg_tm_j = radial_average_tm(R=Rs_rad, bl=bl, wl_bins=wl_j,
-                                         hfov=hfov_j, fov_taper=fov_taper,
-                                         nulling_order=nulling_order)
+            if arch is not None:
+                avg_tm_j = radial_average_general(
+                    u_pos, U_mat, chop_pair[1], R=Rs_rad, bl=bl, wl_bins=wl_j,
+                    hfov=hfov_j, fov_taper=fov_taper)
+            else:
+                avg_tm_j = radial_average_tm(R=Rs_rad, bl=bl, wl_bins=wl_j,
+                                             hfov=hfov_j, fov_taper=fov_taper,
+                                             nulling_order=nulling_order)
             planck_j = planck_law(x=wl_j, temp=temp_s, mode='wavelength') * geom
             sl_leak += w_j * avg_tm_j * planck_j
 

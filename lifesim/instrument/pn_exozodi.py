@@ -143,7 +143,15 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
             f_nu_sr_j = planck_law(x=wl_j[None, :], temp=temp_map_j, mode='wavelength') \
                         * sigma_j * self.data.inst['telescope_area']
 
-            ang_avg_j = azimuthal_average_tm(r_j, bl, wl_j[None, :], nulling_order=nulling_order)
+            arch = self.data.inst.get('architecture')
+            if arch is not None:
+                from lifesim.util.combiner import azimuthal_average_general
+                u_pos, U_mat, chop_pair = arch
+                ang_avg_j = azimuthal_average_general(u_pos, U_mat, chop_pair[1],
+                                                      r_j, bl, wl_j[None, :])
+            else:
+                ang_avg_j = azimuthal_average_tm(r_j, bl, wl_j[None, :],
+                                                 nulling_order=nulling_order)
             if fov_taper == 'gaussian':
                 taper_j = np.exp(-(np.pi / (4 * hfov_j[None, :]) * r_j) ** 2)
             else:

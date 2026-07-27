@@ -198,7 +198,19 @@ class Instrument(InstrumentModule):
 
         # put first transmission peak of optimal wl on center of HZ
         # for the origin of the value 0.5.. see Dannert+2022
-        baseline = (0.589645 / hz_center_rad
+        #
+        # That constant is the peak location of the double-Bracewell chopped
+        # response and is specific to it. A different combiner peaks elsewhere,
+        # and sizing it with this constant places the habitable zone off its
+        # fringe maximum, so an architecture supplies its own constant when one
+        # is configured.
+        peak_const = 0.589645
+        arch = self.data.inst.get('architecture')
+        if arch is not None:
+            from lifesim.util.combiner import baseline_constant
+            peak_const = baseline_constant(*arch)
+
+        baseline = (peak_const / hz_center_rad
                                 * self.data.options.other['wl_optimal'] * 10 ** (-6))
 
         self.apply_baseline(baseline=baseline)

@@ -125,6 +125,19 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
         # localzodi surface brightness is uniform across the (tiny) instrument FoV, so the
         # pixel-grid average of tm3 over the FoV equals its exact rotation (azimuthal)
         # average -- computed analytically here instead of via a brute 2D grid.
+        arch = self.data.inst.get('architecture')
+        if arch is not None:
+            from lifesim.util.combiner import radial_average_general
+            u_pos, U_mat, chop_pair = arch
+            avg_tm = radial_average_general(
+                u_pos, U_mat, chop_pair[1],
+                R=self.data.inst['image_angle'],
+                bl=self.data.inst['bl'],
+                wl_bins=self.data.inst['wl_bins'],
+                hfov=self.data.inst['hfov'],
+                fov_taper=self.data.options.models['fov_taper'])
+            return avg_tm * lz_flux * self.data.inst['telescope_area']
+
         avg_tm = radial_average_tm(R=self.data.inst['image_angle'],
                                    bl=self.data.inst['bl'],
                                    wl_bins=self.data.inst['wl_bins'],

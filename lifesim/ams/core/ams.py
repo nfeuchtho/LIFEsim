@@ -140,9 +140,16 @@ class AgnosticMissionSimulator:
                  planet_signal_budget=None,
                  planet_noise_budget=None,
                  plot_id=None,
+                 architecture=None,
                  verbose=True):
 
         self.__nulling_order = nulling_order
+
+        # Optional concrete beam combiner as (unit_positions, U, chop_pair), with
+        # aperture positions in units of the nulling baseline. When set, the
+        # transmission comes from that combiner rather than from the sin^n
+        # proxy, and the noise modules follow via data.inst['architecture'].
+        self.__architecture = architecture
 
         # Compute savers
         self.snr_saved = None
@@ -280,6 +287,10 @@ class AgnosticMissionSimulator:
                 bus.data.catalog['is_interesting'] = np.logical_or(mask_exp, bus.data.catalog['is_interesting'])
 
             return bus.data.catalog[bus.data.catalog['is_interesting']] if pre_select else bus.data.catalog
+
+        # Must precede apply_options(): the baseline prescription reads the
+        # architecture to size the array to its own response peak.
+        instrument.data.inst['architecture'] = self.__architecture
 
         instrument.apply_options()
 
@@ -566,6 +577,9 @@ class AgnosticMissionSimulator:
         # overwrites it, keeping the two branches independent (see ANALYTIC_NOISE_REWRITE.md).
         # The delegated noise modules below pick it up via `self.data.inst['nulling_order']`.
         instrument.data.inst['nulling_order'] = self.__nulling_order
+        # Same channel for a concrete combiner: when present the noise modules
+        # evaluate the physical response instead of the sin^n proxy.
+        instrument.data.inst['architecture'] = self.__architecture
 
         # Star-leak/local-zodi/exozodi noise is delegated to the instrument's own connected
         # PhotonNoiseStar/PhotonNoiseLocalzodi/PhotonNoiseExozodi modules instead of
@@ -744,17 +758,28 @@ class AgnosticMissionSimulator:
         s_grid = np.empty(n_grid)
         nz_grid = np.empty(n_grid)
 
-        # build the table in chunks to keep the (grid x phi) intermediate small
-        for ga in range(0, n_grid, 20000):
-            gb = min(ga + 20000, n_grid)
-            xg = x_grid[ga:gb][:, None]
-            g = np.sin(xg * cos_phi[None, :]) ** order
-            beta_arg = ratio * xg * sin_phi[None, :]
-            tm3_0 = g * np.cos(beta_arg - np.pi / 4) ** 2
-            tm4_0 = g * np.cos(beta_arg + np.pi / 4) ** 2
-            chop = tm3_0 - tm4_0
-            s_grid[ga:gb] = np.sqrt((chop ** 2).mean(axis=1))
-            nz_grid[ga:gb] = np.sqrt((tm4_0 ** 2).mean(axis=1))
+        if self.__architecture is not None:
+            # A concrete beam combiner: build the same table from the physical
+            # response instead of the sin^n shape proxy. The tabulation itself is
+            # unchanged, because the rotation average of any array whose geometry
+            # scales with one baseline is still a function of x alone.
+            from lifesim.util.combiner import signal_noise_tables
+            u_pos, U_mat, chop_pair = self.__architecture
+            s_grid, nz_grid = signal_noise_tables(u_pos, U_mat, chop_pair,
+                                                  x_grid, bl=1.0,
+                                                  n_phi=phi_space.size)
+        else:
+            # build the table in chunks to keep the (grid x phi) intermediate small
+            for ga in range(0, n_grid, 20000):
+                gb = min(ga + 20000, n_grid)
+                xg = x_grid[ga:gb][:, None]
+                g = np.sin(xg * cos_phi[None, :]) ** order
+                beta_arg = ratio * xg * sin_phi[None, :]
+                tm3_0 = g * np.cos(beta_arg - np.pi / 4) ** 2
+                tm4_0 = g * np.cos(beta_arg + np.pi / 4) ** 2
+                chop = tm3_0 - tm4_0
+                s_grid[ga:gb] = np.sqrt((chop ** 2).mean(axis=1))
+                nz_grid[ga:gb] = np.sqrt((tm4_0 ** 2).mean(axis=1))
 
         signal_spline = make_interp_spline(x_grid, s_grid, k=3)
         noise_spline = make_interp_spline(x_grid, nz_grid, k=3)
