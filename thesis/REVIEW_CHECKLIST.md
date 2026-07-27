@@ -107,7 +107,7 @@ plus anything cheap. Everything else waits.
       **Declaration of Originality is deliberately deferred** -- it is the last
       step before submission, see below.
 
-- [ ] **A2. Citation batch.**
+- [x] **A2. Citation batch.**
       - M10: cite Lay 2004 §4.A and Dannert 2022 §2.2.3 at `main.tex:317` and
         `main.tex:605` (both state rotation-angle independence verbatim);
         `main.tex:317` currently cites `lay2005imaging`, the wrong Lay paper.
@@ -166,9 +166,10 @@ waits for the post-diff fortnight.
 
 ## Tier C — after the diff, before 2026-08-10
 
-- [ ] C1. **Throughput-normalized order-4 ablation.** Separates null order from
-      throughput change, which are currently confounded. An examiner will ask.
-      *(launched in Tier 0; may arrive early)*
+- [x] C1. **Throughput-normalized order-4 ablation.** DONE and promoted into the
+      thesis as Section 5.7. The penalized configuration reaches no target at
+      all, which is a stronger result than the intended separation of null depth
+      from throughput and is now a headline finding rather than a control.
 - [ ] C2. **Local-zodi impact on published LIFE yields.** Extend the 10.9 % median
       SNR shift into yield deltas for the published configuration. **Strongest
       remaining novelty lever** — it turns a housekeeping footnote into a
