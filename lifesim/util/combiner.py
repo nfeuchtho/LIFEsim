@@ -141,6 +141,93 @@ def null_order(positions, U, out, wl, scale, r_probe=None):
     return float(p[0])
 
 
+def radial_average_general(u_pos, U, out, R, bl, wl_bins, hfov=None,
+                           fov_taper='none', n_r=200, n_phi=360):
+    """General-architecture counterpart of ``transmission_analytic.radial_average_tm``.
+
+    Computes the rotation-averaged response of one output, averaged again over a
+    source disk of angular radius ``R`` with the optional Gaussian field-of-view
+    taper. This is what the background terms need: for a circularly symmetric
+    foreground the photon rate is this average times the accepted solid angle.
+
+    ``u_pos`` are the aperture positions in units of the nulling baseline, so the
+    same architecture can be scaled per star by passing that star's ``bl``.
+    Signature and conventions follow ``radial_average_tm`` so the two are
+    interchangeable at the call site.
+    """
+    u_pos = np.asarray(u_pos, dtype=float)
+    U = np.asarray(U, dtype=complex)
+    wl_bins = np.atleast_1d(np.asarray(wl_bins, dtype=float))
+    R_b = np.broadcast_to(np.atleast_1d(np.asarray(R, dtype=float)), wl_bins.shape)
+
+    u = np.linspace(0.0, 1.0, n_r)                       # radial quadrature nodes
+    phi = np.arange(n_phi) * 2.0 * np.pi / n_phi
+    proj = (u_pos[:, 0][:, None] * np.cos(phi)[None, :]
+            + u_pos[:, 1][:, None] * np.sin(phi)[None, :])    # (n_ap, n_phi)
+
+    # theta = u * R(lambda); phase = 2 pi bl * (u_k . theta) / lambda
+    r = u[:, None] * R_b[None, :]                        # (n_r, n_wl)
+    k = 2.0 * np.pi * bl / wl_bins                       # (n_wl,)
+    arg = (r * k[None, :])[:, :, None, None] * proj[None, None, :, :]
+    amp = np.exp(1j * arg)                               # (n_r, n_wl, n_ap, n_phi)
+
+    resp = np.abs(np.einsum('k,rwkp->rwp', U[out], amp)) ** 2 / u_pos.shape[0]
+    ang_avg = resp.mean(axis=-1)                         # (n_r, n_wl)
+
+    if fov_taper == 'none':
+        weight = 1.0
+    elif fov_taper == 'gaussian':
+        if hfov is None:
+            raise ValueError('hfov required for gaussian taper')
+        hfov_b = np.broadcast_to(np.atleast_1d(np.asarray(hfov, dtype=float)),
+                                 wl_bins.shape)
+        weight = np.exp(-(np.pi / (4.0 * hfov_b[None, :]) * r) ** 2)
+    else:
+        raise ValueError('Nonexistent fov taper model')
+
+    return 2.0 * np.trapz(ang_avg * weight * u[:, None], u, axis=0)
+
+
+def signal_noise_tables(positions, U, chop, x_grid, bl, n_phi=360, chunk=20000):
+    """Tabulate the chopped signal and single-output noise coefficients.
+
+    The simulator looks these up against the dimensionless separation
+    ``x = pi * bl * theta / lambda``. Writing the aperture positions in units of
+    the baseline, the phase at aperture k becomes ``2x (u_k . n(phi))`` with
+    ``n(phi)`` the rotation direction, so the response depends on the geometry
+    and on ``x`` alone. One table therefore serves every star and every
+    wavelength, exactly as for the closed-form reference array, and that is what
+    keeps the evaluation cheap for an arbitrary architecture.
+
+    Returns ``(s_grid, n_grid)``: the root-mean-square chopped response and the
+    root-mean-square single-output response over one rotation.
+    """
+    u = np.asarray(positions, dtype=float) / float(bl)
+    U = np.asarray(U, dtype=complex)
+    a_out, b_out = chop
+
+    phi = np.arange(n_phi) * 2.0 * np.pi / n_phi
+    nx, ny = np.cos(phi), np.sin(phi)
+    proj = u[:, 0][:, None] * nx[None, :] + u[:, 1][:, None] * ny[None, :]  # (n_ap, n_phi)
+
+    x_grid = np.asarray(x_grid, dtype=float)
+    s_grid = np.empty(x_grid.size)
+    n_grid = np.empty(x_grid.size)
+
+    for lo in range(0, x_grid.size, chunk):
+        hi = min(lo + chunk, x_grid.size)
+        xg = x_grid[lo:hi][:, None, None]                     # (nx, 1, 1)
+        amp = np.exp(2j * xg * proj[None, :, :])              # (nx, n_ap, n_phi)
+        out = np.einsum('ok,xkp->oxp', U, amp)                # (n_out, nx, n_phi)
+        T = np.abs(out) ** 2 / u.shape[0]
+
+        chopped = T[a_out] - T[b_out]
+        s_grid[lo:hi] = np.sqrt((chopped ** 2).mean(axis=-1))
+        n_grid[lo:hi] = np.sqrt((T[b_out] ** 2).mean(axis=-1))
+
+    return s_grid, n_grid
+
+
 def double_bracewell(bl, ratio):
     """LIFE's reference architecture as ``(positions, U)``.
 
