@@ -6,6 +6,10 @@ kr = 2*pi*bl*r/wl is large and the chirp across a bin matters most)."""
 import os
 
 import numpy as np
+# numpy 2.0 renamed trapz to trapezoid and removed the old name; keep both
+# working so the package runs against either major version.
+_trapz = getattr(np, 'trapezoid', np.trapz)
+
 
 working_directory = os.getcwd()
 import lifesim
@@ -109,7 +113,7 @@ def exo_leak_quadrature(instrument, l_sun, distance_s, n):
         else:
             taper_j = 1.0
         integrand_j = f_nu_sr_j * ang_avg_j * taper_j * r_j ** 2
-        ez_leak_j = 2 * np.pi * log_ratio_j * np.trapz(integrand_j, u[:, 0], axis=0)
+        ez_leak_j = 2 * np.pi * log_ratio_j * _trapz(integrand_j, u[:, 0], axis=0)
         ez_leak += w_j * ez_leak_j
     return ez_leak
 
@@ -145,7 +149,7 @@ def exo_leak_center_point(instrument, l_sun, distance_s):
     else:
         taper = 1.0
     integrand = f_nu_sr * ang_avg * taper * r ** 2
-    return 2 * np.pi * log_ratio * np.trapz(integrand, u[:, 0], axis=0)
+    return 2 * np.pi * log_ratio * _trapz(integrand, u[:, 0], axis=0)
 
 
 for spec_res in SPEC_RES_LIST:

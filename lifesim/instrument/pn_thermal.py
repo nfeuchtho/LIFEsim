@@ -1,4 +1,8 @@
 import numpy as np
+# numpy 2.0 renamed trapz to trapezoid and removed the old name; keep both
+# working so the package runs against either major version.
+_trapz = getattr(np, 'trapezoid', np.trapz)
+
 from typing import Union
 
 from lifesim.core.modules import PhotonNoiseInstrumentModule
@@ -113,7 +117,7 @@ class PhotonNoiseThermal(PhotonNoiseInstrumentModule):
         if hasattr(np, 'trapezoid'): # old versions of numpy do not have the trapezoid function
             detector_bb_int = np.trapezoid(y=detector_bb, x=wl_bins)
         else:
-            detector_bb_int = np.trapz(y=detector_bb, x=wl_bins)
+            detector_bb_int = _trapz(y=detector_bb, x=wl_bins)
 
         thermal_leak_detector = solid_angle * total_area * detector_bb_int * np.ones_like(self.data.inst['wl_bins'])
 

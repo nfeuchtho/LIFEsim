@@ -1,4 +1,8 @@
 import numpy as np
+# numpy 2.0 renamed trapz to trapezoid and removed the old name; keep both
+# working so the package runs against either major version.
+_trapz = getattr(np, 'trapezoid', np.trapz)
+
 from scipy.special import j0, j1, comb
 
 
@@ -130,4 +134,4 @@ def radial_average_tm(R, bl, wl_bins, hfov=None, fov_taper='none', n_r=200, null
     ang_avg = azimuthal_average_tm(r, bl, wl_bins[None, :], nulling_order=nulling_order)
     taper = np.exp(-(np.pi / (4 * hfov_b[None, :]) * r) ** 2)
     integrand = ang_avg * taper * u
-    return 2 * np.trapz(integrand, u[:, 0], axis=0)
+    return 2 * _trapz(integrand, u[:, 0], axis=0)

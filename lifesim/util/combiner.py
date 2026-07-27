@@ -29,6 +29,10 @@ comes from: only some outputs carry the deep null.
 """
 
 import numpy as np
+# numpy 2.0 renamed trapz to trapezoid and removed the old name; keep both
+# working so the package runs against either major version.
+_trapz = getattr(np, 'trapezoid', np.trapz)
+
 
 
 def array_response(positions, U, alpha, beta, wl):
@@ -249,7 +253,7 @@ def radial_average_general(u_pos, U, out, R, bl, wl_bins, hfov=None,
     else:
         raise ValueError('Nonexistent fov taper model')
 
-    return 2.0 * np.trapz(ang_avg * weight * u[:, None], u, axis=0)
+    return 2.0 * _trapz(ang_avg * weight * u[:, None], u, axis=0)
 
 
 def signal_noise_tables(positions, U, chop, x_grid, bl, n_phi=360, chunk=20000):
