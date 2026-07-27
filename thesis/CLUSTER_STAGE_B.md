@@ -41,13 +41,19 @@ that many workers and the default of eight comes from `settings.yaml`, not from
 anything about the problem. Set it to the cores you are allocated.
 
 ```bash
-python -m lifesim.ams.ablation_throughput --stage-b mag    --catalog hi --n-cpu 32
-python -m lifesim.ams.ablation_throughput --stage-b mag    --catalog lo --n-cpu 32
-python -m lifesim.ams.ablation_throughput --stage-b slew   --catalog hi --n-cpu 32
-python -m lifesim.ams.ablation_throughput --stage-b slew   --catalog lo --n-cpu 32
-python -m lifesim.ams.ablation_throughput --stage-b linear --catalog hi --n-cpu 32
-python -m lifesim.ams.ablation_throughput --stage-b linear --catalog lo --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b mag    --catalog hi --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b mag    --catalog lo --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b slew   --catalog hi --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b slew   --catalog lo --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b linear --catalog hi --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b linear --catalog lo --n-cpu 32
 ```
+
+**Use `python -u`.** The search routine prints its per-iteration progress without
+flushing, and Python block-buffers stdout when it is not a terminal, so without
+`-u` the log stays empty for hours and a working job is indistinguishable from a
+hung one. This was verified locally: the runner's own headers appeared, the
+search progress did not.
 
 Each writes its figure to `thesis/images/tse/physical/` as soon as it finishes,
 named `phys_<catalog>_<scan>_<target>.pdf`, and prints its elapsed time. Nothing
@@ -64,7 +70,7 @@ If bluesky uses SLURM, wrap each line:
 #SBATCH --output=stageb-mag-hi-%j.out
 source ~/venv-lifesim/bin/activate
 cd ~/LIFESim
-python -m lifesim.ams.ablation_throughput --stage-b mag --catalog hi --n-cpu 32
+python -u -m lifesim.ams.ablation_throughput --stage-b mag --catalog hi --n-cpu 32
 ```
 
 ## Bringing the results back
