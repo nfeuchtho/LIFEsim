@@ -332,6 +332,67 @@ def run_background_context(catalogs, null_orders):
     print(f'\nBackground context: {BACKGROUND_RESULTS}', flush=True)
 
 
+BREAKEVEN_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
+                                 'breakeven_throughput.tsv')
+
+
+def run_breakeven(catalogs, tol=2e-4):
+    """Throughput at which a fourth-order null stops paying for itself.
+
+    Solves t_4(tau) = t_2(tau_nominal) for tau, both at zero added budget. The
+    result is the throughput a fourth-order architecture must retain for its
+    deeper null to shorten the mission at all, and it can be compared directly
+    against the output efficiency of any proposed combiner.
+
+    `run()` calls `instrument.apply_options()`, which recomputes eff_tot from
+    the options, so the throughput can be varied without rebuilding the bus.
+    """
+    rows = []
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        nominal = ARMS['control']
+
+        def mtime(order, tau):
+            bus.data.options.array['throughput'] = tau
+            ams = AgnosticMissionSimulator(order, 7, 65 / 360 * 2 * np.pi, 0.8,
+                                           12 * 60 * 60, verbose=False)
+            return float(ams.run(instrument, opt))
+
+        t_ref = mtime(2, nominal)
+        lo, hi = 0.05, nominal          # f(lo) > 0, f(hi) < 0
+        f_hi = mtime(4, hi) - t_ref
+        f_lo = mtime(4, lo) - t_ref
+        print(f'hab2{catalog}: order-2 reference {t_ref:.4f} yr | '
+              f'order-4 at tau={hi} is {f_hi:+.4f} yr, at tau={lo} is {f_lo:+.4f} yr',
+              flush=True)
+        if f_hi > 0 or f_lo < 0:
+            print('>> break-even not bracketed; skipping', flush=True)
+            continue
+
+        it = 0
+        while hi - lo > tol:
+            mid = 0.5 * (lo + hi)
+            if mtime(4, mid) - t_ref > 0:
+                lo = mid
+            else:
+                hi = mid
+            it += 1
+        tau_star = 0.5 * (lo + hi)
+        retention = tau_star / nominal
+        print(f'>> hab2{catalog}: break-even throughput {tau_star:.5f} '
+              f'({100*retention:.1f}% of nominal) after {it} bisections', flush=True)
+        rows.append([f'hab2{catalog}', round(t_ref, 6), round(tau_star, 6),
+                     round(retention, 5), it])
+
+    os.makedirs(os.path.dirname(BREAKEVEN_RESULTS), exist_ok=True)
+    with open(BREAKEVEN_RESULTS, 'w', encoding='utf8') as fh:
+        fh.write('catalog\tmtime_order2_nominal_yr\tbreakeven_throughput\t'
+                 'retention_fraction\tbisections\n')
+        for r in rows:
+            fh.write('\t'.join(str(x) for x in r) + '\n')
+    print(f'\nBreak-even results: {BREAKEVEN_RESULTS}', flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -347,6 +408,9 @@ def main():
     ap.add_argument('--defect-impact', action='store_true',
                     help='Quantify the inherited local-zodiacal normalization '
                          'defect by rerunning with and without it.')
+    ap.add_argument('--breakeven', action='store_true',
+                    help='Solve for the throughput at which a fourth-order null '
+                         'ceases to shorten the mission relative to order two.')
     ap.add_argument('--background-context', action='store_true',
                     help='Report the astrophysical background spectral density '
                          'for scale against the reported allowances.')
@@ -374,6 +438,10 @@ def main():
 
     if args.background_context:
         run_background_context(catalogs, [2, 4])
+        return
+
+    if args.breakeven:
+        run_breakeven(catalogs)
         return
 
     for catalog in catalogs:
