@@ -47,7 +47,7 @@ import numpy as np
 
 _CWD = os.getcwd()
 import lifesim
-from lifesim import TradeSpaceExplorer, AgnosticMissionSimulator
+from lifesim import TradeSpaceExplorer, AgnosticMissionSimulator, ErrorBudget
 os.chdir(_CWD)  # LIFEsim changes the working directory on import
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -253,6 +253,82 @@ def run_defect_impact(catalogs, null_orders, upper_start):
     print(f'\nDefect-impact results: {DEFECT_RESULTS}', flush=True)
 
 
+BACKGROUND_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
+                                  'background_context.tsv')
+
+
+class _RecordingBudget(ErrorBudget):
+    """An ErrorBudget that records the astrophysical term handed to it.
+
+    The AMS accepts externally supplied budgets, so this captures the background
+    spectra without modifying the simulator. Factors are left at their defaults,
+    so the recorded run is identical to an ordinary zero-budget run.
+    """
+
+    def __init__(self, store, key):
+        super().__init__()
+        self._store = store
+        self._key = key
+
+    def evaluate(self, astro, *args):
+        self._store.setdefault(self._key, []).append(np.asarray(astro, dtype=float))
+        return super().evaluate(astro, *args)
+
+
+def run_background_context(catalogs, null_orders):
+    """Astrophysical background spectral density, for scale against N_I.
+
+    Reports the median over catalog stars of the stellar-leakage, local-zodiacal
+    and exozodiacal terms, converted to ph/s/micron at the same pre-efficiency
+    single-output plane as the reported allowance, so the two are directly
+    comparable.
+    """
+    rows = []
+    for catalog in catalogs:
+        bus, instrument, opt = build_bus(catalog, ARMS['control'])
+        # The SNR flow is dispatched to worker processes when n_cpu > 1
+        # (ams.py:307), and the recording budgets below would then fill a dict in
+        # the child rather than here. One evaluation is cheap; run it in-process.
+        bus.data.options.other['n_cpu'] = 1
+        wl_bins = np.asarray(bus.data.inst['wl_bins']) * 1e6          # micron
+        widths = np.asarray(bus.data.inst['wl_bin_widths']) * 1e6     # micron
+
+        for order in null_orders:
+            store = {}
+            ams = AgnosticMissionSimulator(
+                order, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60, verbose=False,
+                leakage_budget=_RecordingBudget(store, 'star'),
+                localzodi_budget=_RecordingBudget(store, 'localzodi'),
+                exozodi_budget=_RecordingBudget(store, 'exozodi'))
+            ams.run(instrument, opt)
+
+            comp = {}
+            for key in ('star', 'localzodi', 'exozodi'):
+                stacked = np.concatenate([a.reshape(-1, len(widths))
+                                          for a in store.get(key, [])], axis=0)
+                comp[key] = np.median(stacked, axis=0) / widths   # ph/s/micron
+            total = comp['star'] + comp['localzodi'] + comp['exozodi']
+
+            for j, wl in enumerate(wl_bins):
+                rows.append([f'hab2{catalog}', order, round(float(wl), 3),
+                             round(float(comp['star'][j]), 4),
+                             round(float(comp['localzodi'][j]), 4),
+                             round(float(comp['exozodi'][j]), 4),
+                             round(float(total[j]), 4)])
+
+            band = float(np.sum(total * widths) / np.sum(widths))
+            print(f'>> hab2{catalog} order {order}: band-averaged astrophysical '
+                  f'background {band:.1f} ph/s/micron; at 10 um '
+                  f'{float(total[np.argmin(abs(wl_bins - 10))]):.1f}', flush=True)
+
+    os.makedirs(os.path.dirname(BACKGROUND_RESULTS), exist_ok=True)
+    with open(BACKGROUND_RESULTS, 'w', encoding='utf8') as fh:
+        fh.write('catalog\tnull_order\twl_um\tstar\tlocalzodi\texozodi\ttotal\n')
+        for r in rows:
+            fh.write('\t'.join(str(x) for x in r) + '\n')
+    print(f'\nBackground context: {BACKGROUND_RESULTS}', flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -268,7 +344,19 @@ def main():
     ap.add_argument('--defect-impact', action='store_true',
                     help='Quantify the inherited local-zodiacal normalization '
                          'defect by rerunning with and without it.')
+    ap.add_argument('--background-context', action='store_true',
+                    help='Report the astrophysical background spectral density '
+                         'for scale against the reported allowances.')
+    ap.add_argument('--targets', type=str, default=None,
+                    help='Comma-separated mission-time targets overriding the '
+                         'defaults. Needed for the penalized arm, whose '
+                         'zero-budget time already exceeds every default target.')
     args = ap.parse_args()
+
+    if args.targets:
+        override = [float(t) for t in args.targets.split(',')]
+        for key in TARGETS:
+            TARGETS[key] = override
 
     catalogs = args.catalog or ['hi', 'lo']
     arms = args.arm or list(ARMS)
@@ -279,6 +367,10 @@ def main():
 
     if args.defect_impact:
         run_defect_impact(catalogs, [2, 4], args.upper_start)
+        return
+
+    if args.background_context:
+        run_background_context(catalogs, [2, 4])
         return
 
     for catalog in catalogs:

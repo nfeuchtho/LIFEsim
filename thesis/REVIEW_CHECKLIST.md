@@ -187,7 +187,11 @@ waits for the post-diff fortnight.
 - [ ] C3. **SQ3 aggregate-`N_I` fidelity assessment.** Split `N_I` into components,
       show the aggregate reproduces the split within a stated tolerance. Converts
       the one open research question into a result.
-- [ ] C6. **Penalized arm at feasible mission-time targets.** The Guyon-penalized
+- [x] C6. **Penalized arm at feasible mission-time targets.** DONE. The
+      reversal survives: long-weighted is largest in all six tested cases across
+      both catalogs, by factors of 1.3 to 2.6, and clears the integral-neutral
+      reference in every one. Reported as Table 5.3 in Section 5.7. Original note
+      follows. The Guyon-penalized
       order-four configuration cannot complete Experiment 1 at 5.5 or 6.0 yr at
       all: with zero added noise it already needs 7.65 yr, so the endpoint search
       correctly returns no admissible budget. Rerun the penalized arm at 8.0, 8.5
@@ -201,7 +205,14 @@ waits for the post-diff fortnight.
       exceeds its leakage-suppression benefit by a factor of three to five, so a
       penalized order-four configuration reaches no target at all. Data:
       `thesis/reproducibility/throughput_sweep.tsv`.
-- [ ] C7b. **Optional strengthening:** state what fraction of the astrophysical
+- [x] C7b. **Background context.** DONE and reported in Section 6.1. The
+      band-averaged astrophysical background is about 4300 ph/s/micron at null
+      order two and 2350 at order four, so the second-order flat allowances are
+      roughly 3% (Hab2Max) and 1.5% (Hab2Min) of it, against about a quarter at
+      order four. Local-zodiacal light supplies 78-86% of that background, which
+      is why a 27.3% error in it moved the requirement so far. Original note
+      follows.
+- [ ] C7b-orig. **Superseded:** state what fraction of the astrophysical
       background the reported allowances represent at one wavelength. Reviewer 2
       flagged its absence as the reason a reader cannot judge whether 140 or 640
       is demanding or comfortable. Requires evaluating `N_B(lambda)` at the
