@@ -103,6 +103,21 @@ Catalogues under `lifesim/catalogs/` are gitignored and are 181 MB and 121 MB.
 Collection script: `lifesim/ams/ablation_throughput.py`, with modes
 `--sweep --defect-impact --background-context --breakeven --snr-shift --physical`.
 
+## Open issue: what the budget figures actually show
+
+Every budget-breakdown figure -- Figure 4.1, Figures 5.1 and 5.2, and the twelve
+regenerated ones under `images/tse/physical/` -- is produced by the simulator's
+plot mode, which at `ams.py:634-636` resolves **one specific planet** by
+positional index (9 for Hab2Max, 5 for Hab2Min) and draws that planet's stellar
+and exozodiacal background.
+
+The figures therefore combine an amplitude derived from the whole ensemble, via
+the mission-time search, with background curves belonging to a single arbitrary
+target. That is a reasonable illustration, but no caption says so, and Figure
+4.1's caption currently implies a general configuration. Every such caption needs
+a clause naming the target and stating that the curves are that target's, not an
+ensemble average.
+
 ## A caution learned the hard way
 
 `ANALYTIC_NOISE_REWRITE.md` is itself AI-written and is **not** an independent

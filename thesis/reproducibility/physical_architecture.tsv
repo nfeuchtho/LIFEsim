@@ -11,3 +11,5 @@ timestamp	catalog	architecture	mtime_target_yr	budget_family	endpoint_ph_s_um	mt
 2026-07-27T22:26:15+00:00	hab2lo	triple_nuller_6ap	8.0	flat	221.8897170289793	7.925323	97.4
 2026-07-27T22:27:28+00:00	hab2lo	triple_nuller_6ap	8.0	long_weighted	641.1505126952303	7.99218	73.0
 2026-07-27T22:28:53+00:00	hab2lo	triple_nuller_6ap	8.0	short_weighted	381.0624690870012	8.028359	85.0
+2026-07-27T23:16:23+00:00	hab2hi	triple_nuller_6ap	5.5	flat	138.14705637098447	5.536131	89.0
+2026-07-27T23:17:42+00:00	hab2hi	triple_nuller_6ap	5.5	long_weighted	347.0934216327573	5.510494	78.5
