@@ -1,0 +1,651 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{lettrine}
+\usepackage{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{dcolumn}
+\usepackage{array,booktabs,ragged2e}
+\usepackage{pgfplots,pgfplotstable,pgfkeys,filecontents}
+\usepackage{csvsimple,ifthen,etoolbox}
+\usepackage{amsmath,latexsym}
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{xfrac}
+\usepackage{fancyhdr}
+\usepackage{lettrine}
+\usepackage{geometry}
+\usepackage{dcolumn}
+\usepackage[htt]{hyphenat}
+\usepackage{circuitikz}
+\usepackage{siunitx}
+\usepackage{nicefrac}
+\usepackage{hyperref}
+\usepackage{color,soul}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{adjustbox}
+\usepackage{pdfpages}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usetikzlibrary{fit}
+\usepackage{float}
+\usepackage{rotating}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{mathtools}
+\usepackage{upgreek}
+\usepackage[toc,page]{appendix}
+\usepackage[section]{placeins}
+
+% --- Float placement: keep figures near their references ---
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{4}
+\setcounter{totalnumber}{6}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.8}
+
+\newcommand\addvmargin[1]{
+	\node[fit=(current bounding box),inner ysep=#1,inner xsep=0]{};
+}
+\geometry{
+	a4paper,
+	total={8.5in,11in},
+	left=1in,
+	right=1in,
+	top=1in,
+	bottom=1in,
+}
+
+\pagestyle{fancy}
+
+\raggedbottom
+\newcolumntype{R}[1]{>{\RaggedLeft\arraybackslash}p{#1}}
+\renewcommand{\baselinestretch}{1.4}
+\setlength\parindent{0pt}
+\def\doubleunderline#1{\underline{\underline{#1}}}
+
+\newcommand{\reporttitle}[3][ ]{
+	\thispagestyle{empty}
+	\begin{center}
+		\vspace*{8mm}
+		\fontshape{sc}
+		\fontsize{17pt}{20pt}
+		\selectfont
+		#2
+		\linebreak
+		\fontsize{25pt}{25pt}
+		\bfseries
+		\selectfont
+		#3
+		\linebreak
+		\fontshape{n}
+		\fontsize{15pt}{25pt}
+		\normalfont
+		\selectfont
+		#1
+	\end{center}
+}
+
+% Header ============================================================================================
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Master's Thesis - 1st Draft\\IPA / Quanz Group}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\chead{DATE\\ \nouppercase{\leftmark}}
+\rhead{FS 26\\Nicolas Feuchthofen}
+\cfoot{Page \thepage}
+
+%\setlength{\columnsep}{5mm}
+%\setlength{\columnseprule}{0.5pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1.4}
+\setlength{\parskip}{3mm}
+% ===============================================================================================================
+
+\onehalfspacing
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+
+\begin{document}
+% Titel ========================================================================================================
+\reporttitle[\vspace{-1.5cm} \\ \rule{6.4cm}{0.4pt} \\ \vspace{-0.5cm} \textit{Nicolas Feuchthofen} \\ Supervisors: Dr. Felix Dannert, Prof. Dr. Sascha Patrick Quanz\\ \vspace{-0.4cm}  DATE]{Master's Thesis - 1st Draft}{Finding Optimal Random Noise Error Budget Distributions for the LIFE Space Mission With Arbitrary Nulling and Noise Models}
+
+\vspace{1cm}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/LIFE_Logo_Wordmark_Primary_Digital_RBG-Black.png}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{abstract}
+    TODO
+\end{abstract}
+
+\newpage
+
+% ===============================================================================================================
+
+\section*{Acknowledgments}
+TODO
+
+\newpage
+
+% ===============================================================================================================
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+At the moment, the error budget, which is the maximum allowed total noise, of the LIFE space mission is estimated using a double Bracewell interferometer architecture. Currently, astrophysical noise sources are computed from known models. The required mission time is then usually derived without instrumental noise, or using arbitrary additional instrumental noise terms.
+This approach is very simple and understandable, but unfortunately it does not completely meet the complex requirements of the mission.
+
+First, there is no study on the impact of varying noise on mission time. We simply do not know the optimal budget assignment at the moment. In instrument engineering, not all noise sources are equally easily optimizable. We must hence be able to include not only the absolute value, but also the distribution of the error budget in sensible instrument requirement calculations. Second, there lies a fundamental problem in the assumption of an instrument architecture. How do we know whether the double Bracewell is actually ideal for our mission? There might be a different nulling architecture that is simpler to construct and control while actually completing the mission in less time.
+
+To summarize, we currently know neither which instrument architecture is the best for our case nor how accurately we must engineer that architecture to be able to achieve the scientific goals in a realistic time.
+
+In order to find an answer to both very pressing questions, we propose a different approach. Instead of assuming a fixed instrument and simulating noise based on it, we use noise and planet signals as input. These inputs must conform to the astrophysical limit. By changing the inputs and their functional forms, we also challenge the instrument architecture since it is fundamentally connected to signal and noise through interferometry physics. This approach does not rely on any assumptions on architecture, works with any order nulling, and is therefore \textit{instrument-agnostic}.
+
+\subsection{Research Questions} \label{sec: intro: research questions}
+Using a set of novel approaches, this thesis project will seek to answer the following central question.
+
+\textit{Using an efficient architecture-agnostic simulator for arbitrary physics-conforming nulling and noise models, can we reliably determine instrument-agnostic requirements on the overall random noise error budget of the LIFE space mission to complete the mission in a reasonable amount of time, assuming pessimistic constraints on the physical limits?}
+
+This question may be structured into the following sub-questions, which the thesis will address in detail:
+\begin{itemize}
+    \item \textit{What is the dimension of the AMS parameter space?}
+    \item \textit{Can we reduce the AMS parameter space without significantly compromising fidelity?}
+    \item \textit{Can we determine a set of optimal, i. e. architecturally most easily feasible, parameters for any set mission time, assuming any realizable nulling architecture?}
+    \item \textit{Can we efficiently and deeply explore the parameter space of the AMS to be able to provide a solution that is as close to optimal as possible?}
+\end{itemize}
+
+The remainder of this thesis follows the logic of these questions. Section \ref{sec: background} lays out the theory needed to follow the approach: the target catalogs, the signal-to-noise ratio, the noise sources, and the notion of an error budget spread over a large trade space. Section \ref{sec: methods} then constructs the instrument-agnostic machinery itself, the functional treatment of the variable parameters, the modified null-depth ansatz that stands in for the architecture, and the Agnostic Mission Simulator that turns a set of parameters into a mission time. Section \ref{sec: ts reduction} attacks the first two sub-questions by shrinking the trade space without sacrificing fidelity, and Section \ref{sec: tse} explores the reduced space to answer the remaining two. We close with a discussion of what the approach achieves and where it can still be improved.
+
+\newpage
+\section{Background and Procedures} \label{sec: background}
+This project is being conducted within the scope of the LIFE space mission. The mission aims to use nulling interferometry to block most of the light of individual stars to be able to detect the thermal emissions of orbiting exoplanets. This will be achieved by placing a rotating array of apertures at the Sun-Earth L2 Lagrange point. By flying in formation, the collected light may be combined to form a large mid-infrared interferometer. The presence of different molecular species, including potential biomarkers, can be indicated by the absorption features in the retrieved spectra, providing clues to the existence of extraterrestrial life. We currently work with a double Bracewell mission architecture, which is made up of two pairs of apertures, producing two dark (destructive interference) and two bright (constructive interference) outputs with a null order of two, as depicted in Fig. \ref{fig: double-bracewell-layout}. This chapter defines the background and theory necessary to be able to follow our approach.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/intro/dannert2022-double-bracewell-layout.png}
+    \caption{Dannert et al. (2022): Double Bracewell interferometer layout for the LIFE space mission. Light from apertures 4 and 3, 1 and 2 is combined to form two destructive and two constructive outputs. The destructive outputs are combined again with a phase shift of $\pi/2$ to form the two dark outputs with a second order null.}
+    \label{fig: double-bracewell-layout}
+\end{figure}
+
+\newpage
+
+\subsection{The Experiment and Assumptions}
+This work focuses on \textit{Experiment 1} of the LIFE mission, a sub-mission aiming to detect and characterize at least 50 terrestrial planets between 0.5 and 1.5 Earth radii in the habitable zone of sun-like stars (stellar temperature between 4370 K and 7310 K) (CITATION). For a successful characterization, we assume a minimum signal-to-noise-ratio of 44. Each aperture is optimistically assumed to possess a fixed mirror size of 4 m. The total detector efficiency is set to 9\% based on previous assessment (CITATION).
+
+\subsection{Target Catalog Selection} \label{sec: intro: catalog}
+The LIFE target catalogs are created on the basis of real neighborhood stars, particularly sun-like and M dwarf stellar objects, up to about 50 parsecs away. Since we do not yet have reliable planet detections around the vast majority of target stars, we must simulate both planetary occurrence rates and distributions based on various input parameters. Using MCMC draws on Kepler statistics, simulated exoplanets are placed in orbit around the stars. Each MCMC draw is called a \textit{universe}, containing a distinct set of hypothetical exoplanets. The tool used for this purpose is called P-Pop (CITE).
+
+We used two catalogs as our approach basis: \textit{Hab2Min} and \textit{Hab2Max} with 100 universes each. These two catalogs fundamentally deviate in their definition of $\eta_{\oplus}$, which defines the fraction of all sun-like stars that possess at least one Earth-twin exoplanet in their empiciral habitable zone (eHZ) (Tab. \ref{tab: eta earth}) (CITATION). Previous research suggests values between 0.1 and 0.5 (CITATION), which motivates the inclusion of at least two different catalogs.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+Catalog & $\eta_{\oplus}$ \\
+\midrule
+Hab2Min & $0.19_{-0.10}^{+0.19}$ \\
+Hab2Max & $0.34_{-0.19}^{+0.38}$ \\
+\bottomrule
+\end{tabular}
+\caption{(CITATION, LIFE paper 6). Values of $\eta_{\oplus}$ for the two used input catalogs. The sub- and superscript denote one standard deviation. $\eta_{\oplus}$ denotes here the fraction of sun-like stars with at least one exo-earth-candidate (EEC) in their empirical habitable zone (eHZ).}
+\label{tab: eta earth}
+\end{table}
+
+\subsection{Signal Collection: Transmission Map, Chopping, and Modulation} \label{sec: intro: signal collection}
+Before quantifying the signal-to-noise ratio, we must understand how the interferometer actually collects a planetary signal and separates it from the vastly brighter and more diffuse backgrounds. The starting point is the \textit{transmission map}. When the beams from the individual apertures are combined, they interfere, so that the instrument's sensitivity to light varies with the position of the emitting source on the sky. The transmission map $T$ is precisely this response pattern: it assigns to every sky position, parametrized by the angular offsets $(\alpha, \beta)$ from the central line of sight, the fraction of incident flux that reaches the detector. For a double Bracewell array the map takes the form of alternating dark and bright fringes whose angular scale is set by the ratio of the observed wavelength to the nulling baseline, the physical separation of the apertures (CITATION). By construction the array is tuned to place a deep null on the line of sight, where the on-axis starlight is destructively cancelled, while an off-axis planet at a suitable angular separation falls onto a bright fringe and is transmitted (Fig. \ref{fig: transmission maps a}, left). This is the geometric essence of nulling interferometry: the starlight is suppressed by placing it at the null, and the planet light is picked up by the surrounding transmission pattern.
+
+Suppressing the direct starlight is, however, not enough. A residual signal remains from the stellar leakage, from the local- and exo-zodiacal dust, and from any slowly varying instrumental background, all of which are far stronger than the planet itself and would otherwise swamp it. The instrument attenuates these through \textit{chopping}. The double Bracewell produces two destructive outputs whose transmission maps are mirror images of each other about the line of sight. Their difference, the \textit{chopped transmission map}, is antisymmetric: it is positive where one output transmits and negative where the other does. Any source that is symmetric about the line of sight, such as the on-axis stellar leakage or a smooth, centrally symmetric dust disk, contributes almost equally to both outputs and therefore cancels in their difference. A planet, being a point source sitting off-axis in only one of the two maps, does not cancel and survives the subtraction (Fig. \ref{fig: transmission maps a}, right). Chopping thus acts as a differential measurement that rejects the symmetric backgrounds while preserving the asymmetric planetary signal, and it is the reason a faint planet can be extracted from a background several orders of magnitude brighter.
+
+The final ingredient is \textit{modulation} through array rotation. Over an observation the entire array is slowly rotated about the line of sight. A planet at a fixed angular separation is thereby swept through the alternating positive and negative lobes of the chopped map, so that its contribution to the differential output oscillates in time, tracing out a characteristic \textit{transmission curve} as a function of rotation angle (Fig. \ref{fig: transmission maps b}). The symmetric backgrounds, being nearly axisymmetric, stay approximately constant under this rotation. The planetary signal is therefore encoded as a time-modulated component riding on an essentially static background, which is what allows it to be isolated in the subsequent data analysis. This is the origin of the temporal average $\langle\cdot\rangle$ over one full array rotation that appears throughout the SNR derivation below.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/intro/transmission_maps.png}
+        \caption{Transmission maps of the double Bracewell array.}
+        \label{fig: transmission maps a}
+    \end{subfigure}
+
+    \vspace{2mm}
+
+    \begin{subfigure}{.72\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/intro/transmission_modulation.png}
+        \caption{Rotational modulation of the marked planet.}
+        \label{fig: transmission maps b}
+    \end{subfigure}
+    \caption{Signal collection of the LIFE double Bracewell array, computed directly with the LIFEsim transmission module at a wavelength of $10.4\,\upmu$m and a nulling baseline of $20\,$m, zoomed to the central $\pm 300\,$mas of the field of view. (a) Left: the transmission map of a single destructive output. The star (cyan) sits on the deep on-axis null, while a planet (green) at an angular separation of $53\,$mas falls onto a bright fringe and is transmitted. Right: the chopped map, formed as the difference of the two destructive outputs. It is antisymmetric, with positive (red) and negative (blue) lobes; any source symmetric about the line of sight cancels in this difference, whereas the off-axis planet does not. The dashed circle traces the path the planet follows as the array rotates. (b) As the array rotates, the planet is swept along that circle through the alternating lobes of the chopped map, so its collected signal (red) is modulated in time, while the unchopped single-output response (blue dashed), through which the planetary photon noise is collected, carries a different weighting. The rich multi-lobe structure reflects the planet crossing the many fine fringes set by the imaging baseline; the essential point is that the planetary signal varies periodically in time while the symmetric backgrounds do not, which is what makes it separable.}
+    \label{fig: transmission maps}
+\end{figure}
+
+Two consequences of this scheme carry directly into the SNR. First, the planetary \textit{signal} is collected through the chopped map, whereas the planetary \textit{photon noise}, which is insensitive to the sign of the modulation, is collected through a single, unchopped output; the two therefore enter with different transmission weights. Second, because the map is integrated over a full rotation, the effective response becomes radially symmetric and depends only on the angular separation of the planet and on the nulling baseline. This rotation-averaged response, further attenuated by a field-of-view taper that models the loss of off-axis coupling into the instrument's optical fibers, is the \textit{transmission efficiency} introduced in Section \ref{sec: intro: params}. With the collection mechanism established, we can now make the notion of signal and noise quantitative.
+
+\subsection{The Signal-To-Noise Ratio (SNR)}
+In data analysis, the \textit{signal-to-noise ratio} (SNR) is a simple measure of how noise-contaminated a signal is. Derived from the assumption of Gaussian signals, it is generally defined as
+\begin{align}
+    \text{SNR} = \frac{\text{Usable Signal}}{\text{Total Noise}}.
+\end{align}
+The astrophysical photon sources we are concerned with are generally non-monochromatic since we assume them to be dominated by black body physics. The SNR must hence be computed for each observed wavelength and then combined over the full spectrum. The final product is known as the \textit{bulk SNR}. We only outline here the derivation of the LIFE mission bulk SNR by Dannert et al. (2022).
+
+In the context of the LIFE space mission, the signal is the pure photon flux from the target planet at the point of emission, filtered through the chopped transmission map. We denote any undesired photon flux as noise, regardless of origin. The background noise contributions detailed in Section \ref{sec: intro: noise sources} are additive. Consider the background noise fluxes $N_1, N_2, ..., N_n$, then the total background noise is given by
+\begin{align} \label{eq: additive noise}
+    N_B(\lambda) = \sum_{i=1}^{n}N_i(\lambda).
+\end{align}
+The mission has a finite spectral resolution, which means that the entire observed spectrum is separated into wavelength bins. All retrieved data are one-dimensional, only depending on the wavelength. Hence, we must compute an SNR for each bin with central wavelength $\lambda_i$. To average the signal and noise contributions per bin, we use the continuous root-mean-square (RMS). For the signal $S$ we have
+\begin{align}
+    \text{RMS}_{\lambda_i, S} = \int_i d \lambda \sqrt{\langle S^2(\lambda)\rangle},
+\end{align}
+where $\int_i$ runs over the respective wavelength bin and $\langle\cdot\rangle$ denotes the temporal average over one full array rotation, so that $\sqrt{\langle S^2(\lambda)\rangle}$ is the root-mean-square of the time-modulated chopped signal at each wavelength. Regarding noise, we must respect the background noise $N_B$, as well as the planetary noise $N_P$. The planetary noise denotes the emitted planetary photon flux filtered through the unchopped transmission map. Using that the background noise is constant in time, and taking the discrete RMS to combine the RMS of $N_B$ and $N_P$, we arrive at the RMS expression for the total non-systematic astrophysical noise per bin,
+\begin{align}
+    \text{RMS}_{\lambda_i, N} = \sqrt{2\int_i d\lambda(N_B(\lambda) + \sqrt{\langle N_P^2(\lambda)\rangle})}.
+\end{align}
+We may now compute the bin SNR as
+\begin{align} \label{eq: bin snr}
+    \text{SNR}_{\lambda_i} = \frac{\text{RMS}_{\lambda_i,
+    S}}{\text{RMS}_{\lambda_i, N}} = \frac{\int_i d\lambda \sqrt{\langle S^2(\lambda)\rangle}}{\sqrt{2\int_i d\lambda(N_B(\lambda) + \sqrt{\langle N_P^2(\lambda)\rangle})}}.
+\end{align}
+Finally, assuming that the noise between individual bins is uncorrelated, the bulk SNR is given by
+\begin{align} \label{eq: bulk snr}
+    \text{SNR}_\text{tot} = \sqrt{\sum_{\lambda_i}\text{SNR}_{\lambda_i}^2}.
+\end{align}
+From this point onward, the term SNR will always refer to bulk SNR unless otherwise stated.
+
+\subsection{Non-Systematic Noise Sources} \label{sec: intro: noise sources}
+To be able to quantify the goals of the mission, we must carefully define some requirements on the performance of the instrument. In particular, the nature of the instrument incurs noise sources. Firstly, in many solar systems, including our own, there is a circumsolar dust cloud emitting in the same wavelength range as the planet because it is at a comparable temperature. This noise is referred to as \textit{local-zodiacal} if it originates from our solar system and \textit{exo-zodiacal} if it is produced by the target system. Secondly, even if the target star is very far away, it will still have a non-zero apparent angular diameter. As the interferometer is designed to perfectly cancel out the starlight directly on the line of sight, the emission from the limb of the stellar disk will not be completely nulled. The resulting photon contribution is known as \textit{stellar leakage}. Lastly, due to engineering limitations, the instrument itself is also certain to produce a signal contamination known as \textit{instrumental noise}, such as dark currents on the detector. A sample of how astrophysical noise could look is shown in Fig. \ref{fig: astronoise}.
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}{.49\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/intro/constant_5yrs_noiseonly.png}
+  \caption{Stellar Leakage - Localzodi Dominated}
+\end{subfigure}
+\begin{subfigure}{.50\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/intro/constant_5yrs_noiseonly_exozodi.png}
+  \caption{Exozodi Dominated}
+\end{subfigure}
+\caption{Demonstration of two typical astrophysical noise contributions over the LIFE mid-infrared spectrum. Stellar leakage dominates the shorter wavelengths, while the dust disks obscure the longer wavelengths. On the left hand side, we may see a typical low-exozodi case. In these cases a very typical minimum of astrophysical noise appears in the first third of the spectrum. A potential planetary signal would likely be clearly visible in the corresponding wavelength range. The right hand side displays a strongly exozodi-dominated system, which causes the noise to increase by roughly one order of magnitude everywhere in the spectrum. If a planet resides in this system, it will probably be very hard to characterize compared to the left case.}
+\label{fig: astronoise}
+\end{figure}
+
+The overall success of the mission depends on how well we can increase the SNR of the measurements. Although some noise may be mitigated by using photon statistics, we always strive to increase the SNR to be able to satisfactorily detect and characterize the maximum number of targets. In practice, if looking at a certain target yields data with a lot of noise, we cannot draw confident conclusions, which reduces the scientific benefit and might result in the target being unsuitable. Subsequently, another target must be selected and its spectra retrieved, which takes more mission time. Due to this effect, we must aim to reduce all noise as much as possible. Now, the considered non-systematic astrophysical noise is governed by black-body physics and is created outside the instrument at its respective source, which gives us only limited optimization chances. Instrumental noise, however, is based on the construction and precision of the instrument itself, which we can directly influence. The question now arises of exactly how much instrumental noise we can allow in addition to the astrophysical noise for the mission goals to still be achievable in reasonable time. This total amount of noise allowed for a given mission time is known as the \textit{error budget} and plays a critical role in determining the engineering accuracy required for the instrument. It is essential to carefully assign this budget to ensure the success of the mission.
+
+\subsection{Parameters and Instrument Performance} \label{sec: intro: params}
+In order to understand the methods we use, it is important to first define some terms. In the context of this work, we denote by a \textit{parameter} a value or function that describes an aspect of the mission that we may or must vary and find constraints for. As an example, we should vary the limiting magnitude and find a reasonable cutoff, hence it is a parameter. The wavelength binning of the instrument, on the other hand, is fixed in the mission itself and is hence not considered a parameter. We must also distinguish between variable and agnostic parameters. The stellar leakage, for example, is variable because it depends on the distance and temperature of the star as well as the observed wavelength, since stars are much hotter than planets and hence emit more strongly in shorter wavelengths. Conversely, the limiting magnitude is agnostic, because it defines a cut-off above which we consider target stars invisible to any instrument we build. We must declare our approach based on whether a parameter is variable or agnostic.
+
+Looking at the previously described astrophysical noise sources and assuming an ideal instrument without instrumental noise, we can compute the received photon counts for any instrument architecture, source and target. We can now return to the concept of an error budget: we distribute the budget by padding each parameter with a variable amount of margin. For our mission, we define the zero-noise-budget instrument as the absolute limit. Building a better instrument is impossible because it would require reducing the astrophysical photon flux. As the easiest instrument to build, it is therefore also our starting point. From there, we increase the permissible error budget by adding a margin to each parameter. If, at some wavelength, the added budget is lower than the total astrophysical noise, we say that the instrument is \textit{astrophysical-noise-limited} at that wavelength. Conversely, should the budget exceed the total astrophysical noise, the instrument will be \textit{instrumental-noise-limited} there.
+
+As an example, consider again the stellar leakage. Typically, a star emits more strongly in the shorter wavelengths, so we might add some margin to the shorter wavelengths and observe the impact on mission time. This example as well as the general budget distribution idea is illustrated in Fig. \ref{fig: leakage budget example}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/intro/long_short_6yrs.png}
+    \caption{A simple budget distribution example. We pad the short wavelengths with budget to account for stellar leakage, proportionally subtracting it from the longer wavelengths in the process. The green-shaded area and dashed green line are the error budget we add on top, symbolizing instrumental noise. The shades of green denote whether the instrument is instrumental-noise- or astrophysical-noise-limited at any given wavelength. As an example, at 8 microns, the budget is higher than the astrophysical noise, so the instrument is instrumental-noise-limited. At 16 microns, the budget is lower than the astrophysical noise, so we say that the instrument is astrophysical-noise-limited there.}
+    \label{fig: leakage budget example}
+\end{figure}
+
+A special case is the planetary emission. It is related to the instrument through the transmission efficiency, which is a product of the fully rotated, hence radially symmetric, instrument transmission and the field of view taper. The former fundamentally depends on the nulling baseline, the physical distance between the interferometer apertures. The latter describes the signal loss as the photon incidence angle is shifted from the central axis as a result of optical fiber coupling. The emissions from the planet constitute our signal, which we desire to maximize.
+
+We can now collect the complete set of variable parameters and the physical quantities each of them depends on. Every noise contribution reaches the instrument through the transmission map, which is why each additionally carries the wavelength dependence characteristic of its blackbody source. The variable parameters are as follows:
+\begin{itemize}
+    \item Stellar leakage. Depends on the wavelength, the stellar temperature, the stellar radius, and the distance to the star.
+    \item Local-zodiacal noise. Depends on the wavelength and the ecliptic latitude of the target.
+    \item Exo-zodiacal noise. Depends on the wavelength, the stellar luminosity, and the distance to the star.
+    \item Planetary signal. Depends on the wavelength and, through the transmission efficiency, on the nulling baseline and the field of view taper.
+\end{itemize}
+This enumeration already indicates the size of the raw problem. Each variable parameter carries both a multiplicative and an additive modifier (Section \ref{sec: intro: varparams descr}), and each modifier is in principle a free function of the two to four physical quantities listed above. Treated without simplification, the variable part of the trade space is therefore not merely high-dimensional but formally infinite-dimensional, since a free function has infinitely many degrees of freedom. This is precisely the observation that motivates the reductions of Section \ref{sec: ts reduction: condensation}, which collapse these modifiers into a single, interpretable, one-dimensional noise function of wavelength.
+
+In addition to the variable ones, there are also parameters that are inherently instrument-agnostic. They should also be varied and will impact the required mission time. Since they are agnostic and inherently one-dimensional, we will evaluate them on simple grids. The agnostic parameters are as follows:
+\begin{itemize}
+    \item Limiting magnitude. Describes the maximum K-band magnitude object that the instrument can detect.
+    \item Field of regard. Describes a fundamental limit on the rotating instrument, excluding part of the celestial sphere. In practice, at any point in time, the instrument can only see part of the sky. We now observe which part of the sky is unobservable while the rotating instrument orbits the sun. We ultimately find that the celestial sphere beyond a certain ecliptic latitude is inaccessible to our observations. The field of regard symmetrically defines the allowed zone, with $\frac{\pi}{2}$ the full sky.
+    \item Slew time. Defines the average time it takes for the instrument to center on a new target.
+\end{itemize}
+Knowing the starting points and limits, we can now go back to the performance of the instrument. We employ a practical science iso-performance approach. Specifically, we declare an instrument better-performing if it can complete the scientific goals of the mission in less time. The variable and agnostic parameters together span a large space of possible choices, which we call the \textit{trade space}. To be able to estimate the error budget, we must first create a tool that takes the parameters as input and gives the mission time as output. This tool is the \textit{Agnostic Mission Simulator} (AMS), described in detail in Section \ref{sec: methods: AMS}. Hence, for this part, we invert the research question and strive to find the mission time for a set error budget. The term "set" in this context also includes the distribution of the budget across all parameters.
+
+\subsection{The Trade Space} \label{sec: intro: trade space}
+With the AMS in place, we can return to the fundamental question. How do we find the error budget for any set mission time? In theory, this would require inverting the AMS. In practice, it means scanning the trade space for the minimum mission time. Since we start the variable parameters from the astrophysical limits, we know that the mission time will increase monotonically by adding budget. Setting the error budget will hence be a question of just how much we can increase the budget before the mission simply takes too long. This sounds straightforward but undoubtedly requires a lot of creative thinking. Let us illustrate this with an example. We know that the trade space is very large - if we conservatively assume 10 degrees of freedom (variable parameter dimensions plus agnostic parameters), brute-force computing just 10 points for any degree of freedom, we end up with a grid of $10^{10}$ points, on each of which the AMS must run once. Assuming a very optimistic parallelized AMS runtime of one second per data point, we are looking at a total runtime of 317 years (!), by which time we get an extremely coarse overview of the trade space. As this little example drastically shows, we require a more refined approach to trade space exploration (TSE). A conceivable approach may be to combine variable parameters in order to reduce the trade space.
+
+Once the TSE tool is also sufficiently implemented, we can run it for each of the previously found instrument architectures and then compare the resulting error budgets. In addition to defining an error budget for the instrument, this would undoubtedly also give valuable insight into which architecture is more suitable for the mission.
+
+\newpage
+\section{Methods} \label{sec: methods}
+With the groundwork covered, we can now actually talk about the aforementioned instrument-agnostic approach. What does it mean to construct such an approach? How do we simulate and set constraints on instrument physics without actually knowing the instrument?
+
+\subsection{Variable Parameter Treatment} \label{sec: intro: varparams descr}
+In order to describe our approach, we must first determine how to implement the variable parameters. A conceivable strategy could be an interpolation grid on which the parameters are evaluated. Each point in the grid could be modified, granting an enormous trade space. This benefit, however, also constitutes the biggest drawback of this approach because such a large trade space will be difficult to confine, making TSE even more challenging. Instead, we propose a relatively simple functional approach. Denoting by F the output photon flux density of a regular astrophysical model (i. e., the zero-budget planetary signal or astrophysical noise), we express the \textit{variable parameter} V as
+\begin{align} \label{eq: variable parameter}
+    \text{V}(\alpha_1, \dots, \alpha_n) = \text{M}(\alpha_1, \dots, \alpha_n) \times \text{F} + \text{A}(\alpha_1, \dots, \alpha_n),
+\end{align}
+where we define M as the \textit{multiplicative modifier} and A as the \textit{additive modifier}. The dependencies $\alpha_i$ stand for arbitrary physical quantities like wavelength, stellar radius, etc. In this context, increasing either M or A would increase V, thus assigning some budget to V. Notice here that we must have $\text{M} \geq 1$ and $\text{A} \geq 0$, because otherwise we would reduce the pure astrophysical flux, which is impossible. Referring to Section \ref{sec: intro: params}, our zero-budget parameter is defined as $\text{M} = 1$ and $\text{A} = 0$.
+
+\subsection{Modified Double Bracewell Null Depth Approach} \label{sec: intro: null depth approach}
+Computing the signal and contribution for any nulling architecture, and hence conducting a "true" agnostic approach, is neither reasonably feasible nor interesting. Since we know that we will build a rotating nulling interferometer, there is only a finite number of realizations. Implementing a choice of these realizations is also not helpful because we might put too much emphasis on certain architectures while omitting others. Also, parameters like the baseline may become multi-dimensional, asymmetrical, and hard to define. We therefore propose a different and simpler approach to architecture selection. We know the transmission map of the double Bracewell interferometer, whose dark outputs have the form
+\begin{align}
+    T\ \propto\ \text{sin}^2(\phi)\times \text{cos}^2(\psi),
+\end{align}
+where $\phi$ and $\psi$ are functions depending on wavelength and baseline. To approximate a different order null, we now change the form to
+\begin{align}
+    T_n\ \propto \text{sin}^n(\phi)\times \text{cos}^2(\psi),
+\end{align}
+where $n$ denotes the null order. The functions $\phi$ and $\psi$ depend linearly on the angular offset from the line of sight. Hence, on the line of sight, it holds that
+\begin{align*}
+    \phi = \psi = 0 \implies T_n = 0.
+\end{align*}
+As desired, the transmission vanishes on the line of sight and increases radially in $n$th order, simulating $n$th order nulling. With this ansatz, we may continue to use the double Bracewell baseline formalism and physics, but we get a null form and depth near the line of sight akin to different architectures with different null order. This approach, while very crude, allows us to study the impact of changing null order on the total mission time, which is especially relevant for on-axis noise sources like stellar leakage.
+
+\subsection{The Agnostic Mission Simulator (AMS)} \label{sec: methods: AMS}
+As described in Section \ref{sec: intro: params}, the AMS serves to compute the mission time for any input of parameters. The simulator proceeds in two phases. The \textit{simulation phase} combines an SNR flow, which computes each signal and noise source using regular models and the variable parameter approach described in Section \ref{sec: intro: varparams descr}, with a filter flow, which selects the results on the basis of the agnostic parameters. The subsequent \textit{distribution phase} then uses these SNRs to distribute the observation time across the targets and return the required percentile mission time. We now explain each phase in detail.
+
+\subsubsection{The Simulation Phase}
+This is the core of the AMS: the rapid evaluation of the SNR for the entire input planet catalog. The processing flow, illustrated in Fig. \ref{fig: simphase flowchart}, is divided into two distinct components: the \textit{SNR flow} and the \textit{filter flow}. The AMS uses an array, the AMS SNR array, to constantly store an SNR for each target in the catalog. The SNR flow now serves to compute this array based on the currently set variable parameters. Afterwards, the filter flow is run, during which the agnostic parameters are employed to return a filtered copy of the up-to-date AMS SNR array. The AMS continuously and automatically tracks whether any variable parameters have changed compared to the previous SNR flow. If they have, another SNR flow is triggered. If they have not been varied, however, only the filtering is performed.
+
+In case the SNR flow needs to be run, we perform a full unfiltered iteration over the entire target catalog. For each target, we compute the astrophysical noise contributions and the planetary signal through the variable parameters, finally combining all the values to get the target SNR. This value is then saved in an array. In this step, a key optimization is introduced by exploiting the structure of the underlying physics. Importantly, the noise contributions computed during the interpolation phase may be distinguished by their origin. The stellar leakage and local-zodiacal noise are fundamentally connected to the entire target system, while the planetary signal and noise (transmission efficiency) must be re-evaluated for every single target. We now compute the stellar physics only once for each distinct star and store the result in a memoization dictionary. This way, whenever we encounter another target around the same star, we may re-use the stellar physics and save time on the interpolator. As the loop progresses, the SNR array and the stellar memo dictionary will progressively complete. Once the loop terminates, we define the now complete array as our current AMS SNR array and conclude the SNR flow.
+
+With an up-to-date AMS SNR array, we may proceed with the filter flow. The flow starts by creating an empty result array with an entry for each target planet, much like the SNR flow. We then iterate over the whole catalog again. If a target fulfills the agnostic filter requirements given by limiting magnitude and field of regard, its spot in the result array is set to the SNR from the AMS SNR array. In this case, we consider the target visible. If the target, however, does not meet both cutoff criteria, we set its SNR result to zero, considering the target invisible. The benefit of using a different array in this way is that we preserve the original AMS SNR array, much like a database. To illustrate the usefulness of this extra memory usage, assume that we first test a highly restrictive filter and then follow with an unfiltered run. If we overwrote the AMS SNR array, the unfiltered run would still have the values from the first run "deleted", thereby falsifying the result. It is hence wise to only modify the AMS SNR array when completely re-computing it and leaving it constant otherwise. Once the filter flow terminates, we ultimately return the filtered result array, which concludes this phase.
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.95\textheight]{images/ams_flowchart_simphase.png}
+    \caption{Flowchart of the AMS simulation phase. Gray trapezes refer to entry or exit points, red tiles denote flows, yellow diamonds mark decision points, green boxes define calculation steps, blue rectangles stand for memory manipulation. The \textit{SNR flow} is run whenever the SNRs need to be re-computed, meaning after each physics-governing parameter change or the first time the AMS is run. At the end of the flow, the unfiltered SNRs are saved in the AMS for later use. The \textit{filter flow} is always run and uses the agnostic cutoff parameters, specifically magnitude and field of regard, to set the SNR of unobservable targets to zero. The final output is the full set of filtered SNRs. Important: The filter flow does not change the SNRs from the SNR flow, but always makes a full copy in order not to lose any data through filtering.}
+    \label{fig: simphase flowchart}
+\end{sidewaysfigure}
+
+\subsubsection{The Distribution Phase}
+We now have a full set of filtered SNRs for every target in the input planet catalog. The only remaining step is to use LIFEsim to distribute the available observation time across the targets and then find the required mission time.
+
+The distribution rests on a single fact about photon-limited measurements: the SNR accumulates as the square root of the integration time. The SNR flow yields, for each target, the ratio $\text{SNR}_{1\text{h}}$ attainable in one hour of observation, so after an integration time $t$ the accumulated ratio is $\text{SNR}(t) = \text{SNR}_{1\text{h}}\sqrt{t/1\,\text{h}}$, and separate visits to the same target add in quadrature. Reaching a required threshold $\text{SNR}_\text{req}$, the value of 44 assumed for a successful characterization in Experiment 1, from a current level $\text{SNR}_\text{cur}$ therefore costs an integration time of
+\begin{align} \label{eq: integration time}
+    t = \frac{\text{SNR}_\text{req}^2 - \text{SNR}_\text{cur}^2}{\text{SNR}_{1\text{h}}^2}\quad\text{[h]}.
+\end{align}
+Each retargeting additionally incurs a fixed overhead, the slew time introduced as an agnostic parameter in Section \ref{sec: intro: params}, which is charged before any integration begins to count toward the SNR. The targets are then scheduled greedily: at each step the optimizer observes the star that yields the most new detections per unit of spent mission time, that is, the steepest gain in scientific return, and adds the corresponding integration and slew time to the running total. This continues until either the available observation budget, the product of the total search time and the observing efficiency, is exhausted, or the required number of targets has been characterized. We rely on the existing LIFEsim greedy optimizer for this step and do not reproduce its full internal logic here.
+
+To define the mission time output, recall that the current input planet catalog simulates Kepler statistics to statistically assign hypothetical planets to known stars. Each assignment iteration constitutes one universe. Since the AMS computes the mission time per universe, and the planets are different in each universe, the result must be a distribution of mission times across the universes. By the law of large numbers, the more universes there are in our catalog, the more closely we will approximate the true mission time distribution.  We define our required mission time result, the final output of the AMS, by a certain percentile of completed missions. As an example, a 90th percentile mission time means that in 90\% of missions (universes), the scientific goals were achieved in less than this time. The percentile must be carefully selected, since reducing it will make our mission more likely not to achieve its goal in our universe, and increasing it too much might cause the simulator to only consider the "unluckiest draw", which would result in unrealistically high mission time requirements.
+
+\subsubsection{Validation of the SNR Flow}
+The AMS does not introduce new physics: its SNR flow reimplements the same stellar-leakage, zodiacal and planet-signal terms as the established LIFEsim instrument model, but in the vectorized, per-star-memoized form described above for the sake of speed. It is therefore essential to confirm that this reimplementation reproduces the original numbers rather than merely approximating them. We validate it directly by computing, on an identical catalog, the one-hour SNR of every target both with the AMS and with the standard LIFEsim instrument routine, in the regime where the two must agree: no instrumental noise, that is, the thermal and dark-current floors switched off, and no added error budget. Any discrepancy then isolates differences in the numerical implementation of the astrophysical physics alone.
+
+On a random subsample of 2000 targets from the Hab2Max catalog, the two agree to within floating-point round-off. The per-target relative SNR difference has a median of exactly zero, a mean of $7\times10^{-17}$, a standard deviation of $9\times10^{-17}$ and a maximum of $4\times10^{-16}$, i.e. at the level of double-precision machine epsilon ($\approx 2\times10^{-16}$). The AMS SNR flow is thus a faithful, and substantially faster, reimplementation of the LIFEsim model, and every trade-space result in this thesis inherits the validated physics of the latter.
+
+\newpage
+
+\section{Trade Space Reduction} \label{sec: ts reduction}
+As we have outlined in Section \ref{sec: intro: trade space}, the trade space is very large. We will now turn to making some warranted simplifications, where appropriate, in order to reduce the trade space while not compromising fidelity.
+
+\subsection{Condensation of Astrophysical Noise} \label{sec: ts reduction: condensation}
+The majority of the trade space is made up primarily of variable parameters, each of which is dependent on up to four physical quantities. The aim of the project is to define a useful and easily understandable budget. Increasing dependencies and making the budget conditional will complicate the result, making the budget harder to understand and implement.
+
+We therefore choose to dramatically reduce the trade space by exploiting the additive nature of astrophysical noise (eq. \ref{eq: additive noise}). In detail, we define an additional additive and wavelength-dependent instrumental noise term $N_I (\lambda)$ such that the total background noise is given as
+\begin{align*}
+N_B(\lambda) = \sum_{i=1}^{n}N_i(\lambda) + N_I (\lambda).
+\end{align*}
+As is evident from the blackbody behavior of the background noise sources, we must keep the wavelength dependence to maintain physical relevance.
+
+The functional form of $N_I$ can be arbitrary. Increasing $N_I$ will ultimately increase the mission time. Hence, the maximum mission time budget is reached and given by $N_I$ if the mission time barely reaches the goal. This interpretation of the error budget is illustrated in Fig. \ref{fig: budget example}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.8\linewidth]{images/ts reduction/short_long_5yrs.png}
+\caption{Depiction of the noise budget on top of the astrophysical noise. The dashed green line denotes the budget distribution, in this case a linear distribution from short to long wavelengths. The solid green line stands for the total noise including the budget. The shaded green area between the astrophysical and total noise curves is the actual error budget. In this example the budget is distributed such that the total mission time is exactly five years.}
+\label{fig: budget example}
+\end{figure}
+
+\subsection{Image Size and Spectral Resolution} \label{sec: ts reduction: image spec}
+Not all quantities that govern the AMS runtime are physical parameters in the sense of Section \ref{sec: intro: params}. Two of them, the \textit{image size} and the \textit{spectral resolution}, are purely numerical settings of the SNR computation. The image size is the side length, in pixels, of the square field-of-view grid on which the exo-zodiacal and local-zodiacal background integrals are evaluated. The spectral resolution is the number of wavelength bins into which the observed spectrum is divided. Both are fixed in the mission itself and are therefore not part of the trade space. However, since the AMS runs its SNR flow over the entire target catalog, and does so repeatedly during trade space exploration, the cost of a single SNR evaluation scales directly with both settings. It is hence worthwhile to choose the smallest values that do not compromise fidelity, thereby speeding up every subsequent AMS call. This is exactly the type of reduction this chapter is concerned with, applied to the simulator itself rather than to the parameters.
+
+The guiding principle is convergence. As we increase either setting, the computed SNR approaches a limit, the "true" value that a perfectly resolved simulation would yield. We may therefore treat a very high-resolution run as ground truth and measure, per target, the relative SNR error of a coarser run against it. The smallest setting for which this error has plateaued at a negligible level is the ideal choice: any finer would only cost runtime, any coarser would falsify the result. Crucially, we do not judge convergence by a central value alone. A mean or median error can be driven low simply by averaging many well-sampled targets against a few badly sampled ones, hiding the fact that individual planets are grossly wrong. We therefore track both the mean error and the \textit{spread} of the per-target error across the catalog, and require both to be small before accepting a setting.
+
+We first consider the image size. It only enters the SNR through the background field-of-view integrals; the planetary transmission is evaluated analytically and any instrumental noise floor is independent of the spatial grid. The image size is hence a pure spatial discretization knob with a genuine converged limit. Fig. \ref{fig: image size convergence a} shows, for four regimes of increasing instrumental noise (I/N), the mean relative SNR error against a high-resolution reference of 512 pixels, together with a shaded band spanning the 16th to 84th percentile of the per-target error distribution. The mean settles onto a low plateau at an image size of about 160 pixels, which we adopt. Notably, adding instrumental noise \textit{dilutes} the image-size error rather than aggravating it: the noise floor is spatially independent, so it enlarges the total noise while the spatial sampling error stays fixed. Higher instrumental noise therefore makes the image-size choice \textit{less} critical, which is convenient, since the mission is designed to operate in the background-limited regime where the requirement is at its most stringent.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/ts reduction/is_error_vs_imagesize.png}
+        \caption{Convergence and plateau}
+        \label{fig: image size convergence a}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/ts reduction/is_aliasing_trap.png}
+        \caption{The aliasing trap at 100 pixels}
+        \label{fig: image size convergence b}
+    \end{subfigure}
+    \caption{Image-size convergence of the bulk SNR. (a) Mean relative SNR error against a 512-pixel spatial reference (solid lines), with a shaded band giving the 16th--84th percentile spread across the catalog, for four regimes of increasing instrumental noise (I/N). Both the mean and the spread plateau around an image size of 160 pixels (dashed line); below it the band is very wide, showing that many individual targets are badly mis-sampled even where the mean is only moderate. Additional instrumental noise pushes the curves lower, confirming that the background-limited regime is the most demanding. (b) A cautionary detail. At an image size of 100 pixels the median, the 90th percentile, and the whole-catalog RMS all dip to a local minimum together, so the error looks small by every statistic. This is a coincidental aliasing cancellation, not convergence: the immediate neighbours spike (the whole-catalog RMS reaches nearly 60\% at 113 pixels), the minimum is razor-thin, and even the dip stays several times above the genuine plateau. Robust convergence, low and stable against small changes in the grid, begins only near 160 pixels.}
+    \label{fig: image size convergence}
+\end{figure}
+
+The spread is what turns this from a plausible choice into a firm one. Below roughly 156 pixels the 16th--84th percentile band in Fig. \ref{fig: image size convergence a} is generally very wide (with one deceptive exception at 100 pixels, discussed below): individual targets scatter to several tens of percent relative error even where the mean sits near ten percent. In other words, the catalog average looks merely mediocre while a large fraction of planets are in fact grossly mis-sampled. At 156--160 pixels the band collapses together with the mean, which is the true signature of convergence: not only the average but \textit{every} target is now well sampled. This is precisely the distinction a central value alone cannot make.
+
+A second, more treacherous pitfall appears around an image size of 100 pixels. As Fig. \ref{fig: image size convergence b} shows, the error dips to a local minimum there, and not just in the median: the 90th percentile and the whole-catalog RMS dip in lockstep, so at that one grid size the error looks small by every statistic. The dip is nonetheless spurious. It is a coincidental aliasing cancellation, at that exact pixel pitch the disk-mask sampling error happens to cancel across the catalog, rather than the grid having genuinely resolved the disks. The giveaway is its fragility: the immediate neighbours explode, with the whole-catalog RMS leaping to nearly 60\% at an image size of 113 pixels, and even the dip itself, at roughly 5\%, remains several times worse than the true plateau of about 1.3\% at 160 pixels. A converged setting must be low \textit{and} stable against small changes in the grid; the 100-pixel notch is instead a razor-thin minimum surrounded by maxima, the very opposite of convergence, and it would shift or vanish for a different catalog or resolution. Genuine, robust convergence sets in only from around 160 pixels, which is why we accept that plateau and not the coincidental dip.
+
+We turn to the spectral resolution. Here the situation is qualitatively different, and in fact more forgiving. The bulk SNR combines the per-bin contributions as $\text{SNR}_\text{tot} = \sqrt{\sum_i \text{SNR}_{\lambda_i}^2}$ (eq. \ref{eq: bulk snr}). Whenever the noise is purely photon- or background-limited, this sum is invariant under the choice of binning: splitting a bin in two divides both its signal and its noise consistently, leaving the quadrature sum unchanged. Since the baseline instrument carries no per-channel detector floor, the spectral resolution is essentially irrelevant to the yield, and a coarse resolution of 20 bins is numerically indistinguishable from a fully resolved run. Fig. \ref{fig: spec res convergence} confirms this: in the no-I/N and background-limited regimes the mean relative error at a spectral resolution of 20 is already at the $10^{-4}$ level, and, just as importantly, its 16th--84th percentile band is equally tight, so no individual target is poorly resolved either. The resolution only begins to matter once a per-channel floor is switched on, because such a floor does not scale with the bin width; then finer binning spreads a fixed noise floor across more channels and both the mean error and its spread at low resolution grow. Since we operate in the background-limited regime, a spectral resolution of 20 is amply sufficient, and we adopt it.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/ts reduction/sr_error_vs_specres.png}
+    \caption{Spectral-resolution sensitivity of the bulk SNR. The mean relative SNR error against a fully resolved reference of 100 bins (solid lines), with a shaded 16th--84th percentile band across the catalog, is plotted against the spectral resolution for the same four instrument-noise regimes. In the no-I/N and background-limited regimes (the mission's operating point), both the mean and the band at a spectral resolution of 20 (dashed line) are already negligible, confirming that the quadrature-combined SNR is essentially resolution-invariant for every target, not just on average. Only when a per-channel detector floor is switched on, which does not scale with bin width, does the coarse resolution incur a sizeable error, motivating why the setting can safely be minimized for our purposes.}
+    \label{fig: spec res convergence}
+\end{figure}
+
+In summary, we fix the AMS SNR computation to an image size of 160 pixels and a spectral resolution of 20 bins. These are the smallest values that reach the converged plateau in the regime the mission operates in, minimizing the runtime of every AMS evaluation without measurably degrading the yield.
+
+\subsection{Restriction of Null Order}
+We described a composite approach to null order simulation in Section \ref{sec: intro: null depth approach}. The corresponding transmission maps allow for any integer value of null order $n$. In practice, the geometry of the interferometer and the corresponding transmission maps only allow for even null orders. Since the double Bracewell interferometer has a null order of two, we may only additionally consider null orders 2, 4, 6, ... An instrument with a higher null order needs more mixing of constructive and destructive outputs, which increases the number of required instrument apertures. A null order of six already requires a minimum of eight (TODO: verify??? CITE) apertures which will almost certainly not be operationally realizable. We hence have a natural focus on the null orders of two and four. Since building an instrument with a null order of four already requires at least two more apertures (TODO: verify???, CITE), even considering such an architecture would undoubtedly require much stronger performance compared to the currently envisioned second order null.
+
+\section{Trade Space Exploration} \label{sec: tse}
+With the trade space reduced to an interpretable size, we can finally address the inverse problem posed in Section \ref{sec: intro: trade space}: for a given target mission time, how much random-noise budget can the instrument afford, and how does that budget depend on its distribution over wavelength and on the agnostic operating point? This section presents a first exploration of the reduced trade space. All results reported here are computed for a null order of two, i.e. the nominal double Bracewell architecture. The corresponding exploration for higher null orders, and the architecture comparison it enables, is left as future work (see Section \ref{sec: tse: null order}).
+
+\subsection{The Iso-Mission-Time Budget}
+The quantity we solve for is the \textit{iso-mission-time budget}: the largest additive instrumental noise term $N_I(\lambda)$ (Section \ref{sec: ts reduction: condensation}) that can be added on top of the astrophysical noise while the required mission time still equals a chosen target. It is expressed as a photon flux density in ph\,s$^{-1}$\,$\upmu$m$^{-1}$ and represents, for that operating point, the error budget in the sense of this thesis: any instrument whose random noise stays below it completes the mission in the target time.
+
+Locating this budget for any set functional budget form efficiently exploits the monotonicity established in Section \ref{sec: intro: trade space}: since the mission time increases monotonically as budget is added, the budget at which it reaches a given target is unique. Empirically the mission time grows roughly exponentially with the budget, so the search fits a function $m(\text{budget}) = a\,e^{b\,\text{budget}}$ through the mission times at the current bracketing bounds, inverts it to predict the budget at the target time, evaluates the AMS there, and tightens whichever bound the prediction lies closest to. The procedure repeats until the mission time is within $0.05$ years of the target or the bracket has collapsed. Two outcomes carry physical meaning: if the mission time already exceeds the target at zero added budget, the target is unreachable and no extra noise is permissible (a budget of zero); if it is met even at the largest tested budget, that bound is returned.
+
+\subsection{The Shape of the Error Budget}
+The first question is how the affordable budget depends on its \textit{distribution} over wavelength. We compare three shapes at a fixed operating point (limiting magnitude 7, field of regard $65^\circ$, slew time 12\,h) for the Hab2Max catalog: a flat budget, a budget ramped linearly from zero at the short-wavelength end to a maximum at the long-wavelength end (matching the exo- and local-zodiacal noise, which dominate the long wavelengths), and the opposite ramp peaking at short wavelengths (matching the stellar leakage, which dominates the short wavelengths). Figure \ref{fig: tse budget shapes} shows the three cases directly, each tuned so that the required mission time is exactly five years. In every panel the astrophysical noise forms the familiar U-shape: high at short wavelengths where the stellar leakage dominates, high again at long wavelengths where the local- and exo-zodiacal emission take over, and reaching a minimum near 7\,$\upmu$m. The added budget $N_I$ is laid on top of this, and the shaded band between the astrophysical and total noise is the error budget itself. The three panels differ only in how that budget is distributed across the spectrum. The endpoints at which each shape reaches the five-year target are listed in Table \ref{tab: budget shapes}.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_budget_constant_5yr.png}
+        \caption{Flat}
+        \label{fig: tse budget shapes a}
+    \end{subfigure}
+    \begin{subfigure}{.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_budget_shortlong_5yr.png}
+        \caption{Long-weighted}
+        \label{fig: tse budget shapes b}
+    \end{subfigure}
+    \begin{subfigure}{.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_budget_longshort_5yr.png}
+        \caption{Short-weighted}
+        \label{fig: tse budget shapes c}
+    \end{subfigure}
+    \caption{The random-noise error budget laid on top of the astrophysical noise, for the Hab2Max catalog at a limiting magnitude of 7, a field of regard of $65^\circ$ and a slew time of 12\,h, with a null order of two. Each panel is tuned so that the required mission time is exactly five years. The orange dashed curve is the astrophysical noise, the green solid curve the total noise, and the green shaded band between them the error budget, i.e. the added noise $N_I$; the dotted curves are the individual astrophysical sources (stellar leakage, local- and exo-zodiacal). (a) A flat budget of 230 ph\,s$^{-1}$$\upmu$m$^{-1}$ across the spectrum. (b) A budget ramped toward the long wavelengths, following the zodiacal emission, reaching 320 at the long end and zero at the short end. (c) A budget ramped toward the short wavelengths, following the stellar leakage, reaching 470 at the short end. The short-weighted shape admits the largest budget, confirming that added noise is least costly where the stellar leakage already dominates.}
+    \label{fig: tse budget shapes}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Catalog & MT target & Flat & Short-weighted & Long-weighted \\
+        &           & [ph\,s$^{-1}$$\upmu$m$^{-1}$] & (leakage-shaped) & (zodi-shaped) \\
+\midrule
+Hab2Max & 5 yr  & 230  & 470 & 320 \\
+Hab2Max & 6 yr  & 1190 & 3300 & 2270 \\
+Hab2Min & 10 yr & 180  & 610 & 335 \\
+\bottomrule
+\end{tabular}
+\caption{Iso-mission-time additive leakage budgets for three wavelength distributions. For the ramped shapes the value quoted is the non-zero endpoint (the ramp runs linearly to zero at the opposite end). The Hab2Max rows assume a limiting magnitude of 7, a field of regard of $65^\circ$ and a slew time of 12\,h; the Hab2Min row assumes a limiting magnitude of 5.25 and a field of regard of $60^\circ$. Values are read from the exploration output.}
+\label{tab: budget shapes}
+\end{table}
+
+Two robust observations follow. First, the budget grows steeply, and clearly super-linearly, with the permitted mission time: for Hab2Max the flat budget rises from 230 to 1190 ph\,s$^{-1}$$\upmu$m$^{-1}$ between the five- and six-year targets, a factor of roughly five for a single extra year. This is the exponential behaviour the search exploits. Second, for a fixed mission time the affordable budget is largest when it is concentrated toward the short wavelengths and smallest when concentrated toward the long wavelengths, with the flat budget in between (for Hab2Max at five years, 470 short-weighted versus 320 long-weighted). Adding noise at long wavelengths therefore costs more mission time than adding it at short wavelengths, indicating that the long-wavelength region is the more critical to the retrieval. \textbf{TODO: why is long-wavelength noise costlier? check HZ emission peak / astro-noise minimum before committing to a mechanism.}
+
+The same asymmetry appears independently in the two-dimensional scan of Fig. \ref{fig: tse linear additive}, which maps the required mission time over a grid of short- and long-wavelength budget endpoints of a linear ramp. The iso-mission-time contours extend markedly further along the short-wavelength axis than the long-wavelength axis: for Hab2Max the eight-year contour reaches a short-wavelength budget of about $10^4$ ph\,s$^{-1}$$\upmu$m$^{-1}$ but a long-wavelength budget of only around $6\times10^3$. The floor of the map, at negligible budget, recovers the zero-budget mission time of the operating point, approximately five years for Hab2Max and closer to seven years for the sparser Hab2Min catalog.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_linear_additive_hab2hi.png}
+        \caption{Hab2Max}
+        \label{fig: tse linear additive a}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_linear_additive_hab2lo.png}
+        \caption{Hab2Min}
+        \label{fig: tse linear additive b}
+    \end{subfigure}
+    \caption{Required mission time over a grid of short- and long-wavelength endpoints of a linear additive noise budget, at a limiting magnitude of 7, a field of regard of $65^\circ$ and a slew time of 12\,h, for a null order of two. Black contours mark integer mission-time levels. In both catalogs the contours extend further along the short-wavelength axis than the long-wavelength axis, showing that noise added at long wavelengths costs more mission time. The Hab2Min catalog (b) reaches its mission-time cap at much lower budgets, reflecting its lower planet occurrence.}
+    \label{fig: tse linear additive}
+\end{figure}
+
+\subsection{The Random-Noise Error Budget} \label{sec: tse: budget result}
+We can now state the central result of this thesis. Combining the two findings above, the affordable budget is largest when it is shaped to follow the stellar leakage, i.e. concentrated toward the short wavelengths. Taking this most permissive shape, Table \ref{tab: budget result} gives the resulting random-noise error budget as a spectral density at representative wavelengths, for the optimistic Hab2Max catalog at a five-year target and the pessimistic Hab2Min catalog at a seven-year target, both at a null order of two and the operating point of Fig. \ref{fig: tse budget shapes}. The Hab2Min budget is read from its seven-year run, shown in Fig. \ref{fig: tse budget hab2min}. In both cases the budget is a linear ramp, peaking at the short-wavelength end and falling to zero near 17\,$\upmu$m, so that essentially no additional noise is permissible in the zodiacal-dominated long-wavelength region.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Wavelength & \multicolumn{2}{c}{Allowable random-noise budget [ph\,s$^{-1}$$\upmu$m$^{-1}$]} \\
+\cmidrule(l){2-3}
+$[\upmu\mathrm{m}]$ & Hab2Max (5 yr) & Hab2Min (7 yr) \\
+\midrule
+4  & 470 & 730 \\
+6  & 400 & 620 \\
+8  & 320 & 505 \\
+10 & 250 & 395 \\
+12 & 180 & 280 \\
+14 & 110 & 170 \\
+16 & 40  & 55  \\
+\bottomrule
+\end{tabular}
+\caption{The central result: the instrument-agnostic random-noise error budget as a function of wavelength, for the short-weighted (leakage-shaped) distribution that maximizes the affordable budget. An instrument whose random-noise spectral density stays below these values at every wavelength completes Experiment 1 within the stated mission time. Both columns are the linear budget ramp evaluated at each wavelength, with short-wavelength endpoints of 470 ph\,s$^{-1}$$\upmu$m$^{-1}$ for Hab2Max and 730 for Hab2Min, falling linearly to zero toward 17\,$\upmu$m (Fig. \ref{fig: tse budget shapes} and Fig. \ref{fig: tse budget hab2min}).}
+\label{tab: budget result}
+\end{table}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/tse/tse_budget_shortlong_hab2min_7yr.png}
+    \caption{The short-weighted (leakage-shaped) error budget for the Hab2Min catalog at a seven-year target, from which the Hab2Min column of Table \ref{tab: budget result} is read. Curves as in Fig. \ref{fig: tse budget shapes}; the added budget (green dash-dot) peaks at 730 ph\,s$^{-1}$$\upmu$m$^{-1}$ at the short-wavelength end and ramps linearly to zero near 17\,$\upmu$m.}
+    \label{fig: tse budget hab2min}
+\end{figure}
+
+This table is the concrete, instrument-agnostic answer to the central research question of Section \ref{sec: intro: research questions}: for the double Bracewell architecture it states, wavelength by wavelength, how much random instrumental noise the LIFE instrument may carry while still characterizing the required sample of terrestrial planets within a five- to seven-year mission, depending on the assumed planet occurrence rate. Because the budget is derived from the astrophysical limit upward and expressed independently of any specific noise mechanism, it applies to whatever combination of instrumental effects an eventual design produces, as long as their summed random-noise spectral density respects these bounds.
+
+\subsection{Dependence on the Agnostic Parameters}
+The affordable budget is not a single number but a function of the agnostic operating point defined in Section \ref{sec: intro: params}. We map it over the two most consequential pairs of agnostic parameters, holding the budget flat in wavelength.
+
+Fig. \ref{fig: tse iso magfor} scans the limiting magnitude against the field of regard. The dominant lever is unambiguously the field of regard. Below roughly $58^\circ$ the five-year target for Hab2Max is unreachable at any magnitude, even with zero added noise: the field-of-regard cut removes too many targets. Above that threshold the affordable budget rises steeply with widening field of regard, crossing 500 ph\,s$^{-1}$$\upmu$m$^{-1}$ near $76^\circ$ and reaching about 850 at the full $90^\circ$. The dependence on limiting magnitude is by comparison weak and saturating for Hab2Max: once the magnitude is faint enough to include the targets that actually constrain the mission, going fainter adds little. The reason the field of regard is so decisive is geometric, and is made explicit in Fig. \ref{fig: tse yield}: the cut excises two polar wedges, a "zone of avoidance", from the sky, and at a $65^\circ$ field of regard this already removes $26.7\%$ of the otherwise interesting targets.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_iso_magfor_hab2hi_5yr.png}
+        \caption{Hab2Max, 5-year target}
+        \label{fig: tse iso magfor a}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_iso_magfor_hab2lo_7yr.png}
+        \caption{Hab2Min, 7-year target}
+        \label{fig: tse iso magfor b}
+    \end{subfigure}
+    \caption{Iso-mission-time flat additive budget over limiting magnitude and field of regard, for a null order of two and a fixed slew time. Dark regions are infeasible (no budget permissible even without added noise). The field of regard is the dominant parameter in both catalogs; the dependence on limiting magnitude saturates for Hab2Max (a) but continues to help toward fainter magnitudes for the sparser Hab2Min (b). \textbf{TODO: ST mismatch: these are run at ST 10h, whereas the other plots use 12\,h!!}}
+    \label{fig: tse iso magfor}
+\end{figure}
+
+Fig. \ref{fig: tse iso slewfor} scans the slew time against the field of regard at a fixed limiting magnitude of 7. Slew time enters the mission time directly as a per-retargeting overhead (Section \ref{sec: methods: AMS}), and the map shows how sharply it caps the budget: the affordable budget is largest at the bottom-right corner of short slew and wide field of regard, exceeding 2000 ph\,s$^{-1}$$\upmu$m$^{-1}$ for Hab2Max at a one-hour slew and $90^\circ$, and falls below 500 once the slew time exceeds roughly 13\,h even at the widest field of regard. Fast retargeting and a wide field of regard are thus the two operating conditions that most enlarge the permissible noise budget.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_iso_slewfor_hab2hi_5yr.png}
+        \caption{Hab2Max, 5-year target}
+        \label{fig: tse iso slewfor a}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/tse/tse_iso_slewfor_hab2lo_7yr.png}
+        \caption{Hab2Min, 7-year target}
+        \label{fig: tse iso slewfor b}
+    \end{subfigure}
+    \caption{Iso-mission-time flat additive budget over slew time and field of regard, for a null order of two and a fixed limiting magnitude of 7. The affordable budget falls steeply with increasing slew time, which is charged directly against the mission time, and grows with a widening field of regard. Both catalogs show the same structure, with Hab2Min (b) reaching lower budgets.}
+    \label{fig: tse iso slewfor}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/tse/tse_yield_hab2hi.png}
+    \caption{Edge-on ecliptic view of the target distribution for Hab2Max at a limiting magnitude of 7 and a field of regard of $65^\circ$. The radial coordinate is the distance to the star and the angular coordinate the ecliptic latitude. Green markers are interesting targets that are detected, red are interesting but undetected, and black are interesting but rendered invisible by the cuts. The shaded polar wedges are the field-of-regard "zone of avoidance"; at $65^\circ$ it removes $26.7\%$ of the interesting targets. Detected targets concentrate near the ecliptic plane and at small distances.}
+    \label{fig: tse yield}
+\end{figure}
+
+\subsection{Catalog Dependence}
+Every scan was run for both the optimistic Hab2Max and the pessimistic Hab2Min catalog, which differ in their assumed Earth-twin occurrence rate $\eta_\oplus$ (Section \ref{sec: intro: catalog}). The two behave qualitatively identically, exhibiting the same short-versus-long budget asymmetry, the same dominance of the field of regard, and the same steep budget growth with mission time. They differ quantitatively as expected: Hab2Min, with fewer detectable planets, requires a longer mission for the same scientific yield and therefore affords a smaller budget at any fixed target time, or equivalently reaches a given budget only at a longer target time. This is why the Hab2Min figures are shown at seven- and ten-year targets where the Hab2Max figures use five and six years. The consistency of the qualitative structure across the two occurrence-rate assumptions is reassuring: the shape of the error budget, and the ranking of the agnostic parameters, does not depend on the still-uncertain value of $\eta_\oplus$.
+
+\subsection{Higher Null Orders} \label{sec: tse: null order}
+\textbf{TODO: NO4 plots are dupes of NO2 -- regenerate the null-order-four runs, then analyse here.} Once regenerated, this subsection will repeat the above exploration for a null order of four and compare the resulting error budgets to those of null order two, addressing the architecture-comparison part of the central research question (Section \ref{sec: intro: research questions}). In particular, since a higher null order suppresses on-axis noise sources such as stellar leakage more strongly, we expect the short-wavelength part of the budget to be the most affected, but this remains to be verified.
+
+\section{Discussion}
+
+Very much TODO
+
+This section discusses the parts of the project completed so far: the instrument-agnostic approach, the Agnostic Mission Simulator, the trade space reductions, and the first exploration of the reduced trade space, which already yields a random-noise error budget for the double Bracewell architecture. The one central result still outstanding, the comparison of nulling architectures, awaits the higher-null-order exploration and is deferred to the marked placeholder below.
+
+Having laid out the instrument-agnostic approach, the Agnostic Mission Simulator, the trade space reductions, and the error budget they produce, we step back to assess what these pieces achieve and where their limits lie.
+
+\subsection{The Agnostic Approach and the AMS}
+The central methodological contribution so far is the decoupling of the error budget question from any fixed instrument. By treating signal and noise as inputs constrained only by the astrophysical limit (Section \ref{sec: intro: varparams descr}), and by approximating different nulling architectures through the modified null-depth ansatz (Section \ref{sec: intro: null depth approach}), we obtain a framework that never commits to a single interferometer layout. This is a genuine departure from the conventional workflow, in which a double Bracewell is assumed and the noise is derived from it. The pay-off is that a single tool, the AMS, can in principle answer both open questions of the mission at once: how much random noise budget is affordable, and which null order spends that budget most economically.
+
+The AMS itself is built around one deliberate design decision, the separation of the SNR flow from the filter flow (Section \ref{sec: methods: AMS}). Because the physics-governing variable parameters change far less often than the agnostic cutoffs during an exploration, caching the unfiltered SNR array and re-running only the cheap filter step avoids a large amount of redundant computation. The stellar-physics memoization compounds this, since many planets share a host star. Together these make repeated AMS evaluations, the inner loop of any trade space exploration, affordable enough to contemplate at all. This matters directly: the naive grid estimate of Section \ref{sec: intro: trade space} put a brute-force scan at hundreds of years, so every constant factor saved in a single evaluation is what keeps the eventual exploration tractable.
+
+\subsection{What the Reductions Buy}
+The reductions of the previous chapter attack the trade space from two independent directions. The condensation of astrophysical noise into a single additive, wavelength-dependent term $N_I(\lambda)$ (Section \ref{sec: ts reduction: condensation}) collapses what would otherwise be a separate budget per noise source into one interpretable function. This is not merely a computational convenience; it also keeps the final product, the error budget, in a form an instrument engineer can actually read and act on. We retain the wavelength dependence precisely because the blackbody character of the sources makes it physically indispensable, so the reduction trims dimensionality without discarding the one axis that carries physical meaning.
+
+The convergence study of the image size and spectral resolution (Section \ref{sec: ts reduction: image spec}) is a reduction of a different kind: it fixes two numerical knobs at the cheapest values that are still faithful. The methodological lesson here is the one worth emphasizing. Convergence of a central value, a mean or a median, is not sufficient evidence that a setting is safe, because the average over a large catalog can look healthy while individual targets are badly wrong. Judging the spread alongside the mean is what exposes this, and it did so twice: the wide percentile band below 156 pixels, and, more insidiously, the coincidental aliasing minimum at 100 pixels that dips in every statistic yet is a razor-thin, non-robust artifact rather than true convergence. For a yield-driven mission, where a single grossly mis-sampled planet can distort the observation-time distribution, this per-target reliability is exactly the property that must be certified, not just the catalog average. Finally, the restriction of the null order to the physically realizable even values, and in practice to orders two and four (Section \ref{sec: intro: null depth approach}), reduces a continuous knob to a two-way comparison of clear engineering relevance.
+
+\subsection{Limitations of the Current Groundwork}
+Several caveats bound the strength of the groundwork laid so far. The modified null-depth ansatz reproduces the on-axis null order of a range of architectures but is explicitly a crude proxy: it inherits the double Bracewell baseline formalism and does not capture the full transmission geometry, asymmetries, or aperture-count constraints of a real higher-order nuller. Its conclusions are therefore best read as a study of the \textit{impact} of null order, not as a faithful simulation of any specific instrument. Likewise, condensing all instrumental noise into a single additive $N_I(\lambda)$ deliberately discards the distinction between noise origins; this is the right move for defining an overall budget, but it means the resulting budget speaks to the total allowable noise rather than to any individual mechanism. The convergence conclusions, too, are stated for the background-limited regime the mission is designed for; were a strong per-channel detector floor to dominate, the spectral-resolution argument in particular would need revisiting, although we showed that such a floor only relaxes the image-size requirement. These are conscious trade-offs in the service of an interpretable, tractable budget, not oversights, but they delimit what the eventual numbers will and will not mean.
+
+\subsection{The Error Budget and Architecture Comparison}
+The trade space exploration of Section \ref{sec: tse} turns the machinery of this thesis into a concrete deliverable: a random-noise error budget for the LIFE instrument, tabulated as a function of wavelength in Table \ref{tab: budget result}. Its engineering-relevant features were established in Section \ref{sec: tse: budget result} and are only summarized here: the budget is strongly wavelength-dependent and most permissive when shaped like the stellar leakage, so that the zodiacal-dominated long wavelengths, which tolerate almost no added noise, are where the instrument must be built most cleanly; it grows close to exponentially with the permitted mission time; and among the agnostic parameters the field of regard is decisive, with a hard feasibility threshold, while the limiting magnitude saturates once the constraining targets are included and the slew time enters as a direct, costly overhead. Crucially, this qualitative structure is independent of the still-uncertain planet occurrence rate $\eta_\oplus$: Hab2Max and Hab2Min differ in the absolute budget and the required mission time, but not in the shape of the budget or the ranking of the agnostic parameters.
+
+Taken together, these results give a first, quantitative, instrument-agnostic answer to the random-noise part of the central research question. They state how much random noise the double Bracewell instrument may carry, wavelength by wavelength, to characterize the required planet sample within a five- to seven-year mission, and thereby speak directly to sub-questions three and four of Section \ref{sec: intro: research questions}. Because the budget is constructed from the astrophysical limit upward and expressed independently of any specific noise mechanism, it constrains whatever combination of instrumental effects an eventual design produces, as long as their summed random-noise spectral density respects these bounds.
+
+\textbf{TODO: the architecture-comparison half of this discussion (null order two versus four) awaits the null-order-four exploration; see Section \ref{sec: tse: null order}. Also fold in any exploration-specific limitations (optimizer convergence, local minima) once characterised.}
+
+\subsection{Remaining Work}
+The AMS by itself answers only the forward question, mission time for a given budget, whereas the research questions of Section \ref{sec: intro: research questions} ultimately demand the inverse: the budget for a given mission time. Section \ref{sec: tse} already carries out that inverse exploration for the nominal null order of two, yielding the error budget of Table \ref{tab: budget result}; what remains is to repeat it for a null order of four and compare the two architectures (Section \ref{sec: tse: null order}). The reductions established here, one interpretable noise term, fixed and validated numerical settings, and a two-way null-order choice, are precisely what turn that exploration from the intractable grid scan of Section \ref{sec: intro: trade space} into a feasible undertaking.
+
+\textbf{TODO: summarize TSE outcome + how far the central question got answered.}
+
+\appendix
+
+
+\end{document}
