@@ -193,10 +193,13 @@ DEFECT_COLUMNS = ('timestamp catalog null_order config localzodi_scale '
                   'mtime_zero_budget_yr mtime_target_yr flat_endpoint_ph_s_um '
                   'wall_s').split()
 
-# The pre-correction local-zodiacal path divided a circular pi*R^2 solid angle by
-# the area 4R^2 of its enclosing square, suppressing the uniform foreground by
-# pi/4. Multiplying the corrected term by pi/4 restores that behaviour exactly,
-# so the two configurations differ only in the defect.
+# The pre-correction local-zodiacal path averaged the transmission over the whole
+# square evaluation grid and then multiplied by the circular solid angle,
+# suppressing the uniform foreground by pi/4 in the uniform-domain limit.
+# Multiplying the corrected term by pi/4 restores that behaviour to within the
+# margin by which the realized ratio (~1.267, the corner flux admitted by the
+# square domain) differs from 4/pi = 1.2732, so the two configurations differ in
+# the defect and in nothing else of consequence.
 PI_OVER_4 = np.pi / 4.0
 DEFECT_CONFIGS = {'corrected': 1.0, 'pre_correction': PI_OVER_4}
 
