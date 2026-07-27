@@ -12,6 +12,20 @@ presentation **4.75**. Methodological competence and work process not assessed
 - Diff draft to supervisor: **2026-07-28, night**
 - Final thesis: **~2026-08-10**
 
+**There is no defense and no exam.** The presentation was held two months ago,
+already with outdated results. The grade comes from the written document alone.
+Two consequences that reorder everything below:
+
+1. Nothing can be explained verbally. Every comprehension blocker is permanent,
+   so the presentation block — the one carrying the only `-` — is weighted
+   heavier in practice than its share of the grading sheet suggests. Tier B is
+   promoted into the diff, and so is the formal-compliance sweep A1.
+2. The supervisor is away and it is holiday season, so **tomorrow's diff may be
+   the only substantive feedback round left**. It must therefore carry the
+   framing decisions he could disagree with (S1 positioning, the S2 mission-time
+   definition, the Guyon normalization in the ablation), because those are
+   expensive to get wrong and cheap for him to correct in one line.
+
 **Rule for the diff:** include items where his feedback changes what you do next,
 plus anything cheap. Everything else waits.
 
@@ -19,17 +33,22 @@ plus anything cheap. Everything else waits.
 
 ## Tier 0 — tonight, before anything else
 
-- [ ] Commit the dirty `lifesim/ams/` tree (branch `ams`). New results must be
-      attributable; `run_matrix_2026-07-24.yaml` already records that the previous
-      raw grids were lost. Retain them this time.
-- [ ] Launch the throughput-normalized order-4 ablation. ~2 h from prior TSE run
-      timestamps; runs unattended overnight and may land in tomorrow's diff.
+- [x] Commit the dirty `lifesim/ams/` tree (branch `ams`) and push. Two commits:
+      `93dde44` (analytic rewrite, 26 files) and `0314771` (thesis sources).
+      LIFEsim also editable-installed into the conda env
+      (`pip install -e . --no-deps`) -- it was not installed before, and only
+      imported when the working directory happened to be the repo root.
+- [x] Launch the throughput-normalized order-4 ablation. Far cheaper than
+      feared: ~70 s per endpoint search, so the full 24-cell matrix runs in under
+      half an hour rather than overnight. Script:
+      `lifesim/ams/ablation_throughput.py`; results:
+      `thesis/reproducibility/ablation_throughput.tsv`.
 
 ---
 
 ## Tier S — must be in the diff (~6 h)
 
-- [ ] **S1. Related-work / positioning subsection** after `main.tex:224`, plus a
+- [x] **S1. Related-work / positioning subsection** after `main.tex:224`, plus a
       §6.1 paragraph placing `N_I` next to Dannert 2025 §3.4.2 `sigma_ph,inst`
       (Eq. 3.22) and the Lay 2004 perturbation levels.
       *Why #1:* the only item that moves all three blocks, and all three reviewers
@@ -37,7 +56,7 @@ plus anything cheap. Everything else waits.
       thesis. This is also where the size of the project becomes visible — see
       "Making the work visible" below. **(2 h)**
 
-- [ ] **S2. M7 — mission time is not wall-clock time.** Define it explicitly in
+- [x] **S2. M7 — mission time is not wall-clock time.** Define it explicitly in
       §2.4 or §3.3.2 and state the conversion. With `opt_limit: experiments` the
       0.8 observing efficiency is inert (`ahgs.py:191,222`), so reported time is
       integration + slew only; a stated 5.5 yr is ~6.9 yr calendar at the
@@ -45,7 +64,7 @@ plus anything cheap. Everything else waits.
       *Why early:* changes how every headline number reads. Better challenged
       tomorrow than in week two. **(30 m)**
 
-- [ ] **S3. M8 — complete the validation matrix** (Table 3.2, `main.tex:540-557`).
+- [x] **S3. M8 — complete the validation matrix** (Table 3.2, `main.tex:540-557`).
       Add the exozodi order-4/6 brute-grid deviations (~10 % on some stars,
       4.5-5.4 % at order 2) and the exozodi log-spacing defect (up to 35 % before
       fix), with the existing attribution to old-grid aliasing near the Kennedy
@@ -55,7 +74,7 @@ plus anything cheap. Everything else waits.
       *Why:* the matrix presently reports only the checks that went well, while the
       supervisor holds the internal brief that records the rest. **(1 h)**
 
-- [ ] **S4. C2 — uncertainty on the headline numbers.** Add the final
+- [x] **S4. C2 — uncertainty on the headline numbers.** Add the final
       `[lower, upper]` bracket and the stopping reason per row of Table 5.1, and
       quote intervals rather than point estimates in the abstract
       (`main.tex:190`). The eps = 0.05 yr stop rule
@@ -64,7 +83,7 @@ plus anything cheap. Everything else waits.
       a precision `main.tex:624` explicitly disclaims.
       *Why:* kills the SQ6 `-` outright, and the data already exists. **(2 h)**
 
-- [ ] **S5. C1 — document the approval.** The supervisor has approved the analytic
+- [x] **S5. C1 — document the approval.** The supervisor has approved the analytic
       rewrite. Record the provenance in Appendix B.2 rather than softening the
       claim at `main.tex:582, 619, 876`, and fix the stale status line in
       `ANALYTIC_NOISE_REWRITE.md:3` ("NOT yet supervisor-approved") plus its §8
@@ -76,13 +95,17 @@ plus anything cheap. Everything else waits.
 
 ## Tier A — cheap, high yield, include if the day holds (~5 h)
 
-- [ ] **A1. Formal compliance sweep.** Declaration of Originality (ETH requirement,
-      currently absent); reference the 5 orphaned floats (Tables 2.2, 2.3, 2.5,
-      5.2 and Fig. 4.1); point to Appendix B from the body; add References to the
-      TOC; fix the wrong cross-reference at `main.tex:807` (cites Eq. 4.4 for a
-      ratio needing Eqs. 4.3 and 4.4 together); expand "MT" on first use.
-      *Why:* clears the only `-` in the presentation block and requires no
-      thinking. **(1.5 h)**
+- [x] **A1. Formal compliance sweep.** Orphaned floats now all referenced (the
+      real list was Fig. "transmission maps", Table "noise taxonomy", Fig. 4.1
+      "budget example", Table 5.2 "null order synthesis"); Appendix B pointed to
+      from two places in the body; References added to the TOC via
+      `\addcontentsline`; "MT" expanded in the Table 5.1 header. The cross-
+      reference fault was worse than reported: the small-star `align` block
+      carried a single label on the second equation, so every reference to the
+      x^2/8 ratio resolved to the order-four expression alone. Both equations are
+      now labelled and both citing sentences reference the pair.
+      **Declaration of Originality is deliberately deferred** -- it is the last
+      step before submission, see below.
 
 - [ ] **A2. Citation batch.**
       - M10: cite Lay 2004 §4.A and Dannert 2022 §2.2.3 at `main.tex:317` and
@@ -100,18 +123,18 @@ plus anything cheap. Everything else waits.
         arbitrary comparison points. They are the dominant lever on the answer
         (`main.tex:700`: 140 -> 610 for half a year). **(1.5 h)**
 
-- [ ] **A3. Terminology.** Resolve the two incompatible meanings of "agnostic"
+- [x] **A3. Terminology.** Resolve the two incompatible meanings of "agnostic"
       (mechanism-agnostic in the title and Introduction vs. a parameter class not
       requiring SNR recomputation at `main.tex:416, 433`). Unify the budget-shape
       names across plot titles, captions and text — "Short-weighted" currently
       carries the embedded plot title "Long-Short Gradient" (Figs 5.1/5.2), and
       Fig. 4.1 calls the same curve "Additional Shot Noise". **(1.5 h)**
 
-- [ ] **A4. Integral-normalised ramp comparison.** Neutral endpoint = 2 x flat;
+- [x] **A4. Integral-normalised ramp comparison.** Neutral endpoint = 2 x flat;
       holds in 8/8 rows. Pure arithmetic on existing numbers, strengthens the
       null-order inversion at zero cost. Best ratio on the list. **(30 m)**
 
-- [ ] **A5. Attribution cites.** Lay (2005) Eq. 17 for
+- [x] **A5. Attribution cites.** Lay (2005) Eq. 17 for
       `<T2>_disk = 1/4 [1 - 2 J1(x)/x]` at `main.tex:936` — claim only the
       even-order and extended-profile extension. Guyon et al. 2013 §1 at
       `main.tex:488` for the Angel Cross throughput trade (theta^4 null on 25 % of
@@ -125,18 +148,19 @@ waits for the post-diff fortnight.
 
 ## Tier B — comprehension, stretch for the diff
 
-- [ ] B1. Define "pre-efficiency reference plane" at `main.tex:208`, where the
-      Introduction's central claim first rests on it. It is currently only
-      implicitly defined eight pages later as "after area, before eta" in Table 2.4.
-- [ ] B2. Move the "iso-mission-time" definition forward. The term is in the title
-      and is defined on p31 of 50.
-- [ ] B3. Reference Fig. 4.1 in the text and complete its caption: catalog, null
-      order, operating point, and whether the shaded region is a rate or a
-      variance. It is the only drawing of an actual noise budget in the thesis.
-- [ ] B4. Scope SQ3 honestly pending the Tier C assessment — state that the
-      *modelling* reduction (collapsing instrumental random terms into one
-      aggregate `N_I`) has no fidelity assessment yet, and give "significantly" a
-      threshold.
+- [x] B1. "pre-efficiency reference plane" now defined inline where the
+      Introduction first relies on it, with a forward pointer to its precise fixing.
+- [x] B2. "iso-mission-time" defined at its first use in the body. The same
+      sentence also carried the overstated novelty claim and the "initially
+      counter-intuitive" framing; both are corrected there.
+- [x] B3. Fig. 4.1 is now referenced from the text, and its caption states the
+      ramp direction unambiguously and that the curves are photon-rate spectral
+      densities rather than variances. **Still open:** the caption does not name
+      the catalog or null order, which could not be recovered from the figure.
+- [x] B4. SQ3 split into its numerical and modelling reductions in the
+      Conclusion. The numerical one is validated; the modelling one is stated as
+      exact for genuinely independent terms and untested for a realistic noise
+      inventory, so the sub-question is answered as partial rather than closed.
 
 ---
 
@@ -152,6 +176,25 @@ waits for the post-diff fortnight.
 - [ ] C3. **SQ3 aggregate-`N_I` fidelity assessment.** Split `N_I` into components,
       show the aggregate reproduces the split within a stated tolerance. Converts
       the one open research question into a result.
+- [ ] C6. **Penalized arm at feasible mission-time targets.** The Guyon-penalized
+      order-four configuration cannot complete Experiment 1 at 5.5 or 6.0 yr at
+      all: with zero added noise it already needs 7.65 yr, so the endpoint search
+      correctly returns no admissible budget. Rerun the penalized arm at 8.0, 8.5
+      and 9.0 yr to test whether the *ordering* among budget families -- the
+      actual reversal claim -- survives the throughput penalty.
+- [x] C7. **Throughput sensitivity sweep.** DONE and promoted into the thesis as
+      Section 5.7 plus a rewritten Section 6.1 and an abstract sentence. Result:
+      mission time scales sub-linearly in 1/throughput (ratio 1.71-1.83 for a
+      halving, against 2.0 for pure 1/tau), implying a throughput-independent,
+      slew-dominated fraction of 17-29%. The throughput cost of a deeper null
+      exceeds its leakage-suppression benefit by a factor of three to five, so a
+      penalized order-four configuration reaches no target at all. Data:
+      `thesis/reproducibility/throughput_sweep.tsv`.
+- [ ] C7b. **Optional strengthening:** state what fraction of the astrophysical
+      background the reported allowances represent at one wavelength. Reviewer 2
+      flagged its absence as the reason a reader cannot judge whether 140 or 640
+      is demanding or comfortable. Requires evaluating `N_B(lambda)` at the
+      operating point; not yet done.
 - [ ] C4. Minor findings m1-m7 from the scientific-competence report (redundant
       eligibility filters, `n_i` RMS labelling in Table 2.4, the 0.589645 baseline
       constant retained at order four, promoting retention limits from Appendix B
@@ -162,8 +205,21 @@ waits for the post-diff fortnight.
 
 ---
 
+## Final step before submission
+
+- [ ] **Declaration of Originality.** Download the current official ETH form,
+      sign it, place the PDF in `thesis/`, and include it with `\includepdf`
+      (the `pdfpages` package is already loaded in the preamble). Do not
+      reconstruct the wording by hand; use the current official template. This
+      is the last action before the thesis is sent off.
+
 ## Cover note to send with the diff
 
+- [ ] **Lead with what changed since the presentation.** He last saw results two
+      months ago and they were already outdated then. Without an explicit
+      changelog he will read the new numbers against a stale prior and aim his
+      feedback at the wrong target. State what moved, why, and which conclusions
+      survived.
 - [ ] List what is still coming (Tier C) so gaps read as planned work, not
       oversights.
 - [ ] Ask directly: is the throughput-normalized ablation the right control for the

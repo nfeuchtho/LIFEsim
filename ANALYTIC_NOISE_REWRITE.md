@@ -1,8 +1,12 @@
 # Analytic (grid-free) astrophysical noise rewrite
 
-Status: **implemented, self-consistent, NOT yet supervisor-approved.** Old grid-based
-code kept as `.bak` files (see "Backups" below) so this can be reverted file-by-file
-if needed. Do not delete the `.bak`/`.new` files until supervisor sign-off.
+Status: **implemented, self-consistent, supervisor-approved (2026-07).** The old
+grid-based code is preserved in two places: the `.bak`/`.new` pairs under
+`code_review_backups/` (not `.bak` files sitting next to the sources, as section 8
+originally described), and -- more reliably -- commit `2fd5142` in the project
+repository, which is the pre-rewrite state. The rewrite itself is commit `93dde44`.
+Since git now holds both states, the backup directory is redundant and is excluded
+from version control.
 
 This document is written to (a) brief the supervisor on what changed and why, and
 (b) let a future session (or a different person) pick this up cold.

@@ -187,9 +187,9 @@
 \begin{abstract}
     The Large Interferometer For Exoplanets (LIFE) aims to detect and characterize nearby terrestrial exoplanets in the mid-infrared. Its scientific return depends on how much additional instrumental random noise can be tolerated without making the required observing program too long. This thesis develops an Agnostic Mission Simulator (AMS) and a trade-space explorer that convert a wavelength-dependent aggregate random-noise allowance into a 90th-percentile mission time. The source calculation was reformulated analytically for circularly symmetric astrophysical backgrounds, eliminating the former spatial pixel grid, correcting the local-zodiacal normalization by about 27\%, and permitting accurate wavelength-bin quadrature. The AMS reproduces the shared LIFEsim source-model SNRs to floating-point precision.
 
-    Final calculations compare three additive budget shapes---flat, short-weighted, and long-weighted---for the Hab2Max and Hab2Min catalogs at limiting magnitude 7, field of regard $65^\circ$, and 12\,h slew time. For the second-order double-Bracewell reference, the short-weighted ramp admits the largest endpoint, consistent with geometric stellar leakage dominating the short-wavelength variance. In the fourth-order proxy, stellar leakage is suppressed by three to five orders of magnitude and the ordering reverses: zodiacal backgrounds dominate and the long-weighted ramp admits the largest endpoint. At the primary mission-time targets, the flat allowance rises from 140 to 650\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and from 65 to 590\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Min at 7.5\,yr when changing from null order two to four.
+    Final calculations compare three additive budget shapes---flat, short-weighted, and long-weighted---for the Hab2Max and Hab2Min catalogs at limiting magnitude 7, field of regard $65^\circ$, and 12\,h slew time. For the second-order double-Bracewell reference, the short-weighted ramp admits the largest endpoint, consistent with geometric stellar leakage dominating the short-wavelength variance. In the fourth-order proxy, stellar leakage is suppressed by three to five orders of magnitude and the ordering reverses: zodiacal backgrounds dominate and the long-weighted ramp admits the largest endpoint. At the primary mission-time targets, the flat allowance rises from 140 to 640\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and from 65 to 590\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Min at 7.5\,yr when changing from null order two to four.
 
-    These values are iso-mission-time amplitudes within tested budget families, not wavelength-by-wavelength subsystem requirements. The null-order comparison uses an unnormalized $\sin^n$ transmission proxy with fixed collecting area, efficiency, and baseline prescription; it therefore measures the impact of the modeled null order and its associated throughput change rather than predicting a concrete fourth-order LIFE architecture.
+    These values are iso-mission-time amplitudes within tested budget families, not wavelength-by-wavelength subsystem requirements. The null-order comparison uses an unnormalized $\sin^n$ transmission proxy with fixed collecting area, efficiency, and baseline prescription; it therefore measures the impact of the modeled null order and its associated throughput change rather than predicting a concrete fourth-order LIFE architecture. Charging that proxy the optical efficiency penalty of a realizable four-aperture fourth-order combiner removes every admissible allowance at the targets studied, because the mission time required with no added noise already exceeds them. Across catalogs and null orders the required time scales with the inverse of throughput, tempered by a slew-dominated fraction of 17 to 29\% that does not scale at all, and the cost of halving the efficiency exceeds the benefit of the deeper null by a factor of three to five.
 \end{abstract}
 
 \newpage
@@ -198,14 +198,14 @@
 
 \tableofcontents
 
-\chapteropening{Introduction}{Why LIFE matters and how a science goal becomes an instrument requirement}
+\chapteropening{Introduction}{Why LIFE matters and how a science goal becomes an instrument requirement} \label{sec: introduction}
 Human curiosity extends far beyond Earth. We seek to understand how life began and whether Earth is its only home in the Galaxy. The Large Interferometer For Exoplanets (LIFE) turns that broad question into a concrete observational program: detecting nearby temperate terrestrial planets in the mid-infrared, measuring their thermal spectra, and using those measurements to constrain planet populations, atmospheric composition, and possible habitability \cite{quanz2022life1,konrad2022life3}.
 
 For me, this scientific promise makes the practical definition of LIFE especially consequential. A mission can deliver those measurements only if its instrument can be built and operated within credible performance limits. This project therefore asks how much aggregate instrumental random noise LIFE can tolerate, and where in wavelength that noise is least damaging, before the required observing program becomes too long. Answering that question helps define instrument boundaries, test the feasibility of the approach, and increase confidence in both the mission concept and the conclusions drawn from its measurements.
 
-The reference LIFE studies used here establish the astrophysical source model, signal extraction, and expected detection and characterization performance for a double-Bracewell interferometer \cite{quanz2022life1,dannert2022life2,dannert2025thesis}. They do not yet provide the wavelength-dependent iso-mission-time boundary for a mechanism-independent aggregate random-noise term. This thesis fills that narrower gap with two linked tools. The \textit{Agnostic Mission Simulator} (AMS) maps a specified noise budget and operating point to mission time; the \textit{Trade Space Explorer} (TSE) inverts that mapping to find the largest tolerated budget amplitude. A controlled change from a second- to a fourth-order transmission proxy then reveals an initially counter-intuitive reversal: the spectral region that tolerates the most added noise changes when geometric stellar leakage is strongly suppressed.
+The reference LIFE studies used here establish the astrophysical source model, signal extraction, and expected detection and characterization performance for a double-Bracewell interferometer \cite{quanz2022life1,dannert2022life2,dannert2025thesis}. An aggregate instrumental random-noise term is not itself new, and Section \ref{sec: intro: prior work} records what this work inherits. What the reference studies do not provide is its inversion: the wavelength-dependent \textit{iso-mission-time} boundary, that is, the set of noise-budget amplitudes that all lead to the same required mission time, for a mechanism-independent aggregate random-noise term. This thesis fills that narrower gap with two linked tools. The \textit{Agnostic Mission Simulator} (AMS) maps a specified noise budget and operating point to mission time; the \textit{Trade Space Explorer} (TSE) inverts that mapping to find the largest tolerated budget amplitude. A controlled change from a second- to a fourth-order transmission proxy then moves the spectral region that tolerates the most added noise from short to long wavelengths. The direction of that change follows from the known suppression of geometric stellar leakage at a deeper null; what the completed exploration establishes is that the reversal survives the full nonlinear scheduling and percentile chain, and that it holds under equal integrated added noise rather than only under equal ramp endpoints.
 
-This work keeps the double Bracewell as its reference geometry. It is mechanism-agnostic only for an aggregate random-noise allowance: individual independent random terms are represented by their common equivalent rate. The result is therefore a bridge quantity. It translates a science-level completion time into an allowed single-output random count rate at a defined pre-efficiency reference plane. A later engineering allocation can map detector, optical, thermal, and control-noise terms to that plane and test their combined variance against the allowance. This thesis does not perform that subsystem allocation and cannot decide which hardware implementation is easiest. Architecture dependence is parameterized only through the explicitly limited null-order proxy, not through an arbitrary-architecture simulation.
+This work keeps the double Bracewell as its reference geometry. It is mechanism-agnostic only for an aggregate random-noise allowance: individual independent random terms are represented by their common equivalent rate. The result is therefore a bridge quantity. It translates a science-level completion time into an allowed single-output random count rate at a defined \textit{pre-efficiency reference plane}. That plane is the point in the signal chain at which photon rates have been multiplied by the collecting area but not yet by the optical throughput or the detector quantum efficiency, so a rate quoted there is independent of how those two factors are eventually apportioned; Section \ref{sec: intro: params} fixes it precisely. A later engineering allocation can map detector, optical, thermal, and control-noise terms to that plane and test their combined variance against the allowance. This thesis does not perform that subsystem allocation and cannot decide which hardware implementation is easiest. Architecture dependence is parameterized only through the explicitly limited null-order proxy, not through an arbitrary-architecture simulation.
 
 \subsection{Research Questions} \label{sec: intro: research questions}
 This thesis addresses the following central question.
@@ -220,6 +220,15 @@ This question is structured into the following sub-questions:
     \item \textit{Can we locate the maximum tolerated amplitude for flat and linear-ramp random-noise budgets at a fixed operating point?}
     \item \textit{How does changing the null order represented by the transmission proxy alter the tolerated spectral budget shapes?}
 \end{itemize}
+
+\subsection{Relation to Prior Work} \label{sec: intro: prior work}
+The tools and the source model used here are inherited, so it is worth stating precisely what is taken over and what is added. LIFE paper II supplies the double-Bracewell response, the signal-extraction formalism, and the LIFEsim source model on which the simulator in Section \ref{sec: methods: AMS} is built, and its appendix constrains instrumental perturbations mechanism by mechanism \cite{dannert2022life2}.
+
+The direct predecessor is Dannert's doctoral thesis \cite{dannert2025thesis}. It already introduces an aggregate instrumental photon-noise term that collects all additional photon-noise contributions, defines a fundamental-noise-limited criterion comparing that term against the astrophysical floor, and studies the resulting effect on detection yield. The aggregate random-noise quantity used here is therefore not a new object, and the present work does not claim it as one. What is new is the direction in which the mapping is used. Where the predecessor propagates an assumed instrumental noise level forward to a yield, this thesis fixes the science outcome---Experiment 1 completed within a stated mission-time target---and inverts for the largest random-noise amplitude compatible with it, resolved in wavelength across a tested family of budget shapes.
+
+Two earlier master's theses in the same programme occupy neighbouring ground. Norbruis \cite{norbruis2023} built a LIFEsim-derived performance model, used P-Pop populations as a test set, and ran grid and multi-objective optimisation over array geometry, aperture area, and instrument temperature to produce Pareto fronts against a detection figure of merit. That work optimises the design for yield; the present work holds the design fixed and solves for a tolerated noise allowance at fixed mission time. Binkert \cite{binkert2023} addresses signal extraction and molecular-feature detection during the search phase, a different layer of the same mission and without overlap with the question asked here.
+
+Against that background, three things in this thesis are new: the iso-mission-time inversion itself, the closed-form treatment of the circularly symmetric backgrounds that removes image size as a production-science parameter (Section \ref{sec: ts reduction: image spec}), and the finding that the spectral preference between budget shapes inverts with null order and survives the full scheduling and percentile chain rather than only the underlying leakage scaling.
 
 The remainder follows the causal chain from mission goal to engineering requirement. Section \ref{sec: background} establishes the experiment, target populations, measurement, SNR, and error budget. Section \ref{sec: methods} builds the fixed-reference simulator and null-order proxy. Section \ref{sec: ts reduction} reduces the raw trade space and derives the analytic background response. Section \ref{sec: tse} then presents the completed exploration, first at the nominal second-order null and then at fourth order. The discussion and conclusion state what the resulting allowances do and do not imply for LIFE.
 
@@ -272,7 +281,7 @@ The characterization threshold deserves particular care. It is not a universal s
 These assumptions specify the required scientific outcome, but not the individual planets that must supply it. We therefore next define the simulated target populations on which the mission-time calculation is based.
 
 \subsection{Target Catalog Selection} \label{sec: intro: catalog}
-The LIFE target catalogs are created from a common scaffold of 4505 nearby stars, including Sun-like and M-dwarf hosts out to roughly 50\,pc. Since planets are not known around most of them, the population must be synthesized. P-Pop draws occurrence and orbital properties constrained by Kepler statistics and places a hypothetical planetary system around every stellar target \cite{kammerer2018ppop}. One complete draw over the stellar scaffold is called a \textit{universe}. The 100 universes in a catalog are therefore alternative population realizations, not 100 independent observations of the real Galaxy.
+The LIFE target catalogs are created from a common scaffold of 4505 nearby stars, including Sun-like and M-dwarf hosts out to roughly 50\,pc. This scaffold was inherited together with the catalogs; its entries carry TESS Input Catalog identifiers, and the star count and distance limit quoted here were verified directly from the catalog files rather than taken from a published target list. It is deliberately broader than the stellar sample of LIFE paper VI, which is restricted to single and wide binary main-sequence stars within 20\,pc \cite{kammerer2022life6}. The $\eta_{\oplus}$ values adopted in Table \ref{tab: eta earth} were averaged over that smaller sample, so the occurrence normalization and the stellar scaffold used here are not drawn from the same stellar population. This is acceptable for the present purpose, because the comparison throughout is between operating points and budget shapes evaluated on one fixed scaffold, but it means the absolute planet counts in Table \ref{tab: catalog inventory} should not be read against the yields reported in LIFE paper VI. Since planets are not known around most of them, the population must be synthesized. P-Pop draws occurrence and orbital properties constrained by Kepler statistics and places a hypothetical planetary system around every stellar target \cite{kammerer2018ppop}. One complete draw over the stellar scaffold is called a \textit{universe}. The 100 universes in a catalog are therefore alternative population realizations, not 100 independent observations of the real Galaxy.
 
 We use two catalogs, \textit{Hab2Min} and \textit{Hab2Max}, with 100 universes each. They implement the lower and upper ``hab2 stars'' extrapolation scenarios of the Bryson et al.\ occurrence model as adopted in LIFE paper VI \cite{bryson2021occurrence,kammerer2022life6}. The quantity $\eta_{\oplus}$ is the average number of exo-Earth candidates per Sun-like star, not the fraction of stars hosting at least one such planet. Hab2Min represents the less favorable and Hab2Max the more favorable occurrence scenario; their difference is driven chiefly by the extrapolation beyond 500\,d, where Kepler completeness no longer directly constrains the occurrence surface. Both retain the same stars, so comparing them changes the hypothetical planets rather than the accessible stellar neighborhood. M dwarfs remain in the source catalogs but fail the Experiment~1 host-temperature cut and are not qualifying targets.
 
@@ -314,13 +323,13 @@ Before quantifying the SNR, we must establish how the interferometer separates a
 
 The two destructive outputs are chopped by subtraction. Their symmetric mean backgrounds cancel in the difference, but their independent photon-counting variances remain and add. A planet generally contributes to both outputs, but unequally, and therefore survives the subtraction (Fig. \ref{fig: transmission maps a}, right).
 
-The final ingredient is \textit{modulation} through array rotation. Over an observation the entire array is slowly rotated about the line of sight. A planet at a fixed angular separation is thereby swept through the alternating positive and negative lobes of the chopped map, so that its contribution to the differential output oscillates in time, tracing out a characteristic \textit{transmission curve} as a function of rotation angle (Fig. \ref{fig: transmission maps b}). The symmetric backgrounds, being nearly axisymmetric, stay approximately constant under this rotation. The planetary signal is therefore encoded as a time-modulated component riding on an essentially static background, which allows it to be isolated in subsequent analysis \cite{lay2005imaging,dannert2022life2}. This is the origin of the temporal average $\langle\cdot\rangle$ over one full array rotation that appears throughout the SNR derivation below.
+The final ingredient is \textit{modulation} through array rotation. Over an observation the entire array is slowly rotated about the line of sight. A planet at a fixed angular separation is thereby swept through the alternating positive and negative lobes of the chopped map, so that its contribution to the differential output oscillates in time, tracing out a characteristic \textit{transmission curve} as a function of rotation angle (Fig. \ref{fig: transmission maps b}). The symmetric backgrounds, being nearly axisymmetric, stay approximately constant under this rotation: Lay reports that the stellar and local-zodiacal geometric leakage rates are nominally independent of the array rotation angle and therefore appear at zero frequency, and Dannert et al. state correspondingly that for rotationally symmetric sources the detected signal does not depend on the rotation angle of the array \cite{lay2004systematic,dannert2022life2}. The planetary signal is therefore encoded as a time-modulated component riding on an essentially static background, which allows it to be isolated in subsequent analysis \cite{lay2005imaging,dannert2022life2}. This is the origin of the temporal average $\langle\cdot\rangle$ over one full array rotation that appears throughout the SNR derivation below.
 
 The calculation does not simulate a time-series estimator sample by sample. It uses the root-mean-square response over a complete, uniformly sampled rotation. For a chopped planet transmission $m(\theta)=T_3(\theta)-T_4(\theta)$, the effective signal coefficient is therefore
 \begin{align}
 s=\left[\frac{1}{2\pi}\int_0^{2\pi}m^2(\theta)\,\mathrm{d}\theta\right]^{1/2}.
 \end{align}
-This is the matched-modulation amplitude for white, rotation-independent variance under the adopted normalization. A constant symmetric brightness cancels from the chopped mean, but it still sends photons to each output and therefore remains in the variance.
+This is the matched-modulation amplitude for white, rotation-independent variance under the adopted normalization. A constant symmetric brightness cancels from the chopped mean, but it still sends photons to each output and therefore remains in the variance. Figure \ref{fig: transmission maps} shows the single-output and chopped maps over which these coefficients are averaged.
 
 \begin{figure}[htbp]
     \centering
@@ -392,6 +401,8 @@ The SNR expression identifies the quantities that limit a measurement, but the e
 \subsection{Non-Systematic Noise Sources} \label{sec: intro: noise sources}
 The model distinguishes noise by both physical origin and statistical treatment. Stellar leakage arises because a real star has finite angular radius: only its centre lies exactly on the null, while light from the resolved disk is transmitted. Local-zodiacal emission is thermal radiation from dust in the Solar System; exozodiacal emission is the analogous dust contribution around the target star. The adopted exozodiacal surface-brightness model follows the smooth, face-on disk prescription used in LIFEsim and is tied to established exozodiacal modeling \cite{kennedy2015,dannert2022life2}. All three contribute photon shot noise even where chopping cancels their symmetric mean.
 
+Table \ref{tab: noise taxonomy} collects these terms with their physical origin, the dependence retained in the model, and the boundary of that treatment.
+
 \begin{table}[htbp]
 \centering
 \begin{tabular}{@{}p{0.21\linewidth}p{0.24\linewidth}p{0.23\linewidth}p{0.23\linewidth}@{}}
@@ -414,6 +425,8 @@ The question is how much instrumental random noise can be allowed in addition to
 
 \subsection{Parameters and Instrument Performance} \label{sec: intro: params}
 A \textit{parameter} is a value or function used to describe a candidate mission calculation. A \textit{variable} parameter is a target-dependent physical signal or noise channel; changing it triggers SNR recomputation (for example stellar leakage or planetary transmission). An \textit{agnostic} parameter is a global visibility filter or overhead applied without recomputing source physics (for example limiting magnitude, field of regard, or slew time).
+
+The word \textit{agnostic} is used in two distinct senses in this thesis, and they should not be conflated. In the title and in Section \ref{sec: introduction} it is \textit{mechanism}-agnostic: the instrumental allowance $N_I(\lambda)$ does not commit to a physical origin for the random terms it aggregates. In the sense just defined, and throughout the description of the simulator, it is a \textit{computational} classification: an agnostic parameter is one whose variation does not require the source physics to be recomputed. The first sense is a modelling choice about what the result means; the second is an implementation property that makes the repeated evaluations affordable. A parameter can be agnostic in the second sense while being entirely architecture-specific, as slew time is.
 
 The ideal $N_I=0$ case is the physical lower bound: it has maximum SNR and minimum mission time, but it is the \textit{hardest} engineering requirement because it demands a perfectly noiseless added contribution. It is a mathematical reference origin, not an easy design. Negative budgets are outside this model. Requirements are relaxed upward from this origin until the iso-mission-time boundary is reached. If, at some wavelength, the added budget is lower than the total astrophysical noise, the calculation is \textit{astrophysical-noise-limited} there; if it exceeds it, it is \textit{instrumental-noise-limited}.
 
@@ -487,6 +500,8 @@ Far-field average of the nulling envelope & Per-star baseline prescription and 1
 
 This distinction is central. The proxy keeps four apertures, collecting area, efficiency, and baseline prescription fixed, but does not normalize throughput between orders. Thus $n=4$ has a lower asymptotic average transmission. The comparison intentionally combines stronger central suppression with the transmission change implied by Eq. \ref{eq: null proxy outputs}. It measures the consequence of that mathematical response, not the performance or feasibility of a specified fourth-order beam combiner.
 
+A realizable fourth-order combiner would additionally pay a throughput cost that this proxy does not represent at all, and that cost is established rather than hypothetical. Guyon et al. note that null depth is commonly achieved at the expense of efficiency, because a smaller fraction of the collected light reaches the output carrying the deep null: for a fixed four-aperture array, a second-order Bracewell arrangement delivers 50\% throughput using two of four outputs, whereas the fourth-order Angel Cross design uses only one of four, or 25\% \cite{guyon2013beam}. The order-four allowances reported in Section \ref{sec: tse} therefore isolate the null-depth benefit and should be read as an upper bound on what a physical fourth-order design would tolerate.
+
 \subsection{The Agnostic Mission Simulator (AMS)} \label{sec: methods: AMS}
 The AMS maps one parameter set to mission time in two phases. The \textit{simulation phase} computes or reuses an unfiltered one-hour SNR for every catalog planet, then applies the global visibility filters. The \textit{distribution phase} schedules the filtered targets and returns the required percentile mission time.
 
@@ -532,6 +547,8 @@ The complete scheduler is:
 
 The AMS is consequently a perfect-information ensemble yield model, not an adaptive discovery scheduler. In experiment-limited mode, the configured 0.8 observing efficiency neither caps nor rescales the returned time. Here ``completion of Experiment~1'' always inherits the strict implementation above: at least 51 detections in at least 91 universes, with empty universes omitted from the time sheet. The strict inequalities tend to raise mission time, whereas omission can bias the reported distribution low. Their net effect is not known from the retained outputs.
 
+Two consequences follow for how every time reported in this thesis should be read. First, the returned quantity is the time the scheduler charges: the sum of on-source integration and slew, accumulated over the shared detection campaign, the four orbit follow-ups, and the characterization observation. It is not a calendar duration, because no duty cycle, downlink, calibration, or safe-mode overhead is applied to it. Second, the observing efficiency of 0.8 configured in Table \ref{tab: study assumptions} would, if applied as a duty cycle, map a charged time $T$ to an elapsed duration $T/0.8$; the 5.5-year target used throughout would then correspond to roughly 6.9 years of elapsed mission. Every target, contour, and budget amplitude reported here is stated in charged time, so comparisons among them are internally consistent. They should not be read directly against a mission calendar, and the allowances in Section \ref{sec: tse} are correspondingly optimistic if the reader interprets the target as elapsed time.
+
 The returned percentile is fixed at 90\%. If 100 universe times are retained, a distribution-free binomial calculation gives approximately 95.6\% coverage for the population 90th percentile between the 84th and 96th order statistics. Fewer retained universes require different ranks. The saved final products contain contour endpoints but not every per-universe time vector, so this rank interval cannot be converted into a numerical uncertainty in years or budget amplitude after the fact. Future production runs should retain those vectors and report a corresponding interval alongside every result.
 
 \subsubsection{Validation of the SNR Flow}
@@ -549,6 +566,8 @@ Analytic azimuthal response versus $2\times10^6$ angle samples, orders 2, 4, 6 &
 Uniform-disk average versus dense two-dimensional grid & Agreement at approximately $10^{-5}$ & Residual is consistent with reference-grid discretization \\
 Order-four stellar and local-zodiacal terms versus image sampling, 15 stars & Below 0.7\% at image size 400 & End-to-end check against an independent spatial discretization \\
 Exozodiacal radial quadrature self-convergence, orders 2, 4, 6 & Below $10^{-5}$ & Checks the one-dimensional extended-disk integration \\
+Order-four and order-six exozodiacal terms versus image sampling & Up to about 10\% on a few stars & Reference-grid aliasing near the Kennedy inner cutoff, not an order-four error: the same stars and grid deviate by 4.5--5.4\% at order two \\
+Exozodiacal radial sampling, 25-star check & Worst case 1--3\% after the log-spaced substitution, against up to 35\% before it & A first uniform-in-radius implementation undersampled the steep profile near the inner cutoff; the defect was found by this check and fixed \\
 Invalid odd null order & Explicit error & Prevents applying the even-order derivation outside its domain \\
 \bottomrule
 \end{tabular}
@@ -568,18 +587,18 @@ We reduce the trade space by exploiting the additive background terms in the bin
 \begin{align*}
 N_B(\lambda) = \sum_{i=1}^{n}N_i(\lambda) + N_I (\lambda).
 \end{align*}
-As is evident from the blackbody behavior of the background noise sources, we must keep the wavelength dependence to maintain physical relevance.
+As is evident from the blackbody behavior of the background noise sources, we must keep the wavelength dependence to maintain physical relevance. Figure \ref{fig: budget example} illustrates the construction: an imposed $N_I(\lambda)$ is added on top of the astrophysical background, and the shaded area between the two curves is the allowance being solved for.
 
 The reduction is valid when terms map to a defined independent random allowance at the same reference plane; it excludes correlated/systematic terms and is not an allocation to subsystems. This study tests flat and two linear-ramp forms of $N_I$, not arbitrary functions. Increasing the amplitude within one specified family increases mission time; the iso-mission-time boundary then defines its tolerated amplitude.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.8\linewidth]{images/ts reduction/short_long_5yrs.png}
-\caption{Depiction of the noise budget on top of the astrophysical noise. The dashed green line denotes the budget distribution, in this case a linear distribution from short to long wavelengths. The solid green line stands for the total noise including the budget. The shaded green area between the astrophysical and total noise curves is the actual error budget. In this example the budget is distributed such that the total mission time is exactly five years.}
+\caption{Construction of an imposed random-noise budget on top of the astrophysical background. The dashed green line is the imposed $N_I(\lambda)$, here a linear ramp that vanishes at the short-wavelength end of the band and reaches its full amplitude at the long-wavelength end; this is the long-weighted family of Section \ref{sec: tse: budget shape}. The solid green line is the resulting total background including the budget, and the shaded area between the two curves is the allowance itself. All three curves are photon-rate spectral densities referred to the pre-efficiency single-output plane, not variances. The amplitude drawn is the one for which the required mission time is exactly five years.}
 \label{fig: budget example}
 \end{figure}
 
 \subsection{Analytic Background Evaluation and Spectral Resolution} \label{sec: ts reduction: image spec}
-The approved physics rewrite removes the science dependence on image size. Circularly symmetric sources permit an analytic azimuthal and radial reduction of the background integrals: the stellar disk is treated as uniform and circular, local zodiacal light as locally uniform, and exozodiacal light as smooth and face-on. Inclined or asymmetric exozodiacal disks require an angle-resolved treatment and are outside this reduction. Image size now affects visualization and independent cross-checks only, not production science SNR.
+The analytic rewrite of the background evaluation removes the science dependence on image size. Circularly symmetric sources permit an analytic azimuthal and radial reduction of the background integrals: the stellar disk is treated as uniform and circular, local zodiacal light as locally uniform, and exozodiacal light as smooth and face-on. Inclined or asymmetric exozodiacal disks require an angle-resolved treatment and are outside this reduction. Image size now affects visualization and independent cross-checks only, not production science SNR.
 
 The reduction follows from expanding the even power $\sin^{2p}\phi$ into cosines. Azimuthal averaging then uses the standard Bessel integral representation \cite{nistdlmf},
 \begin{align}
@@ -597,18 +616,22 @@ J_0\left(\frac{2\pi j b\vartheta}{\lambda}\right).
 For a uniform disk, radial area averaging replaces each $J_0(jx)$ term by $2J_1(jx)/(jx)$, following the standard Bessel derivative identity \cite{nistdlmf}, where $x=2\pi bR/\lambda$ and $R$ is the angular disk radius. The limiting value is one as $jx\rightarrow0$, so the expression is evaluated with its analytic limit near the origin. The Bessel power series then gives the small-star limits
 \begin{align}
 \left\langle T_2\right\rangle_\mathrm{disk}
-&=\frac{x^2}{32}+\mathcal{O}(x^4),\\
+&=\frac{x^2}{32}+\mathcal{O}(x^4),\label{eq: leakage small star t2}\\
 \left\langle T_4\right\rangle_\mathrm{disk}
 &=\frac{x^4}{256}+\mathcal{O}(x^6).
 \label{eq: leakage small star}
 \end{align}
-The fourth-to-second-order stellar-leakage ratio therefore approaches $x^2/8$. The same general average is used inside one-dimensional radial quadrature for a tapered source or exozodiacal profile. Rotation does not ``average away'' a circular background; rather, circular symmetry makes its integrated response independent of rotation angle. Its mean may cancel after chopping, but its photons still set the shot-noise variance.
+Taking the ratio of Eqs. \ref{eq: leakage small star t2} and \ref{eq: leakage small star}, the fourth-to-second-order stellar-leakage ratio therefore approaches $x^2/8$. The same general average is used inside one-dimensional radial quadrature for a tapered source or exozodiacal profile. Rotation does not ``average away'' a circular background; rather, circular symmetry makes its integrated response independent of rotation angle \cite{lay2004systematic,dannert2022life2}. Its mean may cancel after chopping, but its photons still set the shot-noise variance.
 
-The local-zodiacal correction arose from a geometric inconsistency in the removed pixel-grid path. The physical field of view is circular, with solid angle proportional to $\pi R_\mathrm{FoV}^2$, but one normalization divided the integrated circular flux by the area $4R_\mathrm{FoV}^2$ of its enclosing square. It therefore suppressed the uniform foreground by $\pi/4$. Restoring the circular normalization multiplies the local-zodiacal rate by
+The local-zodiacal correction arose from a geometric inconsistency in the removed pixel-grid path. That path is inherited LIFEsim code and predates this work; the analytic reformulation did not introduce the defect, it exposed it. The physical field of view is circular, with solid angle proportional to $\pi R_\mathrm{FoV}^2$, but one normalization divided the integrated circular flux by the area $4R_\mathrm{FoV}^2$ of its enclosing square. It therefore suppressed the uniform foreground by $\pi/4$.
+
+The decisive evidence that this is a defect rather than a modelling choice is internal to the inherited code: the untapered branch of the same routine normalized by a circular mask, while the default tapered branch normalized by the square pixel sum, so the two branches disagreed with each other on the same physical configuration. Restoring the circular normalization multiplies the local-zodiacal rate by
 \begin{align}
-\frac{4}{\pi}=1.2732\ldots,
+\frac{4}{\pi}=1.2732\ldots
 \end{align}
-an increase of approximately 27.3\%. This is a normalization correction, not a new dust model. Because local-zodiacal shot noise is present for every target, the change propagates nonlinearly through SNR, target ranking, and the 90th-percentile mission time.
+in the uniform limit. That limit is exact only where the product of transmission and field-of-view taper is constant over the domain, which it is not; the ratio measured directly against the old grid is $1.268$. The correction is therefore an increase of approximately 27\%, and the analytic value should not be read as an exact prediction of the measured one. This is a normalization correction, not a new dust model.
+
+Because local-zodiacal shot noise is present for every target, the change propagates nonlinearly through SNR, target ranking, and the 90th-percentile mission time. Comparing the corrected and uncorrected paths over the full \mbox{Hab2Max} catalog gives a median relative SNR shift of about 10.9\%. The scope of that figure should be read carefully: it applies to results computed through the default tapered local-zodiacal path, and the present work does not attempt to propagate it into any previously published LIFE yield number. Doing so would require rerunning those studies and is left to future work.
 
 Transmission and source spectra are integrated within every wavelength bin using an eight-point Gauss--Legendre rule in inverse wavelength $u=1/\lambda$. This coordinate is natural because interferometric phases are proportional to $b/\lambda$ and therefore vary nearly linearly with $u$. Across spectral resolutions 5, 10, 20, and 50 and sampled catalog stars, the stellar-leakage and exozodiacal terms agree with a 64-point reference to approximately machine precision. The adopted resolving power remains $R=\lambda/\Delta\lambda=20$, which produces 31 bins over 4--18.5\,$\upmu$m. Thus spatial image size is no longer a science parameter, while wavelength-bin integration is explicitly converged for the retained binning. Appendix \ref{app: analytic derivation} records the derivation and numerical conventions in greater detail.
 
@@ -616,16 +639,16 @@ Transmission and source spectra are integrated within every wavelength bin using
 The proxy described in Section \ref{sec: intro: null depth approach} accepts positive even null orders. This thesis evaluates null orders two and four. Order two reproduces the double-Bracewell null envelope; order four is a controlled mathematical proxy using the same four apertures, collecting area, efficiency, baseline ratio, and per-target baseline prescription. No aperture-count or hardware-feasibility claim follows from the fourth-order calculation.
 
 \chapteropening{Trade Space Exploration}{From the reduced parameter space to an iso-mission-time random-noise allowance} \label{sec: tse}
-With the trade space reduced, we now invert the AMS mapping. All results use the approved analytic background model and a deliberately conservative common operating point unless a plotted axis varies it. The working LIFE field-of-regard reference is $90^\circ$; $65^\circ$ is substantially more restrictive but still permits acceptable mission times. Current project estimates place the K-band limiting magnitude near 8; magnitude 7 is a pessimistic lower bound, and the completed scans show little remaining sensitivity near that value. A 10\,h slew is the inherited baseline \cite{dannert2025thesis}; 12\,h adds an intentionally simple 20\% margin, while longer slews rapidly remove feasible budget space. The choices are therefore conservative comparison points, not optimized requirements. Hab2Max is evaluated at study targets of 5.5 and 6\,yr; Hab2Min uses 7.5 and 8\,yr. Both null orders use the same source catalogs and assumptions.
+With the trade space reduced, we now invert the AMS mapping. All results use the analytic background model of Section \ref{sec: ts reduction: image spec} and a deliberately conservative common operating point unless a plotted axis varies it. The working LIFE field-of-regard reference is $90^\circ$; $65^\circ$ is substantially more restrictive but still permits acceptable mission times. Current project estimates place the K-band limiting magnitude near 8; magnitude 7 is a pessimistic lower bound, and the completed scans show little remaining sensitivity near that value. A 10\,h slew is the inherited baseline \cite{dannert2025thesis}; 12\,h adds an intentionally simple 20\% margin, while longer slews rapidly remove feasible budget space. The choices are therefore conservative comparison points, not optimized requirements. Hab2Max is evaluated at study targets of 5.5 and 6\,yr; Hab2Min uses 7.5 and 8\,yr. These targets are chosen, not inherited. The LIFE concept is postulated to run for roughly five years, so a shorter target is the more demanding and therefore the more informative requirement; for each catalog the lower target is the smallest half-year step at which a non-trivial positive allowance still exists at the nominal null order. Below it the zero-budget calculation already exceeds the requested time and no allowance can be reported. The second target adds half a year to expose how steeply the allowance responds to a relaxation of the science schedule. Because the two catalogs reach that feasibility threshold at different times, they are not compared at a common mission time; differences between Hab2Max and Hab2Min in Table \ref{tab: budget shapes} therefore combine the occurrence scenario with the different target, and should not be read as an occurrence effect alone. Appendix \ref{app: reproducibility} records this operating point together with the data provenance, the reproduction of the reported amplitudes, and the statistical interpretation of the sampled percentile.
 
 \subsection{The Iso-Mission-Time Budget}
 The \textit{iso-mission-time budget} is the tolerated scalar amplitude of one imposed $N_I(\lambda)$ shape at a stated operating point. It is expressed in ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for the flat case or as a ramp endpoint. ``Below'' applies only to the same imposed shape and reference calculation.
 
-The search starts with an amplitude bracket from 0 to 50,000 ph\,s$^{-1}$\,$\upmu$m$^{-1}$. At every iteration the lower bracket endpoint is admissible and the upper endpoint exceeds the target mission time. An exponential fit through the endpoint evaluations proposes the next amplitude; it accelerates the search but does not define the answer. The new evaluation replaces one endpoint according to its mission time, so the bracket invariant is retained. The search stops when mission time lies within 0.05\,yr of the target or the amplitude bracket is at most 10\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ wide. Reported amplitudes are therefore search point estimates. The two alternative stopping rules do not support a universal $\pm5$ amplitude uncertainty: a time-tolerance stop may leave a wider amplitude bracket, whereas a bracket-width stop only bounds the final numerical search interval.
+The search starts with an amplitude bracket from 0 to 50,000 ph\,s$^{-1}$\,$\upmu$m$^{-1}$. At every iteration the lower bracket endpoint is admissible and the upper endpoint exceeds the target mission time. An exponential fit through the endpoint evaluations proposes the next amplitude; it accelerates the search but does not define the answer. The new evaluation replaces one endpoint according to its mission time, so the bracket invariant is retained. The search stops when mission time lies within 0.05\,yr of the target or the amplitude bracket is at most 10\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ wide. Reported amplitudes are therefore search point estimates; Section \ref{sec: app: reproduction} quantifies the resulting uncertainty by rerunning the complete search and recording the mission time each reported amplitude actually delivers. The two alternative stopping rules do not support a universal $\pm5$ amplitude uncertainty: a time-tolerance stop may leave a wider amplitude bracket, whereas a bracket-width stop only bounds the final numerical search interval.
 
 Within a fixed target list, added independent variance can only lower individual SNRs. The full mission-time map also includes discrete rankings and a sampled percentile, so global monotonicity is an empirical property rather than a formal theorem. The completed scans showed nested contours and no folded iso-time branches at the sampled resolution. If the zero-budget calculation already exceeds the requested time, no non-negative allowance exists; the plotted dark region represents this physically infeasible operating point, not a failed numerical search.
 
-\subsection{The Shape of the Error Budget}
+\subsection{The Shape of the Error Budget} \label{sec: tse: budget shape}
 The first question is how the affordable budget depends on its \textit{distribution} over wavelength. We compare three one-parameter families:
 \begin{align}
 N_\mathrm{flat}(\lambda)&=A,\\
@@ -680,11 +703,11 @@ Here $A$ is the reported amplitude. The ramp endpoints are imposed shape paramet
 \centering
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
-Catalog & MT target & Null order & Flat & Short-weighted & Long-weighted \\
+Catalog & Mission-time target & Null order & Flat & Short-weighted & Long-weighted \\
         & [yr]      &            & \multicolumn{3}{c}{Amplitude [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} \\
 \midrule
 Hab2Max & 5.5 & 2 & 140 & 300  & 210  \\
-Hab2Max & 5.5 & 4 & 650 & 1080 & 1470 \\
+Hab2Max & 5.5 & 4 & 640 & 1080 & 1470 \\
 Hab2Max & 6.0 & 2 & 610 & 1300 & 1090 \\
 Hab2Max & 6.0 & 4 & 940 & 1830 & 2240 \\
 Hab2Min & 7.5 & 2 & 65  & 200  & 150  \\
@@ -698,6 +721,8 @@ Hab2Min & 8.0 & 4 & 790 & 1460 & 1860 \\
 \end{table}
 
 The ordering is consistent across catalogs and both Hab2Max mission-time targets. At null order two, the short-weighted endpoint is largest. At null order four, the long-weighted endpoint is largest. Relaxing the target time also increases the allowance sharply: for example, the Hab2Max flat budget grows from 140 to 610 at order two and from 650 to 940 at order four when the target changes from 5.5 to 6\,yr. For Hab2Min, the corresponding flat allowances rise from 65 to 460 and from 590 to 790 when the target changes from 7.5 to 8\,yr.
+
+A ramp endpoint and a flat amplitude are not directly comparable quantities, so it is worth checking that the reversal is not an artifact of the chosen reporting convention. A ramp rising linearly from zero to $A$ across the band has mean $A/2$, so a flat budget of $A/2$ adds the same band-integrated noise; the integral-neutral ramp endpoint is therefore twice the flat amplitude in the same row. Measured against that reference, the short-weighted endpoint exceeds the neutral value at null order two in all four rows, and the long-weighted endpoint exceeds it at null order four in all four rows. The reversal therefore holds under equal integrated added noise, not only under equal endpoints.
 
 The strong response to a half-year relaxation is not evidence of linear sensitivity. These target times lie near a steep part of the completion curve, where a small SNR loss can move marginal planets below the selected set and where the 90th-percentile universe can change identity. The budget endpoints should therefore be interpolated only through a fresh AMS inversion, not by scaling the values in Table \ref{tab: budget shapes}.
 
@@ -804,11 +829,11 @@ Figure \ref{fig: tse iso slewfor} varies slew time and field of regard at fixed 
 The Hab2Min and Hab2Max calculations show the same qualitative shape ordering and the same null-order inversion. Hab2Min requires longer mission-time targets and generally returns smaller allowances at otherwise matched operating parameters, consistent with its less favorable planet population. Because the adopted mission-time targets differ between catalogs, the numerical difference cannot be attributed to $\eta_\oplus$ alone. Figure \ref{fig: tse yield} illustrates the field-of-regard filter for one Hab2Max selection and is not evidence of catalog independence.
 
 \subsection{Why the Spectral Preference Reverses at Null Order Four} \label{sec: tse: null order}
-Suppression of stellar leakage is the leading physical interpretation of the completed order-four comparison. Equation \ref{eq: leakage small star} predicts a fourth-to-second-order ratio of approximately $x^2/8$. Across the 4505 unique catalog stars, $x=2\pi bR_\star/\lambda$ remains above 0.005 over the modeled band, outside the cancellation-sensitive numerical regime of the direct Bessel sum. At 10\,$\upmu$m the median leakage ratio is about $6.3\times10^{-5}$; at 18.5\,$\upmu$m it is about $1.9\times10^{-5}$. Direct positive quadrature agrees with the analytic order-four response over the complete catalog range.
+Suppression of stellar leakage is the leading physical interpretation of the completed order-four comparison. Equations \ref{eq: leakage small star t2} and \ref{eq: leakage small star} together predict a fourth-to-second-order ratio of approximately $x^2/8$. Across the 4505 unique catalog stars, $x=2\pi bR_\star/\lambda$ remains above 0.005 over the modeled band, outside the cancellation-sensitive numerical regime of the direct Bessel sum. At 10\,$\upmu$m the median leakage ratio is about $6.3\times10^{-5}$; at 18.5\,$\upmu$m it is about $1.9\times10^{-5}$. Direct positive quadrature agrees with the analytic order-four response over the complete catalog range.
 
 This suppression removes the high short-wave stellar-noise floor visible in Fig. \ref{fig: tse budget shapes no2}. Added short-wave variance then becomes comparatively expensive. The remaining local- and exo-zodiacal backgrounds dominate toward longer wavelengths, so a larger long-weighted endpoint can be hidden beneath their photon noise. This explanation is consistent with the reversal in Table \ref{tab: budget shapes} and Fig. \ref{fig: tse linear additive}; however, no ablation run isolates leakage suppression from the simultaneous extended-source and planet-throughput changes.
 
-The result is physical within the proxy but not a standalone architecture prediction. Without throughput normalization, the far-field average of the null envelope changes from $1/4$ at order two to $3/16$ at order four. Local-zodiacal transmission therefore falls by approximately 25\%, and the off-axis planet response also changes. The order-four result consequently combines deeper central suppression with a different throughput distribution while holding all other instrument parameters fixed.
+Table \ref{tab: null order synthesis} collects the effects that change between the two orders alongside their consequences for the reported allowance. The result is physical within the proxy but not a standalone architecture prediction. Without throughput normalization, the far-field average of the null envelope changes from $1/4$ at order two to $3/16$ at order four. Local-zodiacal transmission therefore falls by approximately 25\%, and the off-axis planet response also changes. The order-four result consequently combines deeper central suppression with a different throughput distribution while holding all other instrument parameters fixed.
 
 \begin{table}[htbp]
 \centering
@@ -827,13 +852,49 @@ Interpretation & Double-Bracewell reference & Controlled response proxy, not a r
 \label{tab: null order synthesis}
 \end{table}
 
+\subsection{The Throughput Cost of a Deeper Null} \label{sec: tse: throughput}
+The null-order proxy holds optical throughput and detector efficiency fixed between orders, as Table \ref{tab: proxy boundary} states. A realizable fourth-order combiner would not: for a fixed four-aperture array, the deep null is available on a smaller fraction of the collected light \cite{guyon2013beam}. The order-four allowances of Table \ref{tab: budget shapes} therefore describe a benefit purchased at a cost the proxy never charges. This section charges it.
+
+The test applies the factor implied by the second- to fourth-order comparison in \cite{guyon2013beam}, halving the total efficiency from $\eta=0.09$ to $0.045$, and repeats the identical endpoint search at the identical operating point. Because $N_I(\lambda)$ is referred to the pre-efficiency plane, scaling the efficiency scales the delivered instrumental noise consistently with the planet signal and the astrophysical background, so the comparison remains at a single reference plane.
+
+The result is unambiguous and negative. At half efficiency, no non-negative allowance exists at any of the four mission-time targets, for either catalog and for any of the three budget families. The reason is not that the budget search fails but that the target is already unreachable before any instrumental noise is added: the zero-budget mission time rises from 4.47 to 7.65\,yr for Hab2Max and from 6.04 to 10.79\,yr for Hab2Min. Both exceed every target in Table \ref{tab: budget shapes}.
+
+Table \ref{tab: throughput sweep} places that single comparison on a curve by evaluating the zero-budget mission time across a range of total efficiencies at both null orders.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Catalog & Null order & \multicolumn{4}{c}{Zero-budget mission time [yr]} \\
+\cmidrule(l){3-6}
+        &            & $\tau=0.15$ & $0.125$ & $0.10$ & $0.075$ \\
+\midrule
+Hab2Max & 2 & 5.32 & 6.45 & 7.67 & 9.71 \\
+Hab2Max & 4 & 4.47 & 5.02 & 6.09 & 7.65 \\
+Hab2Min & 2 & 7.41 & 8.60 & 10.40 & 13.27 \\
+Hab2Min & 4 & 6.04 & 7.00 & 8.55 & 10.79 \\
+\bottomrule
+\end{tabular}
+\caption{Mission time required with no added instrumental budget, as a function of the optical throughput $\tau$ entering $\eta=\tau\times$ quantum efficiency. The nominal value is $\tau=0.15$; $\tau=0.075$ is the halved-efficiency case used in the ablation. All other parameters are held at the common operating point.}
+\label{tab: throughput sweep}
+\end{table}
+
+Two features of the table matter. First, mission time grows more slowly than the inverse of throughput. Halving the efficiency multiplies the required time by 1.71 to 1.83 rather than by two, consistently across both catalogs and both orders. In a background-photon-limited regime the integration time alone would scale as $1/\eta$; the shortfall is the slew and overhead component, which is charged per observation and does not scale with efficiency at all. The implied throughput-independent fraction of the mission is 17 to 29\%, largest for the shortest campaigns.
+
+Second, and more consequentially, the throughput penalty is larger than the null-depth benefit at every operating point tested here. Moving from order two to order four at the nominal efficiency saves 0.85\,yr for Hab2Max and 1.37\,yr for Hab2Min; halving the efficiency at fixed null order costs between 3.19 and 5.86\,yr, depending on catalog and order. A fourth-order design that pays the throughput cost implied by \cite{guyon2013beam} is therefore slower than the second-order reference it was meant to improve upon, despite suppressing geometric stellar leakage by three to five orders of magnitude.
+
+Three boundaries limit how far this conclusion can be carried. The baseline prescription constant of Section \ref{sec: methods: AMS} is derived for a second-order double Bracewell and is retained unchanged at order four, so neither arm is baseline-optimal for the deeper null and the measured penalty is an upper bound. The efficiency factor is taken from one specific pair of architectures rather than from a general law relating null order to throughput. And because no target is reachable in the penalized configuration, this test cannot say whether the spectral reversal of Section \ref{sec: tse: null order} survives the penalty; answering that requires repeating the search at mission-time targets beyond 7.65 and 10.79\,yr, which lie outside the range this study set out to examine.
+
 \chapteropening{Discussion}{Interpreting the allowances, the null-order inversion, and their boundaries}
 The thesis asks two connected questions: how much aggregate random noise LIFE can tolerate at a chosen mission time, and how that allowance changes when the modeled central null becomes steeper. The completed results answer both within the controlled reference calculation before the methodological and architectural boundaries are considered.
 
 \subsection{The Error Budget and Architecture Comparison}
 At the adopted operating point, the nominal second-order null permits flat allowances of 140\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and 65 for Hab2Min at 7.5\,yr. Within the tested ramp families, short-weighted noise is least damaging because it is added where stellar leakage already dominates. This finding is specific to the second-order background hierarchy.
 
-The fourth-order proxy changes that hierarchy. Its corresponding flat allowances rise to 650 and 590, and the long-weighted ramp becomes least damaging. The inversion occurs in both catalogs and in the full two-endpoint contour scans. Its leading interpretation is geometric: the analytic $x^4$ term suppresses stellar leakage and removes much of the short-wave variance floor. The result is robust within the tested proxy, but the absolute improvement cannot be assigned solely to null depth because the proxy also changes extended-source and planet throughput.
+The fourth-order proxy changes that hierarchy. Its corresponding flat allowances rise to 640 and 590, and the long-weighted ramp becomes least damaging. The inversion occurs in both catalogs and in the full two-endpoint contour scans. Its leading interpretation is geometric: the analytic $x^4$ term suppresses stellar leakage and removes much of the short-wave variance floor. The result is robust within the tested proxy, but the absolute improvement cannot be assigned solely to null depth, because the proxy also changes extended-source and planet throughput while leaving the optical efficiency untouched.
+
+Section \ref{sec: tse: throughput} quantifies what that omission is worth, and the answer reverses the engineering reading of the order-four column. Charging the fourth-order configuration the efficiency penalty implied by a realizable four-aperture combiner \cite{guyon2013beam} removes every admissible allowance at every target studied here: the zero-budget mission time alone rises to 7.65\,yr for Hab2Max and 10.79\,yr for Hab2Min. The gain from a deeper null, 0.85 and 1.37\,yr respectively at fixed efficiency, is between three and five times smaller than the cost of halving that efficiency. The order-four allowances should therefore be read as an upper bound on what a deeper null can buy, and the practical conclusion is the opposite of the one the raw comparison suggests: suppressing stellar leakage is worth little if it is paid for in collected photons, and a higher-order architecture is attractive only if it can be built without the accompanying throughput loss. Whether the spectral reversal itself persists under that penalty is not settled here, because no target in the penalized configuration is reachable at all.
 
 \subsection{The Agnostic Approach and the AMS}
 The methodological contribution is mechanism-agnostic treatment of an \emph{aggregate} independent random-noise allowance, rather than a subsystem allocation. This common reference-plane quantity allows science completion time to constrain a later engineering allocation without prematurely choosing the physical origin of every random term.
@@ -873,13 +934,13 @@ The next scientific step is not another run of the present trade space, but a mo
 Before another production campaign, the scheduler should use non-strict completion criteria consistent with the stated experiment, retain failed universes explicitly, and save every per-universe component time. This would permit bootstrap or rank-based uncertainty intervals in years and separate detection, orbit, characterization, and slew sensitivities. Extending the analytic framework to inclined or asymmetric exozodiacal disks would remove the next important symmetry assumption. These steps would turn the present defensible impact study into a stronger architecture-level requirement analysis.
 
 \chapteropening{Conclusion}{What the completed simulations establish---and what remains architecture-dependent}
-The completed AMS and TSE answer the central research question for every tested budget family and operating point. Under the approved physics model, the nominal second-order null permits primary flat allowances of 140\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and 65 for Hab2Min at 7.5\,yr. The order-four proxy raises them to 650 and 590, while the least damaging tested ramp reverses from short-weighted to long-weighted.
+The completed AMS and TSE answer the central research question for every tested budget family and operating point. Under the analytic background model of Section \ref{sec: ts reduction: image spec}, the nominal second-order null permits primary flat allowances of 140\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and 65 for Hab2Min at 7.5\,yr. The order-four proxy raises them to 640 and 590, while the least damaging tested ramp reverses from short-weighted to long-weighted.
 
 The sub-questions close as follows:
 \begin{itemize}
     \item The unrestricted AMS trade space contains up to eight free modifier functions and three scalar agnostic parameters and is therefore formally infinite-dimensional. The reported family searches reduce it to one amplitude dimension, four dimensions when all agnostic parameters vary, or five when two ramp endpoints vary independently.
     \item Magnitude, field-of-regard, and slew changes reuse unfiltered SNRs and repeat only filtering and scheduling. Budget, source-physics, or null-order changes require catalog-wide SNR recomputation, although host-shared source terms remain memoized within that pass.
-    \item Combining independent random terms at one reference plane and analytically integrating symmetric backgrounds removes the unbounded functional and spatial-grid dimensions while reproducing the retained source calculation to the stated validation precision.
+    \item The two reductions must be judged separately, and only one of them is validated here. The \textit{numerical} reduction, analytic integration of the circularly symmetric backgrounds in place of a spatial pixel grid, removes the grid dimension and reproduces the retained source calculation to the precision stated in Table \ref{tab: validation matrix}. The \textit{modelling} reduction, representing all admissible independent random terms by a single aggregate $N_I(\lambda)$ at a common reference plane, removes the unbounded functional dimension and is exact for terms that are genuinely independent and referable to that plane, because independent variances add. What is not tested is how large a fraction of a realistic instrumental noise inventory satisfies that condition. Quantifying the departure for a specific decomposition into subsystem terms is left open, and the sub-question is therefore answered for the numerical reduction and only partially for the modelling one.
     \item The TSE locates maximum flat and linear-ramp amplitudes as iso-mission-time point estimates; Table \ref{tab: budget shapes} reports the complete set, including both catalogs and both mission-time targets.
     \item A fourth-order central null suppresses stellar leakage consistently with the analytic $x^4$ scaling and reverses the spectral preference in both catalogs. This is the leading physical interpretation within the proxy, not an isolated causal proof or a realizable architecture forecast.
 \end{itemize}
@@ -939,6 +1000,7 @@ The right-hand side is evaluated as one when $aR=0$. With $x=2\pi bR/\lambda$, t
 3-\frac{8J_1(x)}{x}+\frac{2J_1(2x)}{2x}
 \right].
 \end{align}
+The second-order result is not new: Eq. \ref{eq: disk bessel average} applied to the double-Bracewell response reproduces the uniform-disk stellar leakage given by Lay \cite{lay2005imaging}. What the derivation above adds is the extension to arbitrary even null order through the general coefficient sum of Eq. \ref{eq: general null average}, and its reuse inside the one-dimensional radial quadrature for tapered and extended sources in Section \ref{sec: ts reduction: image spec}, neither of which follows from the second-order case alone.
 Using the standard Bessel power series \cite{nistdlmf}, $J_1(x)=x/2-x^3/16+x^5/384+\mathcal{O}(x^7)$, which yields
 \begin{align}
 \left\langle T_2\right\rangle_\mathrm{disk}
@@ -998,6 +1060,8 @@ The completed products are sufficient to reproduce the reported contour endpoint
 \end{itemize}
 
 \subsection{Data and Source Provenance}
+The reformulation of the astrophysical background evaluation described in Section \ref{sec: ts reduction: image spec} was documented in a standalone technical brief covering its derivation, its validation boundaries, and the local-zodiacal normalization correction, and was reviewed and accepted by the thesis supervisor. The code state carrying that reformulation has since been placed under version control; the source hash below remains the authoritative identifier for the production campaign, because the working tree was not clean when those calculations were run.
+
 Table \ref{tab: provenance hashes} records the exact local inputs and result closure used for the final thesis. SHA-256 hashes make later identity checks possible even though no immutable public archive or complete environment lock was created during the production campaign. The source hash covers the production-code closure used by the completed calculations; the result hash covers the 52 files in the complete \texttt{TSE Linear} result tree from which the thesis figures and values were taken.
 
 \begin{table}[htbp]
@@ -1020,6 +1084,40 @@ Validation scripts & recorded script closure & \nolinkurl{040dd0bca26ba14c17a2b8
 
 The retained \texttt{TSE Linear} products contain rendered PDFs and text summaries, not raw per-evaluation grids, logs, or per-universe time vectors. The order-four Hab2Min 8-year ramp values were recovered from the complete vector result PDFs and cross-checked by reproducing the corresponding 7.5-year values before rounding to the precision used in Table \ref{tab: budget shapes}. Consequently, the final figures and tabulated endpoints are traceable, but the production campaign cannot be rerun bit-for-bit from this record alone. A practical future release should archive the catalogs or their immutable source identifiers, the full code closure, an environment lock, the run matrix, raw grids, scheduler logs, and per-universe outputs.
 
+\subsection{Independent Reproduction of the Final Amplitudes} \label{sec: app: reproduction}
+The amplitudes of Table \ref{tab: budget shapes} were produced during a campaign in which the working tree was not clean, and the raw per-evaluation products were not retained. To establish that they are nevertheless reproducible, the complete endpoint search was rerun from a committed code state at the identical operating point, using a single dedicated script whose output is the machine-written table below. The rerun additionally records the mission time that each reported amplitude actually delivers, which the original campaign did not retain.
+
+That last quantity matters for interpretation. The search stops once the evaluated mission time lies within 0.05\,yr of the target, and it returns its last accepted amplitude, so a reported value belongs to the achieved time rather than to the nominal target. The residuals of the rerun span $-0.044$ to $+0.034$\,yr, within the stopping tolerance by construction. Converting a residual into an amplitude uncertainty requires the local slope of amplitude against mission time, which the secant between each catalog's two targets estimates as roughly $6\times10^{2}$ to $1.5\times10^{3}$\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ per year. The stopping tolerance therefore corresponds to an amplitude uncertainty of order 20 to 80\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$, depending on the row. Because the response is not linear in mission time, these figures indicate the scale of the search uncertainty rather than a calibrated interval, and they are the reason no reported amplitude should be read to better than its leading two digits.
+
+Of the twenty-four amplitudes in Table \ref{tab: budget shapes}, twenty reproduce to the precision reported there and four differ by a single rounding step: the Hab2Max six-year order-four short-weighted value, the Hab2Min seven-and-a-half-year flat values at both orders, and the Hab2Min seven-and-a-half-year order-two long-weighted value. All four differences are smaller than the search uncertainty estimated above, and no difference exceeds one step. The Hab2Min eight-year rows reproduce throughout; those values had previously been recovered from vector plots rather than from retained numerical output, and are now re-derived directly from the code.
+
+The reproduction also exposes an inconsistency in the reporting convention rather than in the calculation. Table \ref{tab: budget shapes} rounds most amplitudes to the nearest ten, but the smallest entry is given as 65, which is neither the nearest ten nor two significant figures of the reproduced 62.2. Small amplitudes are where the fixed time tolerance translates into the largest relative uncertainty, so they are also where a rounding convention matters least and misleads most; the values in Table \ref{tab: reproduction} should be preferred where the two disagree.
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}llrrrl@{}}
+\toprule
+Catalog & Target & Flat & Short-weighted & Long-weighted & Achieved time \\
+        & [yr] & \multicolumn{3}{c}{Amplitude [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} & [yr] \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Null order two}} \\
+Hab2Max & 5.5 & 142.4 & 298.3 & 210.5 & 5.455--5.541 \\
+Hab2Max & 6.0 & 610.3 & 1303.1 & 1089.3 & 5.962--6.045 \\
+Hab2Min & 7.5 & 62.2 & 197.9 & 156.7 & 7.484--7.528 \\
+Hab2Min & 8.0 & 462.8 & 973.9 & 810.1 & 7.992--8.037 \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Null order four}} \\
+Hab2Max & 5.5 & 641.2 & 1080.1 & 1474.0 & 5.456--5.519 \\
+Hab2Max & 6.0 & 943.9 & 1840.7 & 2240.5 & 6.011--6.034 \\
+Hab2Min & 7.5 & 596.5 & 1001.2 & 1263.5 & 7.490--7.531 \\
+Hab2Min & 8.0 & 786.2 & 1458.3 & 1864.1 & 7.977--8.037 \\
+\bottomrule
+\end{tabular}
+\caption{Reproduction of the final amplitudes of Table \ref{tab: budget shapes} from a committed code state at the identical operating point. Values are the raw search results, unrounded. The final column gives the range of mission times actually delivered by the three amplitudes in that row; the search stops within 0.05\,yr of the target, so a reported amplitude belongs to its achieved time rather than to the nominal target.}
+\label{tab: reproduction}
+\end{table}
+
 \subsection{Rank Uncertainty of the 90th Percentile}
 Let $q_{0.9}$ be the population 90th percentile and let $X_{(k)}$ denote the $k$th ordered value in a sample of 100 independent population draws. The number of samples below $q_{0.9}$ follows a binomial distribution with $n=100$ and success probability 0.9. Therefore the coverage probability of the interval $[X_{(84)},X_{(96)}]$ is obtained from the corresponding binomial tail sum and is approximately 0.9557.
 
@@ -1028,6 +1126,8 @@ This interval quantifies rank uncertainty under independent sampling from the ad
 \clearpage
 \thispagestyle{chapteropening}
 \small
+\phantomsection
+\addcontentsline{toc}{section}{References}
 \begin{thebibliography}{99}
 
 \bibitem{quanz2022life1}
@@ -1089,6 +1189,28 @@ O. P. Lay,
 ``Imaging properties of rotating nulling interferometers,''
 \textit{Applied Optics}, vol. 44, no. 28, pp. 5859--5871, 2005,
 \href{https://doi.org/10.1364/AO.44.005859}{doi:10.1364/AO.44.005859}.
+
+\bibitem{guyon2013beam}
+O. Guyon, B. Mennesson, E. Serabyn, and S. Martin,
+``Optimal Beam Combiner Design for Nulling Interferometers,''
+\textit{Publications of the Astronomical Society of the Pacific}, vol. 125, no. 930, pp. 951--965, 2013,
+\href{https://doi.org/10.1086/671826}{doi:10.1086/671826}.
+
+\bibitem{laugier2020kernel}
+R. Laugier, N. Cvetojevic, and F. Martinache,
+``Kernel nullers for an arbitrary number of apertures,''
+\textit{Astronomy \& Astrophysics}, vol. 642, A202, 2020,
+\href{https://arxiv.org/abs/2008.07920}{arXiv:2008.07920}.
+
+\bibitem{norbruis2023}
+R. Norbruis,
+\textit{Detecting exoplanets with a smallsat-based multi-aperture nulling interferometry telescope},
+master's thesis, Delft University of Technology, 2023.
+
+\bibitem{binkert2023}
+P. Binkert,
+\textit{Signal Extraction, Constraints on Exoplanet Parameters and Molecular Feature Detection During the Search Phase of the Large Interferometer for Exoplanets Mission},
+master's thesis, ETH Zurich, Exoplanets and Habitability Group, 2023.
 
 \bibitem{nistdlmf}
 F. W. J. Olver et al., eds.,

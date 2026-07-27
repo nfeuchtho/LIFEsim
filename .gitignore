@@ -24,6 +24,8 @@ __pycache__/
 # LaTeX build artifacts (main.pdf and main_diff.pdf are kept deliberately)
 *.aux
 *.log
+# ...but run logs from the data-collection scripts are records, not artifacts
+!thesis/reproducibility/*.log
 *.out
 *.toc
 *.lof
