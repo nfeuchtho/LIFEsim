@@ -82,6 +82,13 @@ class Instrument(InstrumentModule):
         # Get array parameters from options for faster calculation
         self.data.inst['bl'] = self.data.options.array['baseline']
 
+        # LIFEsim proper always models a standard double-Bracewell array. The AMS is the only
+        # caller that models other (even) nulling orders, and does so by overwriting this
+        # instrument-state entry directly before computing noise -- kept out of the `Options`
+        # schema so plain LIFEsim usage and the AMS-specific concept stay independent. See
+        # AgnosticMissionSimulator.get_snr and ANALYTIC_NOISE_REWRITE.md.
+        self.data.inst['nulling_order'] = 2
+
         self.data.inst['telescope_area'] = self.data.options.array['num_apertures'] * np.pi \
                                            * (self.data.options.array['diameter'] / 2.) ** 2
         self.data.inst['eff_tot'] = self.data.options.array['quantum_eff'] \
@@ -353,10 +360,6 @@ class Instrument(InstrumentModule):
 
             self.adjust_bl_to_hz(hz_center=float(cat.iloc[i]['hz_center']),
                                   distance_s=float(cat.iloc[i]['distance_s']))
-
-            # t_map is needed by the noise sockets (exozodi uses it as a mask)
-            _, _, self.data.inst['t_map'], _, _ = self.run_socket(
-                s_name='transmission', method='transmission_map', map_selection='tm3')
 
             noise_bg_star_s[k] = self._unpack_socket(
                 self.run_socket(s_name='photon_noise_star', method='noise', index=i))
@@ -632,11 +635,6 @@ class Instrument(InstrumentModule):
                 self.adjust_bl_to_hz(hz_center=hz_center,
                                      distance_s=distance_s)
 
-        # calculate the transmission map
-        _, _, self.data.inst['t_map'], _, _ = self.run_socket(s_name='transmission',
-                                                              method='transmission_map',
-                                                              map_selection='tm3')
-
         transm_eff, transm_noise = self.run_socket(s_name='transmission',
                                                    method='transmission_efficiency',
                                                    index=None)
@@ -857,11 +855,6 @@ class Instrument(InstrumentModule):
                                         spec_wavs=flux_planet_spectrum[0].value,
                                         spec_fluxes=flux_planet_spectrum[1].value,
                                         edge_mode=True)
-
-        # calculate the transmission map
-        _, _, self.data.inst['t_map'], _, _ = self.run_socket(s_name='transmission',
-                                                              method='transmission_map',
-                                                              map_selection='tm3')
 
         curve_chop, curve_tm4 = self.run_socket(s_name='transmission',
                                                 method='transmission_curve',

@@ -1,4 +1,10 @@
 """
+LEGACY / RETIRED: since the analytic noise rewrite (see
+``ANALYTIC_NOISE_REWRITE.md``), star/localzodi/exozodi noise no longer touch
+``image_size`` -- the image_size axis below is dead weight, always flat. Kept
+only as the pre-rewrite reference map this script's plot was compared against.
+For current spec_res convergence work use ``sr_sweep.py`` instead.
+
 Convergence study: SNR vs. image size and spectral resolution.
 
 Re-computes the image-size / spectral-resolution convergence map
@@ -15,7 +21,7 @@ These two modules are NOT added in ``runner.py``, so they must be added and
 connected here -- otherwise those sockets return nothing and the new noise
 terms silently contribute zero.
 
-For every (image_size, spec_res) grid point the one-hour SNR of the whole
+For every (image_size, spec_res) grid point the one-hour SNRF of the whole
 catalog is computed and compared, per planet, against a high-resolution
 reference (``REF_IMAGE_SIZE``, ``REF_SPEC_RES``). The reported metric is the
 bulk RMSD of the SNR across the catalog, matching the legacy definition

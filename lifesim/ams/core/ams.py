@@ -12,7 +12,11 @@ from scipy.interpolate import make_interp_spline, BSpline
 from lifesim.ams.core.error_budget import ErrorBudget
 from lifesim.util import constants
 from lifesim.util.radiation import black_body
+from lifesim.instrument.pn_star import PhotonNoiseStar
+from lifesim.instrument.pn_localzodi import PhotonNoiseLocalzodi
+from lifesim.instrument.pn_exozodi import PhotonNoiseExozodi
 
+import matplotlib as mpl
 
 class AgnosticMissionSimulator:
     """
@@ -293,7 +297,10 @@ class AgnosticMissionSimulator:
         if 'name_s' in cat.columns:
             cat = cat.drop(['name_s'], axis=1)
 
-        cpus = instrument.data.options.other['n_cpu'] if self.plot_id is None else 1
+        if self.plot_id is not None:
+            return self.get_snr(instrument, self.verbose)
+
+        cpus = instrument.data.options.other['n_cpu']
 
         if not self.snr_array_current:
             self.log('Physics-defining factors have changed, need to run full SNR flow.')
@@ -331,7 +338,6 @@ class AgnosticMissionSimulator:
             else:
                 # Single Processing
                 cat = self.get_snr(instrument, verbose=self.verbose)
-
             # Save data to snr array. Filters will not touch it.
             self.snr_saved = cat['snr_1h'].to_numpy()
             self.snr_maxsep_saved = cat['maxsep_snr_1h'].to_numpy()
@@ -486,11 +492,13 @@ class AgnosticMissionSimulator:
         configured error budgets.
 
         For each unique star in ``instrument.data.catalog``, the nulling baseline
-        (:meth:`get_baseline`) and the star-dependent noise contributions (stellar leakage,
-        local zodi and the zodi-level-1 exozodi background) are computed once and then
-        applied to all of its planets/universes. The transmission-map response as a function
-        of angular separation is tabulated on a 1-D grid and interpolated for each planet,
-        avoiding a per-planet 360-point transmission-map evaluation.
+        (:meth:`Instrument.adjust_bl_to_hz`) and the star-dependent noise contributions
+        (stellar leakage, local zodi and the zodi-level-1 exozodi background, delegated to
+        ``instrument``'s own connected ``PhotonNoiseStar``/``PhotonNoiseLocalzodi``/
+        ``PhotonNoiseExozodi`` modules) are computed once and then applied to all of its
+        planets/universes. The transmission-map response as a function of angular separation is
+        tabulated on a 1-D grid and interpolated for each planet, avoiding a per-planet
+        360-point transmission-map evaluation.
 
         The configured :class:`~lifesim.ams.core.error_budget.ErrorBudget` instances are
         applied to the stellar leakage, local zodi, exozodi, planet signal and planet noise
@@ -545,130 +553,35 @@ class AgnosticMissionSimulator:
         #  P R E  -  C A L C U L A T I O N S
         # ------------------------------------
 
-        # Re-shape wl bins, required for transmission map
-        wl_space = np.array([wl_bins])
-        if wl_space.shape[-1] > 1:
-            wl_space = np.reshape(wl_space, (wl_space.shape[-1], 1, 1))
-
-        # Rescale hfov, required for transmission map
-        hfov = instrument.data.inst['hfov']
-        hfov = np.array([hfov])  # wavelength in m
-        if hfov.shape[-1] > 1:
-            hfov = np.reshape(hfov, (hfov.shape[-1], 1, 1))
-
-        # Setup image angle and size for transmission map
-        image_angle = instrument.data.inst['image_angle']
-        image_angle = np.array([image_angle])  # wavelength in m
-        if image_angle.shape[-1] > 1:
-            image_angle = np.reshape(image_angle, (image_angle.shape[-1], 1, 1))
-        image_size = instrument.data.options.other['image_size']
-
-        # Compute FIXED alpha and beta for transmission map with static fov taper
-        # generare 1D array that spans field of view
-        angle = np.linspace(-1, 1, image_size)
-
-        # angle matrix in x-direction ("alpha")
-        alpha = np.tile(angle, (image_size, 1))
-
-        # angle matrix in y-direction ("beta")
-        beta = alpha.T
-
-        # convert angle matrices to fov units
-        alpha_fixed = alpha * image_angle
-        beta_fixed = beta * image_angle
-
-        # Compute static fov taper function for the noise sources
-        radius_map = instrument.data.inst['radius_map']
-        if instrument.data.options.models['fov_taper'] == 'gaussian':
-            ap = np.ones_like(radius_map)
-        elif instrument.data.options.models['fov_taper'] == 'none':
-            ap = np.where(radius_map
-                          <= instrument.options.other['image_size'] / 2, 1, 0)
-        else:
-            raise ValueError('Nonexistent fov taper model')
-
-        ap_sum = ap.sum()
-
-        # Some localzodi definitions
-        # Since the simulation is static in time (planets not moving), the longitude is fixed
-        long = 3 / 4 * np.pi
-        radius_sun_au = 0.00465047  # in AU
-        tau = 4e-8
-        temp_eff = 265
-        temp_sun = 5777
-        a = 0.22
-
-        # Compute the inbound flux
-        b_tot = black_body(mode='wavelength',
-                           bins=instrument.data.inst['wl_bins'],
-                           width=instrument.data.inst['wl_bin_widths'],
-                           temp=temp_eff) + a \
-                * black_body(mode='wavelength',
-                             bins=instrument.data.inst['wl_bins'],
-                             width=instrument.data.inst['wl_bin_widths'],
-                             temp=temp_sun) \
-                * (radius_sun_au / 1.5) ** 2
-
-        # Contrast
-        image_size_star = 50
-        # Compute FIXED alpha and beta for transmission map with static fov taper
-        # generare 1D array that spans field of view
-        angle = np.linspace(-1, 1, image_size_star)
-
-        # angle matrix in x-direction ("alpha")
-        alpha_star_base = np.tile(angle, (image_size_star, 1))
-
-        # angle matrix in y-direction ("beta")
-        beta_star_base = alpha_star_base.T
-
-        # Convert into coordinates and make a cut-off outside the star
-        x_map = np.tile(np.array(range(0, image_size_star)), (image_size_star, 1))
-        y_map = x_map.T
-        r_square_map = (x_map - (image_size_star - 1) / 2) ** 2 + (y_map - (image_size_star - 1) / 2) ** 2
-        star_px = np.where(r_square_map < (image_size_star / 2) ** 2, 1, 0)
-        star_px_sum = star_px.sum()
-
         wl_bin_widths = instrument.data.inst['wl_bin_widths']
 
-        # EXO
-        # reshape the mas per pixel array for calculation (to (n, 1, 1))
-        mas_pix = np.array([instrument.data.inst['mas_pix']])
-        if mas_pix.shape[-1] > 1:
-            mas_pix = np.reshape(mas_pix, (mas_pix.shape[-1], 1, 1))
-        rad_pix = np.array([instrument.data.inst['rad_pix']])
-        if rad_pix.shape[-1] > 1:
-            rad_pix = np.reshape(rad_pix, (rad_pix.shape[-1], 1, 1))
+        if self.__nulling_order < 2 or self.__nulling_order % 2 != 0:
+            raise ValueError(
+                f'nulling_order must be a positive even integer (got {self.__nulling_order}); '
+                'odd orders average to zero under a full array rotation, so the closed-form '
+                'noise formulas (transmission_analytic.py) have no solution for them.')
 
-        wl_bin_widths_space = np.array([instrument.data.inst['wl_bin_widths']])
-        if wl_bin_widths_space.shape[-1] > 1:
-            wl_bin_widths_space = np.reshape(wl_bin_widths_space, (wl_bin_widths_space.shape[-1], 1, 1))
+        # Push the configured nulling order onto the shared instrument state -- LIFEsim proper
+        # always defaults this to 2 (Instrument.apply_options()); the AMS is the only caller that
+        # overwrites it, keeping the two branches independent (see ANALYTIC_NOISE_REWRITE.md).
+        # The delegated noise modules below pick it up via `self.data.inst['nulling_order']`.
+        instrument.data.inst['nulling_order'] = self.__nulling_order
 
-        # Setup function to quickly retrieve the transmission map if required, also save the FoV taper
-        # that does not change
-        static_fov_taper = np.exp(- (np.pi / 4 / hfov * np.sqrt(alpha_fixed ** 2 + beta_fixed ** 2)) ** 2)
+        # Star-leak/local-zodi/exozodi noise is delegated to the instrument's own connected
+        # PhotonNoiseStar/PhotonNoiseLocalzodi/PhotonNoiseExozodi modules instead of
+        # reimplementing the same physics here -- keeps this in sync automatically with any
+        # future fix to those modules (see ANALYTIC_NOISE_REWRITE.md), instead of needing a
+        # duplicate port every time.
+        def _find_module(s_name, cls):
+            for module in instrument.sockets[s_name]['modules']:
+                if isinstance(module, cls):
+                    return module
+            raise ValueError(f'Instrument has no {cls.__name__} connected to socket "{s_name}"; '
+                             f'AMS.get_snr requires it to compute noise.')
 
-
-        def transmission_map(bl, alpha=None, beta=None, map='tm3'):
-            if alpha is None or beta is None:
-                alpha = alpha_fixed
-                beta = beta_fixed
-                fov_taper = static_fov_taper if instrument.data.options.models['fov_taper'] == 'gaussian' else 1
-            else:
-                fov_taper = np.exp(- (np.pi / 4 / hfov * np.sqrt(alpha ** 2 + beta ** 2)) ** 2) \
-                    if instrument.data.options.models['fov_taper'] == 'gaussian' else 1
-
-            L = bl / 2
-            sin_contrib = np.sin(2 * np.pi * L * alpha / wl_space) ** self.__nulling_order
-            if map == 'tm3':
-                tmap = sin_contrib * np.cos(2 * instrument.data.options.array['ratio']
-                                           * np.pi * L * beta / wl_space - np.pi / 4) ** 2
-            elif map != 'tm4':
-                raise ValueError('Invalid transmission map requested')
-            else:
-                tmap = sin_contrib * np.cos(2 * instrument.data.options.array['ratio']
-                                       * np.pi * L * beta / wl_space + np.pi / 4) ** 2
-            tmap *= fov_taper
-            return tmap
+        star_module = _find_module('photon_noise_star', PhotonNoiseStar)
+        localzodi_module = _find_module('photon_noise_star', PhotonNoiseLocalzodi)
+        exozodi_module = _find_module('photon_noise_universe', PhotonNoiseExozodi)
 
         # Random integration time (e.g., 1h)
         int_time = 60 * 60
@@ -695,14 +608,9 @@ class AgnosticMissionSimulator:
 
         hz_center_s = cat['hz_center'].to_numpy()[rep_pos]
         distance_star_s = cat['distance_s'].to_numpy()[rep_pos]
-        temp_s_s = cat['temp_s'].to_numpy()[rep_pos]
         radius_s_s = cat['radius_s'].to_numpy()[rep_pos]
         l_sun_s = cat['l_sun'].to_numpy()[rep_pos]
         lat_s = cat['lat'].to_numpy()[rep_pos]
-
-        wl_optimal = instrument.data.options.other['wl_optimal']
-        bl_min = instrument.data.options.array['bl_min']
-        bl_max = instrument.data.options.array['bl_max']
 
         # per-star results
         bl_s = np.empty(n_unique)
@@ -718,95 +626,30 @@ class AgnosticMissionSimulator:
 
             hz_center = hz_center_s[k]
             distance_s = distance_star_s[k]
-            temp_s = temp_s_s[k]
             radius_s = radius_s_s[k]
             l_sun = l_sun_s[k]
             lat = lat_s[k]
+            i = int(rep_pos[k])
 
-            # baseline and (static) transmission map for this star
-            bl = AgnosticMissionSimulator.get_baseline(hz_center, distance_s,
-                                                       wl_optimal, bl_min, bl_max)
-            tmap = transmission_map(bl)
+            # sets instrument.data.inst['bl'] from this star's habitable-zone center, exactly
+            # as Instrument.get_snr does -- the noise modules below read it off the instrument.
+            instrument.adjust_bl_to_hz(hz_center=hz_center, distance_s=distance_s)
+            bl = instrument.data.inst['bl']
 
-            # STELLAR LEAKAGE
-            bb_star = black_body(
-                mode='star',
-                bins=wl_bins,
-                width=wl_bin_widths,
-                temp=temp_s,
-                radius=radius_s,
-                distance=distance_s
-            )
-
-            # convert units
-            Rs_au = 0.00465047 * radius_s
-            Rs_as = Rs_au / distance_s
-            Rs_mas = float(Rs_as)
-            Rs_rad = Rs_mas / (3600. * 180.) * np.pi
-
-            # convert angle matrices to fov units
-            alpha = alpha_star_base * Rs_rad
-            beta = beta_star_base * Rs_rad
-
-            tm_star = transmission_map(bl, alpha=alpha, beta=beta)
-
-            noise_star_astro = ((star_px * tm_star).sum(axis=(-2, -1)) / star_px_sum *
-                                bb_star * area)
-
+            noise_star_astro = np.asarray(star_module.noise(index=i))
             noise_star = self.__leakage_budget.evaluate(noise_star_astro, hz_center, distance_s,
                                                         radius_s, wl_bins)
 
-            # LOCALZODI
-            lz_flux_sr = tau * b_tot * np.sqrt(
-                np.pi / np.arccos(np.cos(long) * np.cos(lat)) /
-                (np.sin(lat) ** 2
-                 + (0.6 * (wl_bins / 11e-6) ** (-0.4) * np.cos(lat)) ** 2)
-            )
-
-            lz_flux = lz_flux_sr * (np.pi * instrument.data.inst['image_angle'] ** 2)
-
-            localzodi_noise_astro = (ap * tmap).sum(axis=(-2, -1)) / ap_sum * lz_flux * area
-
+            localzodi_noise_astro = np.asarray(localzodi_module.noise(index=i))
             localzodi_noise = self.__localzodi_budget.evaluate(localzodi_noise_astro, hz_center,
                                                                distance_s, lat, wl_bins)
 
-            # EXOZODI (base, i.e. for a zodi level of 1)
-            # calculate the parameters required by Kennedy2015
-            alpha_ez = 0.34
-            r_in = 0.034422617777777775 * np.sqrt(l_sun)
-            r_0 = np.sqrt(l_sun)
-            sigma_zero = 7.11889e-8  # Sigma_{m,0} from Kennedy+2015 (doi:10.1088/0067-0049/216/2/23)
+            # exozodi at zodi level 1 -- the z scaling is applied vectorially after the loop
+            exozodi_noise_astro = np.asarray(exozodi_module.noise(index=i))
 
-            au_pix = mas_pix / 1e3 * distance_s
-
-            # the radius as measured from the central star for every pixel in [AU]
-            r_au = radius_map * au_pix
-
-            # identify all pixels where the radius is larges than the inner radius by Kennedy+2015
-            r_cond = ((r_au >= r_in)
-                      & (r_au <= image_size / 2 * au_pix))
-
-            # calculate the temperature at all pixel positions according to Kennedy2015 Eq. 2
-            temp_map = np.where(r_cond,
-                                278.3 * (l_sun ** 0.25) / np.sqrt(r_au), 0)
-
-            # calculate the Sigma (Eq. 3) in Kennedy2015 and set everything inside the inner radius to 0
-            sigma = np.where(r_cond,
-                             sigma_zero *
-                             (r_au / r_0) ** (-alpha_ez), 0)
-
-            # get the black body radiation emitted by the interexoplanetary dust
-            f_nu_disk = black_body(bins=wl_space,
-                                   width=wl_bin_widths_space,
-                                   temp=temp_map,
-                                   mode='wavelength') \
-                        * sigma * rad_pix ** 2 * area
-
-            # add the transmission map, exozodi should be normalized
-            exozodi_noise_astro = (f_nu_disk * tmap * ap).sum(axis=(-2, -1))
-
-            # hab2hi: 9
             if self.plot_id is not None and unique_stars[k] == plot_star:
+
+                fig, ax = plt.subplots()
 
                 X = wl_bins[:-1] * 1e6
                 y = wl_bin_widths * 1e6
@@ -832,39 +675,31 @@ class AgnosticMissionSimulator:
                 spl = make_interp_spline(X, total_noise[:-1], k=3)
                 total_noise = spl(x_splines)
 
-                plt.plot(x_splines, total_noise, color='tab:green', label='Total Noise')
+                ax.plot(x_splines, total_noise, color='tab:green', label='Total Noise')
 
-                plt.fill_between(x_splines, total_noise_astro, total_noise, label='Error Budget', hatch='\\\\',
+                ax.fill_between(x_splines, total_noise_astro, total_noise, label='Error Budget', hatch='\\\\',
                                  facecolor='tab:green', edgecolor='tab:orange', alpha=0.25)
 
-                plt.fill_between(x_splines, total_noise_astro, addition, hatch='\\\\',
+                ax.fill_between(x_splines, total_noise_astro, addition, hatch='\\\\',
                                  facecolor='tab:green', edgecolor='tab:orange', alpha=0.5,
                                  where=addition > total_noise_astro)
 
-                plt.plot(x_splines, addition, color='tab:green', linestyle='-.',
+                ax.plot(x_splines, addition, color='tab:green', linestyle='-.',
                          label='Additional Shot Noise', alpha=0.5)
 
-                plt.plot(x_splines, total_noise_astro, linestyle='--',
+                ax.plot(x_splines, total_noise_astro, linestyle='--',
                          color='tab:orange', label='Astrophysical Noise', alpha=0.8)
 
-                plt.plot(X, (noise_star_astro / y)[:-1], linestyle=':', color='tab:purple',
+                ax.plot(X, (noise_star_astro / y)[:-1], linestyle=':', color='tab:purple',
                          label='Stellar Leakage', alpha=0.4)
-                plt.plot(X, (localzodi_noise_astro / y)[:-1], linestyle=':', color='tab:cyan',
+                ax.plot(X, (localzodi_noise_astro / y)[:-1], linestyle=':', color='tab:cyan',
                          label='Localzodi Noise', alpha=0.4)
-                plt.plot(X, (z_plot * exozodi_noise_astro / y)[:-1], linestyle=':', color='tab:red',
+                ax.plot(X, (z_plot * exozodi_noise_astro / y)[:-1], linestyle=':', color='tab:red',
                          label='Exozodi Noise', alpha=0.4)
 
-                plt.legend(fontsize=7)
+                ax.legend(fontsize=7)
 
-                plt.title('Astrophysical Noise and Error Budget (8 yrs, Short-Long Gradient)')
-
-                #plt.yscale('log')
-                plt.xlabel('Wavelength (micron)')
-                plt.ylabel('Noise Contribution (ph s$^{-1}$ micron$^{-1}$)')
-
-                plt.show()
-
-                exit()
+                return fig, ax
 
             bl_s[k] = bl
             noise_bg_star_s[k] = localzodi_noise + noise_star

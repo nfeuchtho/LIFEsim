@@ -500,7 +500,7 @@ class Bus(object):
             raise ValueError('Option name(s) found in multiple categories: ' + msg)
 
         self.data.options.array = convert_to_np(config_dict['array'])
-        self.data.options.thermal = convert_to_np(config_dict['thermal'])
+        #self.data.options.thermal = convert_to_np(config_dict['thermal'])
         self.data.options.optimization = convert_to_np(config_dict['optimization'])
         self.data.options.models = config_dict['models']
         self.data.options.other = config_dict['other']

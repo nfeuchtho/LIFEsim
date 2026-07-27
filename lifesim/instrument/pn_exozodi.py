@@ -3,7 +3,8 @@ from typing import Union
 
 from lifesim.core.modules import PhotonNoiseUniverseModule
 from lifesim.util import constants
-from lifesim.util.radiation import black_body
+from lifesim.util.radiation import planck_law
+from lifesim.util.transmission_analytic import azimuthal_average_tm, gauss_legendre_wavenumber
 
 
 class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
@@ -51,15 +52,9 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
             Distance between the observed star and the LIFE array in [pc].
         z : float
             Zodi level in the observed system in [zodis].
-        mas_pix : np.ndarray
-            Contains the size of each pixel projected to the sky in [milliarcseconds].
-        rad_pix : np.ndarray
-            Contains the size of each pixel projected to the sky in [radians].
-        data.inst['radius_map'] : np.ndarray
-            Contains the distance of a pixel from the center of the detector in [pix].
-        data.options.other['image_size']
-            Number of pixels on one axis of a square detector (dimensionless). I.e. for a 512x512
-            detector this value is 512.
+        data.inst['image_angle'] : np.ndarray
+            Outer FoV radius in [rad] for each of the spectral bins, used as the outer bound
+            of the radial integral over the exozodi disk.
         wl_bins : np.ndarray
             Central values of the spectral bins in the wavelength regime in [m].
         wl_widths : np.ndarray
@@ -81,60 +76,83 @@ class PhotonNoiseExozodi(PhotonNoiseUniverseModule):
 
         # calculate the parameters required by Kennedy2015
         alpha = 0.34
-        r_in = 0.034422617777777775 * np.sqrt(l_sun)
+        r_in = 0.034422617777777775 * np.sqrt(l_sun)  # [AU]
         r_0 = np.sqrt(l_sun)
         sigma_zero = 7.11889e-8  # Sigma_{m,0} from Kennedy+2015 (doi:10.1088/0067-0049/216/2/23)
 
-        # reshape the mas per pixel array for calculation (to (n, 1, 1))
-        mas_pix = np.array([self.data.inst['mas_pix']])
-        if mas_pix.shape[-1] > 1:
-            mas_pix = np.reshape(mas_pix, (mas_pix.shape[-1], 1, 1))
-        rad_pix = np.array([self.data.inst['rad_pix']])
-        if rad_pix.shape[-1] > 1:
-            rad_pix = np.reshape(rad_pix, (rad_pix.shape[-1], 1, 1))
+        wl_bins = self.data.inst['wl_bins']
+        bl = self.data.inst['bl']
+        fov_taper = self.data.options.models['fov_taper']
+        diameter = self.data.options.array['diameter']
+        # defaults to 2 (standard double Bracewell) via Instrument.apply_options(); the AMS
+        # overwrites this shared instrument-state entry to model other nulling architectures --
+        # see AgnosticMissionSimulator.get_snr and ANALYTIC_NOISE_REWRITE.md.
+        nulling_order = self.data.inst.get('nulling_order', 2)
 
-        au_pix = mas_pix / 1e3 * distance_s
+        # Kennedy2015 surface density/temperature depend only on the distance from the star, and
+        # the exozodi disk is circularly symmetric, so the 2D pixel-grid sum reduces to a 1D
+        # radial integral, using the exact rotation (azimuthal) average of tm3 in place of a
+        # brute 2D transmission-map grid.
+        au_per_rad = (3600. * 180. / np.pi) * distance_s  # AU per rad of angular separation
+        r_in_rad = r_in / au_per_rad  # scalar inner cutoff (Kennedy2015 inner radius), fixed
+        #   physical size -- does NOT scale with wl, unlike the outer FoV bound (image_angle).
+        #   So k(wl)*r_in is a genuine chirp across a wl bin (unlike localzodi, where both the
+        #   integration domain and hfov scale with wl and the chirp cancels identically).
 
-        # the radius as measured from the central star for every pixel in [AU]
-        r_au = self.data.inst['radius_map'] * au_pix
+        n_r = 200
+        u = np.linspace(0.0, 1.0, n_r)[:, None]                      # (n_r, 1)
 
-        # identify all pixels where the radius is larges than the inner radius by Kennedy+2015
-        r_cond = ((r_au >= r_in)
-                  & (r_au <= self.data.options.other['image_size'] / 2 * au_pix))
+        # tm(r, wl) * planck(wl) chirps across a wl bin through this wl-dependence of both
+        # k=2*pi*bl/wl and the outer integration bound image_angle(wl) -- integrate each bin
+        # with Gauss-Legendre quadrature in wavenumber u=1/wl (see
+        # transmission_analytic.gauss_legendre_wavenumber for why) instead of sampling only the
+        # bin-center wavelength.
+        wl_lo = self.data.inst['wl_bin_edges'][:-1]
+        wl_hi = self.data.inst['wl_bin_edges'][1:]
+        wl_nodes, gl_weights = gauss_legendre_wavenumber(wl_lo, wl_hi)
 
-        # calculate the temperature at all pixel positions according to Kennedy2015 Eq. 2
-        temp_map = np.where(r_cond,
-                            278.3 * (l_sun ** 0.25) / np.sqrt(r_au), 0)
+        threshold = self.data.options.other['fov_threshold']
+        ez_leak = np.zeros_like(wl_bins)
+        for wl_j, w_j in zip(wl_nodes, gl_weights):
+            hfov_j = wl_j / (2. * diameter)
+            if fov_taper == 'gaussian':
+                image_angle_j = hfov_j * 4 / np.pi * np.sqrt(-np.log(threshold))
+            elif fov_taper == 'none':
+                image_angle_j = hfov_j
+            else:
+                raise ValueError('Nonexistent fov taper model')
 
-        # calculate the Sigma (Eq. 3) in Kennedy2015 and set everything inside the inner radius to 0
-        sigma = np.where(r_cond,
-                         sigma_zero *
-                         (r_au / r_0) ** (-alpha), 0)
+            # guard against a pathological case where the inner (Kennedy2015) cutoff falls
+            # outside the FoV -- no disk is visible, so the outer bound must not go below it
+            outer_rad_j = np.maximum(image_angle_j, r_in_rad)
 
-        wl_bins = np.array([self.data.inst['wl_bins']])
-        if wl_bins.shape[-1] > 1:
-            wl_bins = np.reshape(wl_bins, (wl_bins.shape[-1], 1, 1))
+            # Sigma and temp are power laws in r, diverging toward r_in -- log-spaced radial
+            # samples (r = r_in * (R/r_in)^u) resolve that steep near-r_in region with far
+            # fewer points than a uniform-in-r grid would need.
+            log_ratio_j = np.log(outer_rad_j / r_in_rad)              # (n_wl,)
+            r_j = r_in_rad * np.exp(u * log_ratio_j[None, :])         # (n_r, n_wl)
+            r_au_j = r_j * au_per_rad
 
-        wl_bin_widths = np.array([self.data.inst['wl_bin_widths']])
-        if wl_bin_widths.shape[-1] > 1:
-            wl_bin_widths = np.reshape(wl_bin_widths, (wl_bin_widths.shape[-1], 1, 1))
+            # calculate the temperature at all radii according to Kennedy2015 Eq. 2
+            temp_map_j = 278.3 * (l_sun ** 0.25) / np.sqrt(r_au_j)
 
-        # get the black body radiation emitted by the interexoplanetary dust
-        f_nu_disk = black_body(bins=wl_bins,
-                               width=wl_bin_widths,
-                               temp=temp_map,
-                               mode='wavelength') \
-                    * sigma * rad_pix ** 2 * self.data.inst['telescope_area']
+            # calculate the Sigma (Eq. 3) in Kennedy2015
+            sigma_j = sigma_zero * (r_au_j / r_0) ** (-alpha)
 
-        if self.data.options.models['fov_taper'] == 'gaussian':
-            ap = np.ones_like(self.data.inst['radius_map'])
-        elif self.data.options.models['fov_taper'] == 'none':
-            ap = np.where(self.data.inst['radius_map']
-                          <= self.data.options.other['image_size'] / 2, 1, 0)
-        else:
-            raise ValueError('Nonexistent fov taper model')
-        # add the transmission map
+            # get the black body radiation (per steradian) emitted by the interexoplanetary dust
+            f_nu_sr_j = planck_law(x=wl_j[None, :], temp=temp_map_j, mode='wavelength') \
+                        * sigma_j * self.data.inst['telescope_area']
 
-        ez_leak = (f_nu_disk * self.data.inst['t_map'] * ap).sum(axis=(-2, -1))
+            ang_avg_j = azimuthal_average_tm(r_j, bl, wl_j[None, :], nulling_order=nulling_order)
+            if fov_taper == 'gaussian':
+                taper_j = np.exp(-(np.pi / (4 * hfov_j[None, :]) * r_j) ** 2)
+            else:
+                taper_j = 1.0
+
+            # jacobian for r = r_in*exp(u*log_ratio): dr = r*log_ratio du, combined with the
+            # existing "* r" area element gives an extra factor of r (i.e. r**2 overall)
+            integrand_j = f_nu_sr_j * ang_avg_j * taper_j * r_j ** 2
+            ez_leak_j = 2 * np.pi * log_ratio_j * np.trapz(integrand_j, u[:, 0], axis=0)
+            ez_leak += w_j * ez_leak_j
 
         return ez_leak

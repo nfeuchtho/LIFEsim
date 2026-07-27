@@ -17,7 +17,7 @@ from matplotlib.colors import LogNorm
 from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import fsolve
 
-#mpl.use('Qt5Agg')
+mpl.use('Qt5Agg')
 
 
 class TradeSpaceExplorer:
@@ -58,7 +58,7 @@ class TradeSpaceExplorer:
         self.optimizer = optimizer
         self.instrument = instrument
 
-    def locate_mission_cutoff(self, cutoff=10, upper_start=50_000, setter_func=None):
+    def locate_mission_cutoff(self, cutoff=10, upper_start=50_000, setter_func=None, plot_data=None):
         """
         Finds the additive leakage-budget level at which the mission time equals ``cutoff``.
 
@@ -78,7 +78,7 @@ class TradeSpaceExplorer:
         upper_start : float, default 50_000
             Initial upper bound for the budget value, in ph/s/micron.
         setter_func : callable, optional
-            Called as ``setter_func(self.ams, budget)`` to apply a trial ``budget`` value
+            Called as ``setter_func(budget)`` to apply a trial ``budget`` value
             to the AMS before calling ``self.ams.run()``. Defaults to setting a flat
             additive leakage budget of ``budget`` ph/s/micron across all wavelength bins,
             i.e.
@@ -98,7 +98,7 @@ class TradeSpaceExplorer:
         epsilon = 0.05
 
         if setter_func is None:
-            setter_func = lambda a, bud: a.get_leakage_budget().update_factors(
+            setter_func = lambda bud: self.ams.get_leakage_budget().update_factors(
                 additive_factor=lambda args: bud * self.instrument.data.inst['wl_bin_widths'] * 1e6)
 
         mtime = -1
@@ -106,7 +106,7 @@ class TradeSpaceExplorer:
 
         print(f' > Finding budget CUTOFF for MT target ({cutoff} yrs)')
 
-        setter_func(self.ams, upper_start)
+        setter_func(upper_start)
         high_mtime = self.ams.run(self.instrument, self.optimizer)
         print(f' > Upper Bound MT: {high_mtime:.2f} yrs @ {int(upper_start)} ph/s')
         if high_mtime < cutoff or abs(high_mtime - cutoff) <= epsilon:
@@ -114,7 +114,7 @@ class TradeSpaceExplorer:
             print(f'>> Budget CUTOFF found: {int(upper_start)} ph/s (1 iteration)')
             return upper_start
 
-        setter_func(self.ams, lower)
+        setter_func(lower)
         low_mtime = self.ams.run(self.instrument, self.optimizer)
         print(f' > Lower Bound MT: {low_mtime:.2f} yrs @ {int(lower)} ph/s')
         if low_mtime >= cutoff or abs(low_mtime - cutoff) <= epsilon:
@@ -139,7 +139,7 @@ class TradeSpaceExplorer:
             guess = max(np.log(cutoff / a) / b, 0)
             print(f' > Lower Bound: {int(lower)} ph/s | Guess: {int(guess)} ph/s | '
                   f'Upper Bound: {int(upper_start)} ph/s')
-            setter_func(self.ams, guess)
+            setter_func(guess)
             mtime = self.ams.run(self.instrument, self.optimizer)
             print(f' > Retrieved Guess MT: {mtime:.2f} yrs')
             print(' > Iteration Result: GUESS', end=' ')
@@ -160,6 +160,37 @@ class TradeSpaceExplorer:
             return 0
 
         print(f'>> Budget CUTOFF found: {int(guess)} ph/s ({its} iterations)')
+
+        if plot_data is None:
+            return guess
+
+        catalog_choice = plot_data['cat']
+        gradient = plot_data['gradient']
+
+        # Plot-IDs:
+        # Hi: 9
+        # Lo: 5
+        if catalog_choice == 'lo':
+            plot_id = 5
+        elif catalog_choice == 'hi':
+            plot_id = 9
+        else:
+            raise ValueError(f'Unknown catalog choice: {catalog_choice}')
+
+        # Retrieve data-plot object from AMS
+        prev_id = self.ams.plot_id
+        self.ams.plot_id = plot_id
+        fig, ax = self.ams.run(self.instrument, self.optimizer)
+        self.ams.plot_id = prev_id
+
+        ax.set_title(f'Astrophysical Noise and Error Budget ({cutoff} yrs, {gradient} Gradient)')
+
+        # plt.yscale('log')
+        ax.set_xlabel('Wavelength (micron)')
+        ax.set_ylabel('Noise Contribution (ph s$^{-1}$ micron$^{-1}$)')
+
+        plt.show()
+
         return guess
 
     def plot_snr_imagesize_specres(self):
@@ -277,7 +308,7 @@ class TradeSpaceExplorer:
         ax.set_xlabel('Field of Regard [°]')
         ax.set_ylabel('Limiting Magnitude [mag]')
 
-        contours = plt.contour(fors, limmag, times, [5, 7, 10], colors='black')
+        contours = plt.contour(fors, limmag, times, [6, 7, 10], colors='black')
         ax.clabel(contours, manual=True)
 
         plt.title('Limiting Magnitude and Field of Regard vs. Mission Time')
@@ -351,7 +382,7 @@ class TradeSpaceExplorer:
         ax.set_xscale('log')
         ax.set_yscale('log')
 
-        contours = ax.contour(X, Y, times, levels=[5, 6, 8], colors='black')
+        contours = ax.contour(X, Y, times, levels=[6, 7, 8, 9], colors='black')
         ax.clabel(contours)
 
         ax.set_xlabel('Long-Wavelength Budget [ph s$^{-1}$ micron$^{-1}$]')
@@ -436,12 +467,10 @@ class TradeSpaceExplorer:
         ax.set_xlabel('Field of Regard [°]')
         ax.set_ylabel('Limiting Magnitude [mag]')
 
-        contours = plt.contour(fors, limmag, cutoffs, [500, 1000, 2000], colors='black')
+        contours = plt.contour(fors, limmag, cutoffs, [250, 500, 1000, 2000], colors='black')
         ax.clabel(contours)
 
-        plt.title(f'Limiting Magnitude and Field of Regard vs. Iso-MT Budget ({MT_goal} yrs)')
-
-        plt.savefig(f'tse_iso_{MT_goal}yrs.png')
+        plt.title(f'Lim. Mag. / FoR vs. Iso-MT Budget ({MT_goal} yrs)')
 
         plt.show()
 
@@ -635,7 +664,7 @@ class TradeSpaceExplorer:
                 bbox=dict(boxstyle='round', facecolor='tab:orange', alpha=0.85))
 
         plt.title(f'Yields and Cutoffs ({int(cutoff/(2*np.pi)*360)}° FoR, Lim. Mag. {ams.lim_mag} mag) '
-                  f'in Edge-On Ecliptic Perspective')
+                  f'(Ecliptic Perspective)')
 
         ax.grid(True, alpha=0.6)
 

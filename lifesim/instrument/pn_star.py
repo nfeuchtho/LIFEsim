@@ -3,7 +3,9 @@ from typing import Union
 import numpy as np
 
 from lifesim.core.modules import PhotonNoiseStarModule, TransmissionModule
-from lifesim.util.radiation import black_body
+from lifesim.util.radiation import planck_law
+from lifesim.util import constants
+from lifesim.util.transmission_analytic import radial_average_tm, gauss_legendre_wavenumber
 
 
 class PhotonNoiseStar(PhotonNoiseStarModule):
@@ -67,9 +69,6 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
             If the specified transmission map does not exits.
         """
 
-        image_size = 50 # should be self.data.options.other['image_size'] ?
-        map_selection = 'tm3'
-
         if index is None:
             radius_s = self.data.single['radius_s']
             distance_s = self.data.single['distance_s']
@@ -79,38 +78,45 @@ class PhotonNoiseStar(PhotonNoiseStarModule):
             distance_s = self.data.catalog.distance_s.iloc[index]
             temp_s = self.data.catalog.temp_s.iloc[index]
 
-        # check if the specified map exists
-        if map_selection not in ['tm1', 'tm2', 'tm3', 'tm4']:
-            raise ValueError('Nonexistent transmission map')
-
         # convert units
         Rs_au = 0.00465047 * radius_s
         Rs_as = Rs_au / distance_s
         Rs_mas = float(Rs_as)
         Rs_rad = Rs_mas / (3600. * 180.) * np.pi
 
-        # TODO Instead of recalculating the transmission map for the stellar radius here, one could try
-        #   to reuse the inner part of the transmission map already calculated in the get_snr function
-        #   of the instrument class
-        # TODO: why are we not reusing the maps calculated in the instrument class
-        tm_star = self.run_socket(method='transmission_map',
-                                  s_name='transmission_star',
-                                  map_selection=[map_selection],
-                                  image_angle=Rs_rad,
-                                  image_size=image_size)[int(map_selection[-1]) - 1]
+        # Stellar disk is circularly symmetric on the sky, so the pixel-grid average of
+        # tm3 over the stellar disk equals its exact rotation (azimuthal) average -- computed
+        # analytically here instead of via a brute 2D transmission-map grid.
+        fov_taper = self.data.options.models['fov_taper']
+        diameter = self.data.options.array['diameter']
+        bl = self.data.inst['bl']
+        # defaults to 2 (standard double Bracewell) via Instrument.apply_options(); the AMS
+        # overwrites this shared instrument-state entry to model other nulling architectures --
+        # see AgnosticMissionSimulator.get_snr and ANALYTIC_NOISE_REWRITE.md.
+        nulling_order = self.data.inst.get('nulling_order', 2)
 
-        x_map = np.tile(np.array(range(0, image_size)), (image_size, 1))
-        y_map = x_map.T
-        r_square_map = (x_map - (image_size - 1) / 2) ** 2 + (y_map - (image_size - 1) / 2) ** 2
-        star_px = np.where(r_square_map < (image_size / 2) ** 2, 1, 0)
+        # tm(wl) * planck(wl) oscillates as a chirp in wl (freq ~ bl*Rs_rad/wl**2), so the
+        # old center-point-per-bin sample can be badly wrong for wide bins / large baselines.
+        # Integrate the product over each bin with Gauss-Legendre quadrature in wavenumber
+        # u=1/wl, which turns the chirp into a constant-frequency oscillation -- a fixed
+        # low-order rule then stays accurate across the whole band. See
+        # ANALYTIC_NOISE_REWRITE.md and transmission_analytic.gauss_legendre_wavenumber.
+        wl_lo = self.data.inst['wl_bin_edges'][:-1]
+        wl_hi = self.data.inst['wl_bin_edges'][1:]
+        wl_nodes, gl_weights = gauss_legendre_wavenumber(wl_lo, wl_hi)
 
-        # get the stellar leakage
-        sl_leak = (star_px * tm_star).sum(axis=(-2, -1)) / star_px.sum(
-        ) * black_body(bins=self.data.inst['wl_bins'],
-                       width=self.data.inst['wl_bin_widths'],
-                       temp=temp_s,
-                       radius=radius_s,
-                       distance=distance_s,
-                       mode='star') * self.data.inst['telescope_area']
+        geom = np.pi * ((radius_s * constants.radius_sun)
+                        / (distance_s * constants.m_per_pc)) ** 2
+
+        sl_leak = np.zeros_like(self.data.inst['wl_bins'])
+        for wl_j, w_j in zip(wl_nodes, gl_weights):
+            hfov_j = wl_j / (2. * diameter)
+            avg_tm_j = radial_average_tm(R=Rs_rad, bl=bl, wl_bins=wl_j,
+                                         hfov=hfov_j, fov_taper=fov_taper,
+                                         nulling_order=nulling_order)
+            planck_j = planck_law(x=wl_j, temp=temp_s, mode='wavelength') * geom
+            sl_leak += w_j * avg_tm_j * planck_j
+
+        sl_leak *= self.data.inst['telescope_area']
 
         return sl_leak

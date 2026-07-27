@@ -4,6 +4,7 @@ import numpy as np
 
 from lifesim.core.modules import PhotonNoiseStarModule
 from lifesim.util.radiation import black_body
+from lifesim.util.transmission_analytic import radial_average_tm
 
 
 class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
@@ -50,11 +51,6 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
             Ecliptic latitude of the observed star in [rad].
         data.options.models['localzodi'] : str
             Specifies which localzodi model will be used.
-        data.inst['radius_map'] : np.ndarray
-            Contains the distance of a pixel from the center of the detector in [pix].
-        data.options.other['image_size']
-            Number of pixels on one axis of a square detector (dimensionless). I.e. for a 512x512
-            detector this value is 512.
         data.inst['wl_bins'] : np.ndarray
             Central values of the spectral bins in the wavelength regime in [m].
         data.inst['wl_widths'] : np.ndarray
@@ -62,9 +58,9 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
         data.inst['hfov'] : np.ndarray
             Contains the half field of view of the observatory in [rad] for each of the spectral
             bins.
-        data.inst['t_map'] : np.ndarray
-            Transmission map of the TM3 mode of the array created by the
-            lifesim.TransmissionMap module.
+        data.inst['image_angle'] : np.ndarray
+            Outer FoV radius in [rad] for each of the spectral bins, used as the disk radius
+            over which the transmission map is analytically averaged.
         data.inst['telescope_area'] : float
             Area of all array apertures combined in [m^2].
 
@@ -90,14 +86,6 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
         # moving), the longitude is fixed
         long = 3 / 4 * np.pi
         lat = lat_s
-
-        if self.data.options.models['fov_taper'] == 'gaussian':
-            ap = np.ones_like(self.data.inst['radius_map'])
-        elif self.data.options.models['fov_taper'] == 'none':
-            ap = np.where(self.data.inst['radius_map']
-                          <= self.data.options.other['image_size'] / 2, 1, 0)
-        else:
-            raise ValueError('Nonexistent fov taper model')
 
         # calculate the localzodi flux depending on the correct model
         if self.data.options.models['localzodi'] == 'glasse':
@@ -134,8 +122,20 @@ class PhotonNoiseLocalzodi(PhotonNoiseStarModule):
 
         lz_flux = lz_flux_sr * (np.pi * self.data.inst['image_angle'] ** 2)
 
+        # localzodi surface brightness is uniform across the (tiny) instrument FoV, so the
+        # pixel-grid average of tm3 over the FoV equals its exact rotation (azimuthal)
+        # average -- computed analytically here instead of via a brute 2D grid.
+        avg_tm = radial_average_tm(R=self.data.inst['image_angle'],
+                                   bl=self.data.inst['bl'],
+                                   wl_bins=self.data.inst['wl_bins'],
+                                   hfov=self.data.inst['hfov'],
+                                   fov_taper=self.data.options.models['fov_taper'],
+                                   # defaults to 2 via Instrument.apply_options(); the AMS
+                                   # overwrites this shared instrument-state entry to model
+                                   # other nulling architectures.
+                                   nulling_order=self.data.inst.get('nulling_order', 2))
+
         # calculate the leakage contribution to the measurement
-        lz_leak = (ap * self.data.inst['t_map']).sum(axis=(-2, -1)) / ap.sum() * lz_flux \
-                  * self.data.inst['telescope_area']
+        lz_leak = avg_tm * lz_flux * self.data.inst['telescope_area']
 
         return lz_leak

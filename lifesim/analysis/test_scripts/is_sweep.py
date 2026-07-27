@@ -60,7 +60,17 @@ def main():
     bus, instrument = build_instrument()
 
     isz = np.array(IMAGE_SIZE_SWEEP, dtype=float)
+    # Per-level relative SNR error statistics across the catalog. The mean can
+    # converge by averaging over many planets while individual planets stay far
+    # off; the spread (std) certifies that *every* planet is well sampled.
     med_err = np.full((len(NOISE_LEVELS), len(isz)), np.nan)
+    mean_err = np.full((len(NOISE_LEVELS), len(isz)), np.nan)
+    std_err = np.full((len(NOISE_LEVELS), len(isz)), np.nan)
+    # 16th/84th percentiles: the "1-sigma-equivalent" spread band. Always
+    # positive (the error distribution is one-sided), so it plots cleanly on a
+    # log axis without clipping.
+    p16_err = np.full((len(NOISE_LEVELS), len(isz)), np.nan)
+    p84_err = np.full((len(NOISE_LEVELS), len(isz)), np.nan)
 
     for li, level in enumerate(NOISE_LEVELS):
         set_noise_level(instrument, level)
@@ -73,25 +83,38 @@ def main():
             snr = compute_snr(instrument, s, FIXED_SPEC_RES)
             rel = np.abs(snr[ok] - snr_ref[ok]) / snr_ref[ok]
             med_err[li, ii] = np.median(rel)
-            print(f'   image_size={int(s):3d}: median |dSNR|/SNR = {med_err[li, ii]:.3e}')
+            mean_err[li, ii] = np.mean(rel)
+            std_err[li, ii] = np.std(rel)
+            p16_err[li, ii] = np.percentile(rel, 16)
+            p84_err[li, ii] = np.percentile(rel, 84)
+            print(f'   image_size={int(s):3d}: mean |dSNR|/SNR = {mean_err[li, ii]:.3e}'
+                  f'  std = {std_err[li, ii]:.3e}  [p16,p84] = '
+                  f'[{p16_err[li, ii]:.3e}, {p84_err[li, ii]:.3e}]')
 
         np.savez(os.path.join(OUT_DIR, 'is_sweep.npz'),
-                 image_size=isz, med_err=med_err,
+                 image_size=isz, med_err=med_err, mean_err=mean_err, std_err=std_err,
+                 p16_err=p16_err, p84_err=p84_err,
                  levels=np.array(list(NOISE_LEVELS.keys())),
                  ref_image_size=REF_IMAGE_SIZE, spec_res=FIXED_SPEC_RES)
 
-    plot(isz, med_err, os.path.join(OUT_DIR, 'is_error_vs_imagesize.png'))
+    plot(isz, mean_err, p16_err, p84_err,
+         os.path.join(OUT_DIR, 'is_error_vs_imagesize.png'))
 
 
-def plot(isz, med_err, save_path):
+def plot(isz, mean_err, p16_err, p84_err, save_path):
+    """Mean per-planet relative SNR error (solid) with a shaded 16th-84th
+    percentile band for the catalog spread. A low mean with a wide band would
+    mean the catalog average has converged while individual planets have not."""
     fig, ax = plt.subplots(figsize=(7, 5))
     for li, level in enumerate(NOISE_LEVELS):
-        ax.plot(isz, med_err[li], marker='o', label=LEVEL_LABELS[level])
+        line, = ax.plot(isz, mean_err[li], marker='o', label=LEVEL_LABELS[level])
+        ax.fill_between(isz, p16_err[li], p84_err[li],
+                        color=line.get_color(), alpha=0.15)
     ax.axvline(160, color='0.6', ls='--', lw=1)
     ax.text(160, ax.get_ylim()[1], ' image_size=160', va='top', fontsize=8, color='0.4')
     ax.set_yscale('log')
     ax.set_xlabel('Image Square Length (pixels)')
-    ax.set_ylabel(f'Median |ΔSNR| / SNR  vs  image_size={REF_IMAGE_SIZE}')
+    ax.set_ylabel(f'Relative SNR error vs image_size={REF_IMAGE_SIZE}\n(mean, 16th-84th pct band across catalog)')
     ax.set_title(f'SNR error from spatial under-sampling (spec_res={FIXED_SPEC_RES})')
     ax.legend()
     ax.grid(True, which='both', alpha=0.3)

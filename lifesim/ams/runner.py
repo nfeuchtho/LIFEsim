@@ -11,9 +11,9 @@ os.chdir(working_directory)
 
 if __name__ == '__main__':
 
-    pth = input('>> Enter catalog [hi/lo]: ')
+    pth_input = input('>> Enter catalog [hi/lo]: ')
 
-    cat_pth = f"../catalogs/catalog_hab2{pth}.txt"
+    cat_pth = f"../catalogs/catalog_hab2{pth_input}.txt"
 
     pth = cat_pth.split('.')[0]
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     bus.data.catalog_from_ppop(input_path=cat_pth)
     # speed up calculation
 
-    bus.data.options.set_manual(n_cpu=8, spec_res=20.0, image_size=160)
+    bus.build_from_config(filename='settings.yaml')
 
     # ---------- Creating the Instrument ----------
 
@@ -58,9 +58,7 @@ if __name__ == '__main__':
 
     instrument.apply_options()
 
-    instrument.get_snr()
-
-    print('meep')
+    # instrument.get_snr()
 
     opt = lifesim.Optimizer(name='opt')
     bus.add_module(opt)
@@ -71,8 +69,8 @@ if __name__ == '__main__':
     bus.connect(('inst', 'opt'))
     bus.connect(('opt', 'ahgs'))
 
-    m = (1950 - 0)/(bus.data.options.array['wl_max']*1e-6 - bus.data.options.array['wl_min']*1e-6)
-    n = 1950 - bus.data.options.array['wl_max']*1e-6 * m
+    m = (0 - 730)/(bus.data.options.array['wl_max']*1e-6 - bus.data.options.array['wl_min']*1e-6)
+    n = 0 - bus.data.options.array['wl_max']*1e-6 * m
 
     widths = bus.data.inst['wl_bin_widths'] * 1e6
 
@@ -81,43 +79,37 @@ if __name__ == '__main__':
     # Plot-IDs:
     # Hi: 9
     # Lo: 5
-    ams = AgnosticMissionSimulator(2, 7, 65 / 360 * 2*np.pi, 0.8, 12*60*60,
-                                   verbose=False, plot_id=None)
+    ams = AgnosticMissionSimulator(4, 7, 65 / 360 * 2*np.pi, 0.8, 12*60*60,
+                                   verbose=False)
+
+    # print(ams.run(instrument, opt))
 
     tse = TradeSpaceExplorer(ams, opt, instrument)
 
-    tse.plot_cutoff_for_slewtime(6)
-    exit()
-
     mtime = float(input('>> Enter mission time in years: '))
 
-    #plots.plot_cutoff_for_slewtime(instrument, opt, ams, mtime)
-    #plots.plot_linear_regression_additive(instrument, opt, ams)
+    tse.visualize_filters(False)
 
-    #plots.plot_linear_regression_additive(instrument, opt, ams)
+    GRADIENT = input('>> Enter gradient mode [Short-Long/Long-Short/No]: ')
+    if GRADIENT not in ['Short-Long', 'Long-Short', 'No']:
+        raise ValueError(f'Unknown mode: {GRADIENT}')
 
-
-
-
-    exit()
-    def gradient_setter_function(ams, budget, mode):
-        if mode == 'short-long':
+    def gradient_setter_function(ams, budget):
+        if GRADIENT == 'Short-Long':
             m = (budget - 0) / (bus.data.options.array['wl_max'] * 1e-6 - bus.data.options.array['wl_min'] * 1e-6)
             n = budget - bus.data.options.array['wl_max'] * 1e-6 * m
-        elif mode == 'long-short':
+        elif GRADIENT == 'Long-Short':
             m = (0 - budget) / (bus.data.options.array['wl_max'] * 1e-6 - bus.data.options.array['wl_min'] * 1e-6)
             n = 0 - bus.data.options.array['wl_max'] * 1e-6 * m
+        elif GRADIENT == 'No':
+            m = 0
+            n = budget
         else:
-            raise ValueError(f'Unknown mode: {mode}')
+            raise ValueError(f'Unknown mode: {GRADIENT}')
         ams.get_leakage_budget().update_factors(additive_factor=lambda args: (m * args[3] + n) * widths)
 
-    print('no gradient', plots.locate_mission_cutoff(instrument, opt, ams, mtime, upper_start=5000))
+    plot_data = {'cat' : pth_input, 'gradient' : GRADIENT}
 
-    print('long-short gradient', plots.locate_mission_cutoff(instrument, opt, ams, mtime, upper_start=5000,
-                                      setter_func=lambda ams, bud:
-                                      gradient_setter_function(ams, bud, 'long-short')))
-
-    print('short-long gradient', plots.locate_mission_cutoff(instrument, opt, ams, mtime, upper_start=5000,
-                                      setter_func=lambda ams, bud:
-                                      gradient_setter_function(ams, bud, 'short-long')))
+    print(f'Mission Budget ({GRADIENT} Gradient): ', tse.locate_mission_cutoff(mtime, upper_start=5000,
+                                      setter_func=lambda bud: gradient_setter_function(ams, bud), plot_data=plot_data))
 

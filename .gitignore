@@ -12,3 +12,24 @@ __pycache__/
 .ai/
 /lifesim/catalogs/
 /lifesim/analysis/test_scripts/*_out/
+
+# scratch and generated trees
+/tmp/
+/output/
+/graphify-out/
+/code_review_backups/
+/thesis/output/
+/thesis/graphify-out/
+
+# LaTeX build artifacts (main.pdf and main_diff.pdf are kept deliberately)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
