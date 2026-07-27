@@ -518,15 +518,19 @@ def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000):
     from lifesim.util.combiner import double_triple_nuller
     os.makedirs(PHYSICAL_FIGDIR, exist_ok=True)
 
-    for catalog in catalogs:
-        bus, instrument, opt = build_bus(catalog, ARMS['control'])
-        if n_cpu:
-            bus.data.options.other['n_cpu'] = int(n_cpu)
-        ratio = bus.data.options.array['ratio']
-        target = PRIMARY_TARGET[catalog]
-        arch = double_triple_nuller(1.0, ratio)
+    # Scan outer, catalogue inner. The thesis uses these figures in Hab2Max /
+    # Hab2Min pairs, so completing a pair before starting the next scan means an
+    # interrupted run still leaves usable figures. Rebuilding the bus per scan
+    # costs a catalogue reload of a few seconds against scans lasting hours.
+    for scan in scans:
+        for catalog in catalogs:
+            bus, instrument, opt = build_bus(catalog, ARMS['control'])
+            if n_cpu:
+                bus.data.options.other['n_cpu'] = int(n_cpu)
+            ratio = bus.data.options.array['ratio']
+            target = PRIMARY_TARGET[catalog]
+            arch = double_triple_nuller(1.0, ratio)
 
-        for scan in scans:
             ams = AgnosticMissionSimulator(
                 4, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
                 architecture=arch, verbose=False)
