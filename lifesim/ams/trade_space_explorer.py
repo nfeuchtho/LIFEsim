@@ -17,8 +17,18 @@ from matplotlib.colors import LogNorm
 from scipy.interpolate import RegularGridInterpolator
 from scipy.optimize import fsolve
 
-mpl.use('Qt5Agg')
-
+# Interactive exploration wants a GUI backend, but importing this module must not
+# force one: batch and cluster runs have no display, and a caller that has
+# already selected a file backend has done so deliberately. Only switch when the
+# current backend is still an interactive one, and never fail if Qt is absent.
+_NON_INTERACTIVE = ('agg', 'pdf', 'svg', 'ps', 'cairo', 'template')
+try:
+    import os as _os
+    if (_os.environ.get('MPLBACKEND') is None
+            and mpl.get_backend().lower() not in _NON_INTERACTIVE):
+        mpl.use('Qt5Agg')
+except Exception:
+    pass
 
 class TradeSpaceExplorer:
     """

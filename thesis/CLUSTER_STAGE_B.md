@@ -32,7 +32,16 @@ cd /tmp && python -c "import lifesim; print(lifesim.__file__)"
 ```
 
 Matplotlib is already forced to the Agg backend inside the collection script, so
-no display is needed.
+no display is needed. `trade_space_explorer` used to select `Qt5Agg`
+unconditionally at import, which overrode that and failed on a headless node; it
+now leaves an already-chosen non-interactive backend alone and never raises if Qt
+is missing. Belt and braces, you can also export it:
+
+```bash
+export MPLBACKEND=Agg
+```
+
+which the module honours and will not override.
 
 ## Running
 
