@@ -444,7 +444,7 @@ PHYSICAL_RESULTS = os.path.join(REPO_ROOT, 'thesis', 'reproducibility',
 PHYSICAL_FIGDIR = os.path.join(REPO_ROOT, 'thesis', 'images', 'tse', 'physical')
 
 
-def run_physical(catalogs, upper_start, n_cpu=None):
+def run_physical(catalogs, upper_start, n_cpu=None, design='triple6'):
     """Endpoint searches driven by a concrete beam combiner.
 
     Replaces the sin^n null-order proxy with the six-aperture double triple
@@ -462,7 +462,13 @@ def run_physical(catalogs, upper_start, n_cpu=None):
             bus.data.options.other['n_cpu'] = int(n_cpu)
         ratio = bus.data.options.array['ratio']
         widths = bus.data.inst['wl_bin_widths'] * 1e6
-        arch = double_triple_nuller(1.0, ratio)
+        # 'bracewell4' runs the reference array through the same general-combiner
+        # path as the fourth-order design, so the two halves of the results table
+        # share a provenance instead of mixing a production campaign with fresh
+        # architecture runs.
+        arch = (double_triple_nuller(1.0, ratio) if design == 'triple6'
+                else double_bracewell(1.0, ratio))
+        order = 4 if design == 'triple6' else 2
         print(f'\n=== hab2{catalog} | six-aperture triple nuller | baseline '
               f'constant {baseline_constant(*arch):.6f} (reference '
               f'{baseline_constant(*double_bracewell(1.0, ratio)):.6f}) ===',
@@ -471,12 +477,12 @@ def run_physical(catalogs, upper_start, n_cpu=None):
         for target in TARGETS[catalog]:
             for gradient, family in FAMILIES.items():
                 ams = AgnosticMissionSimulator(
-                    4, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
+                    order, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60,
                     architecture=arch, verbose=False)
                 tse = TradeSpaceExplorer(ams, opt, instrument)
                 setter = make_setter(bus, ams, gradient, widths)
 
-                tag = f'phys_{catalog}_{family}_{str(target).replace(".", "p")}'
+                tag = f'phys_{design}_{catalog}_{family}_{str(target).replace(".", "p")}'
                 t0 = time.time()
                 endpoint = tse.locate_mission_cutoff(
                     target, upper_start=upper_start, setter_func=setter,
@@ -498,7 +504,7 @@ def run_physical(catalogs, upper_start, n_cpu=None):
                                  'wall_s\n')
                     fh.write('\t'.join(str(x) for x in [
                         datetime.now(timezone.utc).isoformat(timespec='seconds'),
-                        f'hab2{catalog}', 'triple_nuller_6ap', target, family,
+                        f'hab2{catalog}', design, target, family,
                         endpoint, round(achieved, 6), wall]) + '\n')
     print(f'\nPhysical-architecture results: {PHYSICAL_RESULTS}', flush=True)
 
@@ -574,6 +580,9 @@ def main():
     ap.add_argument('--n-cpu', type=int, default=None,
                     help='Override the worker count for the SNR flow. The main '
                          'lever on a cluster; settings.yaml defaults to 8.')
+    ap.add_argument('--design', choices=['triple6', 'bracewell4'],
+                    default='triple6',
+                    help='Which architecture the --physical run evaluates.')
     ap.add_argument('--physical', action='store_true',
                     help='Run the endpoint searches with the six-aperture '
                          'physical beam combiner instead of the sin^n proxy.')
@@ -621,7 +630,8 @@ def main():
         return
 
     if args.physical:
-        run_physical(catalogs, args.upper_start, n_cpu=args.n_cpu)
+        run_physical(catalogs, args.upper_start, n_cpu=args.n_cpu,
+                     design=args.design)
         return
 
     if args.stage_b:
