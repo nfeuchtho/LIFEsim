@@ -134,10 +134,8 @@ would conceal exactly what it demonstrates.
 
 ## Remaining before a grading re-run
 
-- The budget-breakdown figures still show a single catalogue planet while their
-  captions imply an ensemble; see the open issue below. The
-  `--background-context` mode already computes ensemble-median curves and would
-  make a more honest Figure 4.1.
+Nothing from the review rounds is open. The next step is a fresh grading pass on
+the rewritten thesis, which the author deferred until the rewrite was complete.
 
 ### Done 2026-07-28, evening
 
@@ -180,7 +178,20 @@ Reproducing 26.7 % also confirms that "interesting" there means Experiment 1
 alone; including Experiment 2 gives 4493 stars and 36.0 %. Data in
 `thesis/reproducibility/target_loss_decomposition.tsv`.
 
-Thesis now 70 pages, no undefined references, no errors.
+**The budget-breakdown figures now disclose what they show.** Figure 5.4 already
+carried the clause, but it forward-referenced a statement Figure 5.3 never made,
+and Figure 4.1 said nothing at all. `identify_plot_target.py` resolves the
+plotted target: the same host star for both catalogs, 46.0 pc, 6303 K, ecliptic
+latitude -34.9 degrees, habitable-zone centre 0.977 AU. It is **not typical** --
+83rd percentile in distance, 90th in effective temperature, so more distant and
+hotter than the median and correspondingly less resolved. Figure 4.1 now carries
+the full disclosure, separating the amplitude (an ensemble quantity, from the
+mission-time search over the whole catalog) from the background curves beneath
+it (one arbitrary target), and points at the ensemble median in Section 6.1 and
+`background_context.tsv`. Note that `run_background_context` was already
+computing the median over catalog stars, so no new figure was needed.
+
+Thesis now 71 pages, no undefined references, no errors.
 
 ## In flight as of 2026-07-28, early morning
 
