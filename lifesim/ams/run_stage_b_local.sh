@@ -21,6 +21,12 @@ cd "$(dirname "$0")/../.." || exit 1
 
 PY="${PY:-C:/Users/nicol/.conda/envs/LIFEsim/python.exe}"
 NCPU="${1:-2}"
+# The search reports its upper bound verbatim when it never brackets the target,
+# so too low a ceiling yields a censored lower bound that looks like a result.
+# The six-aperture design carries 1.5x the reference's collecting area and at
+# generous corners -- wide field of regard, short slew -- tolerates far more than
+# the 5000 default, which already censored a first Stage A attempt.
+UPPER="${2:-20000}"
 OUT=thesis/reproducibility
 mkdir -p "$OUT"
 
@@ -31,10 +37,11 @@ pids=()
 for scan in mag slew linear; do
   for cat in hi lo; do
     log="$OUT/stageb6_${scan}_${cat}.log"
-    echo ">> launching $scan/$cat at ${TARGET[$cat]} yr, ${NCPU} workers -> $log"
+    echo ">> launching $scan/$cat at ${TARGET[$cat]} yr, ${NCPU} workers, ceiling ${UPPER} -> $log"
     nohup "$PY" lifesim/ams/ablation_throughput.py \
         --stage-b "$scan" --catalog "$cat" \
         --targets "${TARGET[$cat]}" --n-cpu "$NCPU" \
+        --upper-start "$UPPER" \
         > "$log" 2>&1 &
     pids+=($!)
   done
