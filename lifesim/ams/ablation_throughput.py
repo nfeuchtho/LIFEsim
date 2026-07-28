@@ -544,7 +544,12 @@ def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000):
             if n_cpu:
                 bus.data.options.other['n_cpu'] = int(n_cpu)
             ratio = bus.data.options.array['ratio']
-            target = PRIMARY_TARGET[catalog]
+            # These scans belong to the fourth-order design, whose zero-budget
+            # time is well below the reference's, so its operating point is not
+            # PRIMARY_TARGET. Read the first entry of TARGETS instead, which
+            # --targets overrides, and which the caller sets to the lowest half
+            # year above this architecture's own zero-budget time.
+            target = TARGETS[catalog][0]
             arch = double_triple_nuller(1.0, ratio)
 
             ams = AgnosticMissionSimulator(
