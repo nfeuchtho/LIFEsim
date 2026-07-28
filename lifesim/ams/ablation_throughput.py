@@ -286,6 +286,7 @@ def run_background_context(catalogs, null_orders):
     single-output plane as the reported allowance, so the two are directly
     comparable.
     """
+    from lifesim.util.combiner import double_bracewell, double_triple_nuller
     rows = []
     for catalog in catalogs:
         bus, instrument, opt = build_bus(catalog, ARMS['control'])
@@ -296,10 +297,19 @@ def run_background_context(catalogs, null_orders):
         wl_bins = np.asarray(bus.data.inst['wl_bins']) * 1e6          # micron
         widths = np.asarray(bus.data.inst['wl_bin_widths']) * 1e6     # micron
 
+        ratio = bus.data.options.array['ratio']
         for order in null_orders:
             store = {}
+            # Drive this from the same realizable architectures the results use.
+            # Without an architecture the AMS falls back to the sin^n null-order
+            # proxy, whose far-field average is 3/16 at order four against the
+            # triple nuller's 1/6, so the reported background would not be the
+            # background the reported allowances were measured against.
+            arch = (double_bracewell(1.0, ratio) if order == 2
+                    else double_triple_nuller(1.0, ratio))
             ams = AgnosticMissionSimulator(
                 order, 7, 65 / 360 * 2 * np.pi, 0.8, 12 * 60 * 60, verbose=False,
+                architecture=arch,
                 leakage_budget=_RecordingBudget(store, 'star'),
                 localzodi_budget=_RecordingBudget(store, 'localzodi'),
                 exozodi_budget=_RecordingBudget(store, 'exozodi'))

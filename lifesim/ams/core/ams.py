@@ -292,6 +292,20 @@ class AgnosticMissionSimulator:
         # architecture to size the array to its own response peak.
         instrument.data.inst['architecture'] = self.__architecture
 
+        # apply_options derives BOTH the collecting area and the single-aperture
+        # field of view from options.array (instrument.py:92-105) --
+        # area = num_apertures * pi * (diameter/2)^2 and hfov = wl / (2*diameter).
+        # An architecture with an aperture count other than the configured one
+        # would otherwise be charged the configured array's area while keeping
+        # its field of view, which is not any physical instrument: the two must
+        # come from the same collectors. Taking the count from the architecture
+        # fixes the collector diameter and lets the total area follow it, so
+        # every design is built from identically sized apertures and shares the
+        # reference's field of view.
+        if self.__architecture is not None:
+            n_ap = int(np.asarray(self.__architecture[0]).shape[0])
+            instrument.data.options.array['num_apertures'] = n_ap
+
         instrument.apply_options()
 
         if pre_select and not self.snr_array_current:

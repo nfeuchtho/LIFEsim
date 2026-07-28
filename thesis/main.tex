@@ -523,7 +523,7 @@ Evaluating Eq. \ref{eq: general transmission} on a spatial grid for every target
 \begin{align}
 x=\frac{\pi b\,\theta}{\lambda},
 \end{align}
-the same dimensionless separation the reference response depends on. The rotation-averaged response of any such architecture is therefore a one-dimensional function of $x$, and can be tabulated once per design and interpolated thereafter.
+the same dimensionless separation the reference response depends on. The rotation-averaged response of any such architecture is therefore a one-dimensional function of $x$, and can be tabulated once per design and interpolated thereafter. Throughout, $x$ denotes this variable evaluated at a general sky angle. Where a resolved stellar disk of angular radius $R_\star$ is averaged over, the natural argument is instead $x_\star\equiv2\pi bR_\star/\lambda$, which is twice $x$ evaluated at $\theta=R_\star$; the factor of two is carried by the Bessel identity used there and is kept explicit to avoid confusing the two.
 
 The consequence is that the cost of an arbitrary combiner is the cost of the reference. Measured on the same catalog and hardware, a full evaluation takes $14.3$\,s with a general combiner against $14.7$\,s with the closed form, and the tabulated background response agrees with the analytic Bessel reduction of Appendix \ref{app: analytic derivation} to a relative $6\times10^{-12}$. The architecture-agnostic model is thus not a slower fallback used where the closed form is unavailable; it is the same calculation, obtained numerically rather than by hand.
 
@@ -579,8 +579,9 @@ The returned percentile is fixed at 90\%. If 100 universe times are retained, a 
 \subsubsection{Validation of the SNR Flow}
 The physics and numerical rewrite were checked at several distinct boundaries; Table \ref{tab: validation matrix} states what each check can and cannot establish.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
+\small
 \begin{tabular}{@{}p{0.27\linewidth}p{0.27\linewidth}p{0.31\linewidth}@{}}
 \toprule
 Comparison & Result & Interpretation \\
@@ -638,15 +639,15 @@ For null order $n=2p$, azimuthally averaging one destructive output at angular r
 J_0\left(\frac{2\pi j b\vartheta}{\lambda}\right).
 \label{eq: general null average}
 \end{align}
-For a uniform disk, radial area averaging replaces each $J_0(jx)$ term by $2J_1(jx)/(jx)$, following the standard Bessel derivative identity \cite{nistdlmf}, where $x=2\pi bR/\lambda$ and $R$ is the angular disk radius. The limiting value is one as $jx\rightarrow0$, so the expression is evaluated with its analytic limit near the origin. The Bessel power series then gives the small-star limits
+For a uniform disk, radial area averaging replaces each $J_0(jx_\star)$ term by $2J_1(jx_\star)/(jx_\star)$, following the standard Bessel derivative identity \cite{nistdlmf}, where $x_\star=2\pi bR_\star/\lambda$ and $R_\star$ is the angular disk radius, as introduced in Section \ref{sec: methods: affordable}. The limiting value is one as $jx_\star\rightarrow0$, so the expression is evaluated with its analytic limit near the origin. The Bessel power series then gives the small-star limits
 \begin{align}
 \left\langle T_2\right\rangle_\mathrm{disk}
-&=\frac{x^2}{32}+\mathcal{O}(x^4),\label{eq: leakage small star t2}\\
+&=\frac{x_\star^2}{32}+\mathcal{O}(x_\star^4),\label{eq: leakage small star t2}\\
 \left\langle T_4\right\rangle_\mathrm{disk}
-&=\frac{x^4}{256}+\mathcal{O}(x^6).
+&=\frac{x_\star^4}{256}+\mathcal{O}(x_\star^6).
 \label{eq: leakage small star}
 \end{align}
-Taking the ratio of Eqs. \ref{eq: leakage small star t2} and \ref{eq: leakage small star}, the fourth-to-second-order stellar-leakage ratio therefore approaches $x^2/8$. The same general average is used inside one-dimensional radial quadrature for a tapered source or exozodiacal profile. Rotation does not ``average away'' a circular background; rather, circular symmetry makes its integrated response independent of rotation angle \cite{lay2004systematic,dannert2022life2}. Its mean may cancel after chopping, but its photons still set the shot-noise variance.
+Taking the ratio of Eqs. \ref{eq: leakage small star t2} and \ref{eq: leakage small star}, the fourth-to-second-order stellar-leakage ratio therefore approaches $x_\star^2/8$. The same general average is used inside one-dimensional radial quadrature for a tapered source or exozodiacal profile. Rotation does not ``average away'' a circular background; rather, circular symmetry makes its integrated response independent of rotation angle \cite{lay2004systematic,dannert2022life2}. Its mean may cancel after chopping, but its photons still set the shot-noise variance.
 
 The local-zodiacal correction arose from a geometric inconsistency in the removed pixel-grid path. That path is inherited LIFEsim code and predates this work; the analytic reformulation did not introduce the defect, it exposed it. The physical field of view is circular, with solid angle proportional to $\pi R_\mathrm{FoV}^2$, but one normalization divided the integrated circular flux by the area $4R_\mathrm{FoV}^2$ of its enclosing square. It therefore suppressed the uniform foreground by $\pi/4$.
 
@@ -901,7 +902,7 @@ Both architectures produce the same wedge: feasibility requires either a short s
 The Hab2Min and Hab2Max calculations show the same qualitative shape ordering and the same null-order inversion. Hab2Min requires longer mission-time targets and generally returns smaller allowances at otherwise matched operating parameters, consistent with its less favorable planet population. Because the adopted mission-time targets differ between catalogs, the numerical difference cannot be attributed to $\eta_\oplus$ alone. Figure \ref{fig: tse yield} illustrates the target filtering for one Hab2Max selection and is not evidence of catalog independence. It also explains why the magnitude dependence saturates while the field-of-regard dependence does not. Of the 26.7\,\% of Experiment-1-eligible host stars excluded at the adopted cuts, the magnitude limit accounts for 20.5 percentage points and the field of regard for 7.5. The magnitude cut removes many more stars, but it removes the faint ones, which contribute little to a top-50 sample; the field-of-regard cut removes a wedge irrespective of brightness and so takes good targets with it. That the larger cut is the less consequential one is the whole content of the saturation seen in Section \ref{sec: tse: agnostic}.
 
 \subsection{Why the Spectral Preference Reverses at a Deeper Null} \label{sec: tse: null order}
-Suppression of stellar leakage is the leading physical interpretation of the completed order-four comparison. Equations \ref{eq: leakage small star t2} and \ref{eq: leakage small star} together predict a fourth-to-second-order ratio of approximately $x^2/8$. Across the 4505 unique catalog stars, $x=2\pi bR_\star/\lambda$ remains above 0.005 over the modeled band, outside the cancellation-sensitive numerical regime of the direct Bessel sum. At 10\,$\upmu$m the median leakage ratio is about $6.3\times10^{-5}$; at 18.5\,$\upmu$m it is about $1.9\times10^{-5}$. Direct positive quadrature agrees with the analytic order-four response over the complete catalog range.
+Suppression of stellar leakage is the leading physical interpretation of the completed order-four comparison. Equations \ref{eq: leakage small star t2} and \ref{eq: leakage small star} together predict a fourth-to-second-order ratio of approximately $x_\star^2/8$. Across the 4505 unique catalog stars, $x_\star=2\pi bR_\star/\lambda$ remains above 0.005 over the modeled band, outside the cancellation-sensitive numerical regime of the direct Bessel sum. At 10\,$\upmu$m the median leakage ratio is about $6.3\times10^{-5}$; at 18.5\,$\upmu$m it is about $1.9\times10^{-5}$. Direct positive quadrature agrees with the analytic order-four response over the complete catalog range.
 
 This suppression removes the high short-wave stellar-noise floor visible in Fig. \ref{fig: tse budget shapes no2}. Added short-wave variance then becomes comparatively expensive. The remaining local- and exo-zodiacal backgrounds dominate toward longer wavelengths, so a larger long-weighted endpoint can be hidden beneath their photon noise. This explanation is consistent with the reversal in Table \ref{tab: budget shapes} and Fig. \ref{fig: tse linear additive}; however, no ablation run isolates leakage suppression from the simultaneous extended-source and planet-throughput changes.
 
@@ -988,9 +989,7 @@ Measured against the pre-rewrite source model on identical input, the same eight
 
 The distinction between those contributions is worth preserving. Replacing the grid by a closed form is a change of algorithm and accounts for the resolution-dependent factor; vectorizing the evaluation is a change of implementation and accounts for a further factor of under two; and evaluating an arbitrary combiner at the same cost is neither, being a capability the grid formulation did not have at any resolution. Reporting a single figure would merge three different claims.
 
-This is what converts the central question from a description into a procedure. A single endpoint search evaluates the mission six to eight times, a two-dimensional operating-point scan evaluates it a few hundred times, and the results reported here required several thousand evaluations. At the pre-rewrite cost and the production image size, the trade space of Section \ref{sec: tse} would have taken months of computer time; the requirement could have been stated but not located, and certainly not revised when the background model changed. The efficiency the central question asks for is therefore a precondition rather than a convenience.
-
-This is what converts the central question from a description into a procedure. A single endpoint search evaluates the mission six to eight times, a two-dimensional operating-point scan evaluates it a few hundred times, and the results reported here required several thousand evaluations in total. At the pre-rewrite cost the trade space presented in Section \ref{sec: tse} would have taken years of computer time; the requirement could have been stated but not located, and certainly not revised when the background model changed. The efficiency demanded by the central question is therefore not a convenience but a precondition, and it is also what allows an arbitrary architecture to be evaluated at the cost of the closed-form reference rather than at the cost of a grid per target and per wavelength.
+This is what converts the central question from a description into a procedure. A single endpoint search evaluates the mission six to eight times, a two-dimensional operating-point scan evaluates it a few hundred times, and the results reported here required several thousand evaluations in total. At the pre-rewrite cost and the production image size, the trade space of Section \ref{sec: tse} would have taken months of computer time; the requirement could have been stated but not located, and certainly not revised when the background model changed. The efficiency the central question asks for is therefore a precondition rather than a convenience, and it is also what allows an arbitrary architecture to be evaluated at the cost of the closed-form reference rather than at the cost of a grid per target and per wavelength.
 
 That last exposure carries a caution that outlives this study. An iso-mission-time requirement is defined where the completion curve is steep, so it inherits an amplified version of any error in the background it is measured against: a $27.3\%$ error in one term moved the derived allowance by up to a factor of eleven (Table \ref{tab: localzodi impact}), and the amplification is largest exactly where the target is most demanding and the result therefore most interesting. Requirements derived this way should be quoted with the background model that produced them, and a background correction should be treated as invalidating them rather than perturbing them.
 
@@ -1074,7 +1073,7 @@ For the two orders used in the thesis,
 +J_0\left(\frac{4\pi b\vartheta}{\lambda}\right)
 \right].
 \end{align}
-At large phase, the oscillatory Bessel terms approach zero. The corresponding far-field averages are therefore $1/4$ and $3/16$. This is the origin of the throughput caveat in the main text.
+At large phase, the oscillatory Bessel terms approach zero. The corresponding far-field averages are therefore $1/4$ and $3/16$. This is the origin of the throughput caveat in the main text. These two values belong to the idealized $\sin^{2p}$ responses derived here, not to any particular hardware: the realizable six-aperture design of Section \ref{sec: methods: architectures} has a far-field average of $1/6$ per deep output, not $3/16$, and Section \ref{sec: tse: null order} quotes the realizable values. The distinction matters because the ratio between orders differs, $2/3$ against $3/4$.
 
 \subsection{Uniform-Disk Average and Small-Star Limit}
 For a uniform disk of angular radius $R$, area averaging a radial Bessel term gives, using the Bessel derivative identity \cite{nistdlmf},
@@ -1084,28 +1083,28 @@ For a uniform disk of angular radius $R$, area averaging a radial Bessel term gi
 =\frac{2J_1(aR)}{aR}.
 \label{eq: disk bessel average}
 \end{align}
-The right-hand side is evaluated as one when $aR=0$. With $x=2\pi bR/\lambda$, the disk-averaged responses become
+The right-hand side is evaluated as one when $aR=0$. Applying this to a stellar disk, so that $R=R_\star$, and writing $x_\star=2\pi bR_\star/\lambda$ as defined in Section \ref{sec: methods: affordable}, the disk-averaged responses become
 \begin{align}
 \left\langle T_2\right\rangle_\mathrm{disk}
-&=\frac14\left[1-\frac{2J_1(x)}{x}\right],\\
+&=\frac14\left[1-\frac{2J_1(x_\star)}{x_\star}\right],\\
 \left\langle T_4\right\rangle_\mathrm{disk}
 &=\frac1{16}\left[
-3-\frac{8J_1(x)}{x}+\frac{2J_1(2x)}{2x}
+3-\frac{8J_1(x_\star)}{x_\star}+\frac{2J_1(2x_\star)}{2x_\star}
 \right].
 \end{align}
 The second-order result is not new: Eq. \ref{eq: disk bessel average} applied to the double-Bracewell response reproduces the uniform-disk stellar leakage given by Lay \cite{lay2005imaging}. What the derivation above adds is the extension to arbitrary even null order through the general coefficient sum of Eq. \ref{eq: general null average}, and its reuse inside the one-dimensional radial quadrature for tapered and extended sources in Section \ref{sec: ts reduction: image spec}, neither of which follows from the second-order case alone.
-Using the standard Bessel power series \cite{nistdlmf}, $J_1(x)=x/2-x^3/16+x^5/384+\mathcal{O}(x^7)$, which yields
+Using the standard Bessel power series \cite{nistdlmf}, $J_1(x_\star)=x_\star/2-x_\star^3/16+x_\star^5/384+\mathcal{O}(x_\star^7)$, which yields
 \begin{align}
 \left\langle T_2\right\rangle_\mathrm{disk}
-&=\frac{x^2}{32}-\frac{x^4}{768}+\mathcal{O}(x^6),\\
+&=\frac{x_\star^2}{32}-\frac{x_\star^4}{768}+\mathcal{O}(x_\star^6),\\
 \left\langle T_4\right\rangle_\mathrm{disk}
-&=\frac{x^4}{256}+\mathcal{O}(x^6).
+&=\frac{x_\star^4}{256}+\mathcal{O}(x_\star^6).
 \end{align}
 Consequently,
 \begin{align}
 \frac{\left\langle T_4\right\rangle_\mathrm{disk}}
 {\left\langle T_2\right\rangle_\mathrm{disk}}
-=\frac{x^2}{8}+\mathcal{O}(x^4).
+=\frac{x_\star^2}{8}+\mathcal{O}(x_\star^4).
 \end{align}
 This scaling predicts the near-disappearance of geometric stellar leakage before any mission scheduling is performed. Direct positive quadrature is retained as a numerical safeguard where subtraction of nearly equal Bessel terms could lose precision.
 
