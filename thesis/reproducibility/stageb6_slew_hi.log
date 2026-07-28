@@ -1,0 +1,93 @@
+Processed line 0 of 729927Processed line 10000 of 729927Processed line 20000 of 729927Processed line 30000 of 729927Processed line 40000 of 729927Processed line 50000 of 729927Processed line 60000 of 729927Processed line 70000 of 729927Processed line 80000 of 729927Processed line 90000 of 729927Processed line 100000 of 729927Processed line 110000 of 729927Processed line 120000 of 729927Processed line 130000 of 729927Processed line 140000 of 729927Processed line 150000 of 729927Processed line 160000 of 729927Processed line 170000 of 729927Processed line 180000 of 729927Processed line 190000 of 729927Processed line 200000 of 729927Processed line 210000 of 729927Processed line 220000 of 729927Processed line 230000 of 729927Processed line 240000 of 729927Processed line 250000 of 729927Processed line 260000 of 729927Processed line 270000 of 729927Processed line 280000 of 729927Processed line 290000 of 729927Processed line 300000 of 729927Processed line 310000 of 729927Processed line 320000 of 729927Processed line 330000 of 729927Processed line 340000 of 729927Processed line 350000 of 729927Processed line 360000 of 729927Processed line 370000 of 729927Processed line 380000 of 729927Processed line 390000 of 729927Processed line 400000 of 729927Processed line 410000 of 729927Processed line 420000 of 729927Processed line 430000 of 729927Processed line 440000 of 729927Processed line 450000 of 729927Processed line 460000 of 729927Processed line 470000 of 729927Processed line 480000 of 729927Processed line 490000 of 729927Processed line 500000 of 729927Processed line 510000 of 729927Processed line 520000 of 729927Processed line 530000 of 729927Processed line 540000 of 729927Processed line 550000 of 729927Processed line 560000 of 729927Processed line 570000 of 729927Processed line 580000 of 729927Processed line 590000 of 729927Processed line 600000 of 729927Processed line 610000 of 729927Processed line 620000 of 729927Processed line 630000 of 729927Processed line 640000 of 729927Processed line 650000 of 729927Processed line 660000 of 729927Processed line 670000 of 729927Processed line 680000 of 729927Processed line 690000 of 729927Processed line 700000 of 729927Processed line 710000 of 729927Processed line 720000 of 729927Processed line 729927 of 729927
+
+=== hab2hi | scan slew | target 4.0 yr | n_cpu 2 ===
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_10624_f51a36505f53439e94a813734188213e_6c161c20e19e4d47a5da02da39aad5b4\10624-1915613729072-a4070362021c4eafac0d44311f0d5f05.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_10624_f51a36505f53439e94a813734188213e_6c161c20e19e4d47a5da02da39aad5b4\10624-1915613729072-60e71ec9ecb642eb9b38d111709f2126.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_10624_f51a36505f53439e94a813734188213e_6c161c20e19e4d47a5da02da39aad5b4\10624-1915613729072-f125120448d742a29117a5e0d0bb1b0b.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_10624_f51a36505f53439e94a813734188213e_6c161c20e19e4d47a5da02da39aad5b4\10624-1915613729072-a2b627049b4f47a589675d65e8213908.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_10624_f51a36505f53439e94a813734188213e_6c161c20e19e4d47a5da02da39aad5b4\10624-1915613729072-2af27418537743218c22adc8514d786f.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+
+>> TSE Run No. 1 / 225 (ST=1hrs, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 6.57  -  0.1 yrs observedExperiment_1: 11.11  -  0.2 yrs observedExperiment_1: 15.67  -  0.5 yrs observedExperiment_1: 19.97  -  0.8 yrs observedExperiment_1: 23.95  -  1.2 yrs observedExperiment_1: 28.26  -  1.7 yrs observedExperiment_1: 33.25  -  2.4 yrs observedExperiment_1: 37.78  -  3.2 yrs observedExperiment_1: 42.28  -  4.0 yrs observedExperiment_1: 46.83  -  5.0 yrs observedExperiment_1: 51.56  -  6.1 yrs observedExperiment_1: 56.04  -  7.3 yrs observedExperiment_1: 60.63  -  8.6 yrs observedExperiment_1: 60.87  -  8.6 yrs observed
+ > Upper Bound MT: 29.64 yrs @ 50000 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 12.67  -  0.0 yrs observedExperiment_1: 19.91  -  0.1 yrs observedExperiment_1: 25.94  -  0.2 yrs observedExperiment_1: 31.86  -  0.3 yrs observedExperiment_1: 37.16  -  0.3 yrs observedExperiment_1: 42.01  -  0.4 yrs observedExperiment_1: 47.05  -  0.5 yrs observedExperiment_1: 51.78  -  0.7 yrs observedExperiment_1: 56.6  -  0.8 yrs observedExperiment_1: 61.24  -  0.9 yrs observedExperiment_1: 61.92  -  0.9 yrs observed
+ > Lower Bound MT: 2.33 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 10636 ph/s | Upper Bound: 50000 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 9.14  -  0.1 yrs observedExperiment_1: 14.92  -  0.2 yrs observedExperiment_1: 19.49  -  0.3 yrs observedExperiment_1: 23.87  -  0.4 yrs observedExperiment_1: 28.44  -  0.6 yrs observedExperiment_1: 33.14  -  0.8 yrs observedExperiment_1: 37.64  -  1.1 yrs observedExperiment_1: 42.13  -  1.3 yrs observedExperiment_1: 46.34  -  1.6 yrs observedExperiment_1: 50.5  -  2.0 yrs observedExperiment_1: 55.02  -  2.3 yrs observedExperiment_1: 59.4  -  2.7 yrs observedExperiment_1: 60.32  -  2.8 yrs observed
+ > Retrieved Guess MT: 9.17 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 4199 ph/s | Upper Bound: 10636 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 10.73  -  0.1 yrs observedExperiment_1: 16.69  -  0.1 yrs observedExperiment_1: 21.44  -  0.2 yrs observedExperiment_1: 26.44  -  0.3 yrs observedExperiment_1: 31.51  -  0.5 yrs observedExperiment_1: 35.82  -  0.6 yrs observedExperiment_1: 40.43  -  0.8 yrs observedExperiment_1: 44.79  -  1.0 yrs observedExperiment_1: 49.3  -  1.2 yrs observedExperiment_1: 53.87  -  1.4 yrs observedExperiment_1: 58.28  -  1.6 yrs observedExperiment_1: 61.04  -  1.8 yrs observed
+ > Retrieved Guess MT: 5.54 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 2623 ph/s | Upper Bound: 4199 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 11.3  -  0.1 yrs observedExperiment_1: 17.74  -  0.1 yrs observedExperiment_1: 22.87  -  0.2 yrs observedExperiment_1: 27.84  -  0.3 yrs observedExperiment_1: 32.78  -  0.4 yrs observedExperiment_1: 37.27  -  0.6 yrs observedExperiment_1: 41.97  -  0.7 yrs observedExperiment_1: 46.45  -  0.9 yrs observedExperiment_1: 50.88  -  1.0 yrs observedExperiment_1: 55.34  -  1.2 yrs observedExperiment_1: 60.02  -  1.4 yrs observedExperiment_1: 62.42  -  1.6 yrs observed
+ > Retrieved Guess MT: 4.56 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 2109 ph/s | Upper Bound: 2623 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 11.61  -  0.0 yrs observedExperiment_1: 17.82  -  0.1 yrs observedExperiment_1: 23.22  -  0.2 yrs observedExperiment_1: 28.33  -  0.3 yrs observedExperiment_1: 33.19  -  0.4 yrs observedExperiment_1: 37.6  -  0.5 yrs observedExperiment_1: 42.5  -  0.7 yrs observedExperiment_1: 46.77  -  0.8 yrs observedExperiment_1: 51.09  -  1.0 yrs observedExperiment_1: 55.35  -  1.1 yrs observedExperiment_1: 60.32  -  1.4 yrs observedExperiment_1: 61.99  -  1.4 yrs observed
+ > Retrieved Guess MT: 4.13 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 7
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 1989 ph/s | Upper Bound: 2109 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 11.61  -  0.0 yrs observedExperiment_1: 17.92  -  0.1 yrs observedExperiment_1: 23.42  -  0.2 yrs observedExperiment_1: 28.68  -  0.3 yrs observedExperiment_1: 33.57  -  0.4 yrs observedExperiment_1: 37.91  -  0.5 yrs observedExperiment_1: 42.71  -  0.7 yrs observedExperiment_1: 46.99  -  0.8 yrs observedExperiment_1: 51.28  -  1.0 yrs observedExperiment_1: 55.83  -  1.1 yrs observedExperiment_1: 60.74  -  1.4 yrs observedExperiment_1: 62.84  -  1.4 yrs observed
+ > Retrieved Guess MT: 4.12 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 8
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 1884 ph/s | Upper Bound: 1989 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 11.71  -  0.1 yrs observedExperiment_1: 18.07  -  0.1 yrs observedExperiment_1: 23.53  -  0.2 yrs observedExperiment_1: 28.87  -  0.3 yrs observedExperiment_1: 33.74  -  0.4 yrs observedExperiment_1: 38.15  -  0.5 yrs observedExperiment_1: 42.96  -  0.7 yrs observedExperiment_1: 47.2  -  0.8 yrs observedExperiment_1: 51.43  -  1.0 yrs observedExperiment_1: 55.96  -  1.1 yrs observedExperiment_1: 61.01  -  1.3 yrs observedExperiment_1: 63.04  -  1.4 yrs observed
+ > Retrieved Guess MT: 4.06 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 9
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 1834 ph/s | Upper Bound: 1884 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 11.75  -  0.1 yrs observedExperiment_1: 18.12  -  0.1 yrs observedExperiment_1: 23.56  -  0.2 yrs observedExperiment_1: 28.91  -  0.3 yrs observedExperiment_1: 33.78  -  0.4 yrs observedExperiment_1: 38.25  -  0.5 yrs observedExperiment_1: 43.08  -  0.7 yrs observedExperiment_1: 47.42  -  0.8 yrs observedExperiment_1: 51.65  -  1.0 yrs observedExperiment_1: 56.12  -  1.1 yrs observedExperiment_1: 61.09  -  1.3 yrs observedExperiment_1: 62.89  -  1.4 yrs observed
+ > Retrieved Guess MT: 4.02 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 1834 ph/s (9 iterations)
+
+>> TSE Run No. 2 / 225 (ST=1hrs, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 11.75  -  0.1 yrs observedExperiment_1: 18.12  -  0.1 yrs observedExperiment_1: 23.56  -  0.2 yrs observedExperiment_1: 28.91  -  0.3 yrs observedExperiment_1: 33.75  -  0.4 yrs observedExperiment_1: 38.22  -  0.5 yrs observedExperiment_1: 43.1  -  0.7 yrs observedExperiment_1: 47.39  -  0.8 yrs observedExperiment_1: 51.61  -  1.0 yrs observedExperiment_1: 56.14  -  1.1 yrs observedExperiment_1: 61.06  -  1.3 yrs observedExperiment_1: 62.71  -  1.4 yrs observed
+ > Upper Bound MT: 4.01 yrs @ 1834 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 1834 ph/s (1 iteration)
+
+>> TSE Run No. 3 / 225 (ST=1hrs, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 11.82  -  0.1 yrs observedExperiment_1: 18.01  -  0.1 yrs observedExperiment_1: 23.48  -  0.2 yrs observedExperiment_1: 28.8  -  0.3 yrs observedExperiment_1: 33.67  -  0.4 yrs observedExperiment_1: 38.23  -  0.5 yrs observedExperiment_1: 42.96  -  0.7 yrs observedExperiment_1: 47.25  -  0.8 yrs observedExperiment_1: 51.33  -  1.0 yrs observedExperiment_1: 56.2  -  1.2 yrs observedExperiment_1: 61.01  -  1.4 yrs observed
