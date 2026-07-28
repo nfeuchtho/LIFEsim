@@ -79,6 +79,59 @@ related-work section, the mission-time definition, the local-zodiacal correction
 and its amplification result, the background-scale context, the reproduction
 appendix. See `REVIEW_CHECKLIST.md`.
 
+## UNFINISHED — do these first (2026-07-28, afternoon)
+
+**1. `main.tex` contains a visible placeholder.** Section 6.3 currently reads
+`\textsc{SPEEDUP-NUMBERS-PENDING}`. It compiles and it will print. Either fill it
+from the measurement below or delete the sentence; do not ship it.
+
+**2. The speedup claim was withdrawn and must be re-measured.** A figure of
+"nineteen hours for a pre-rewrite catalogue pass" was committed and is wrong by
+roughly sixty times. Three traps, all of which caught this measurement once:
+
+- *Extrapolation basis.* The cost was extrapolated per planet from a 400-planet
+  subset carrying 2.6 planets per star, while the full catalogue carries 162.
+  **Whether per-star extrapolation is valid depends on whether the code memoizes
+  star-level work**, and the AMS does while the pre-rewrite code may not. Settle
+  it empirically before quoting anything: run the old tree on two subsets with
+  different planets-per-star ratios and see whether runtime tracks planets or
+  stars. Use whichever basis each tree actually exhibits; they may differ, and if
+  they do, a naive comparison flatters the new code by about sixty times.
+- *Image size.* Production yield runs use **512**. `lifesim/ams/settings.yaml`
+  says 100 and `options.py` defaults to 256. The removed grid cost scales as the
+  square of this; the closed-form background does not depend on it at all. There
+  is therefore **no single speedup factor** -- it is a function of grid size, and
+  quoting one number is wrong regardless of its value. Report the scaling.
+- *Cores.* Measure at `n_cpu=8`, not 1. Note separately that the *new* code
+  barely benefits from more workers, because the analytic reduction removed the
+  work the multiprocessing existed for.
+
+Reference point from the author, worth reproducing: production yield runs on
+`fdannert`'s `multiprocessing_v2` branch took roughly fifteen minutes on eight
+cores.
+
+Benchmark script: `lifesim/analysis/test_scripts/bench_speedup.py`, which asserts
+which tree it imported. Usage `bench_speedup.py <tag> <root> [n_planets] [image_size] [n_cpu]`.
+A worktree of the pre-rewrite code is checked out at
+`C:\Users\nicol\AppData\Local\Temp\lifesim-old` (commit `2fd5142`); recreate with
+`git worktree add <path> 2fd5142` and remove with `git worktree remove <path>`.
+
+**3. A reference re-run was in progress.** `--physical --design bracewell4` runs
+the double Bracewell through the same general-combiner path as the fourth-order
+design, so that both halves of Table 5.1 share a provenance instead of mixing a
+production campaign with fresh architecture runs. Results append to
+`thesis/reproducibility/physical_architecture.tsv` with `architecture =
+bracewell4`. Early rows agreed with the production values to about one percent
+(141.5 against 140, 210.7 against 210), the difference being the architecture's
+own baseline constant. **If all twelve rows are present, update Table 5.1's
+reference half and the corresponding block of Appendix B.3.**
+
+**4. The title was changed** to *Iso-Mission-Time Random-Noise Error Budgets for
+LIFE with Arbitrary Nulling and Noise Models*. The previous title ended "Using a
+Null-Order Proxy", which is no longer true. The word "Optimal" from an earlier
+draft was dropped deliberately: nothing is optimised over the space of spectral
+distributions, only three families compared.
+
 ## In flight as of 2026-07-28, early morning
 
 Six jobs are running on the bluesky cluster, launched with `--stage-b` and
