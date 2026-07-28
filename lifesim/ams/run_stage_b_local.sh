@@ -12,7 +12,11 @@
 # half year above its zero-budget time (Hab2Max 3.7191 -> 4.0, Hab2Min 5.0851
 # -> 5.5), not the reference's 5.5 and 7.5.
 #
-#   bash lifesim/ams/run_stage_b_local.sh [n_cpu_per_job]
+# A scan writes nothing but its figure, so an interrupted run loses everything
+# unless its log is replayed. Pass a directory of logs from a previous attempt
+# as the third argument and each scan skips the points already decided there.
+#
+#   bash lifesim/ams/run_stage_b_local.sh [n_cpu_per_job] [ceiling] [resume_dir]
 #
 # Watch progress with:  tail -f thesis/reproducibility/stageb6_mag_hi.log
 
@@ -27,8 +31,15 @@ NCPU="${1:-2}"
 # generous corners -- wide field of regard, short slew -- tolerates far more than
 # the 5000 default, which already censored a first Stage A attempt.
 UPPER="${2:-20000}"
+RESUME="${3:-}"
 OUT=thesis/reproducibility
 mkdir -p "$OUT"
+
+RESUME_ARG=()
+if [ -n "$RESUME" ]; then
+  RESUME_ARG=(--resume-dir "$RESUME")
+  echo ">> resuming from $RESUME"
+fi
 
 # catalogue:target -- each design at its own primary operating point
 declare -A TARGET=( [hi]=4.0 [lo]=5.5 )
@@ -38,10 +49,12 @@ for scan in mag slew linear; do
   for cat in hi lo; do
     log="$OUT/stageb6_${scan}_${cat}.log"
     echo ">> launching $scan/$cat at ${TARGET[$cat]} yr, ${NCPU} workers, ceiling ${UPPER} -> $log"
-    nohup "$PY" lifesim/ams/ablation_throughput.py \
+    # -u so progress reaches the log as it happens; these prints are not
+    # flushed individually and block buffering makes a running scan look stalled.
+    nohup "$PY" -u lifesim/ams/ablation_throughput.py \
         --stage-b "$scan" --catalog "$cat" \
         --targets "${TARGET[$cat]}" --n-cpu "$NCPU" \
-        --upper-start "$UPPER" \
+        --upper-start "$UPPER" "${RESUME_ARG[@]}" \
         > "$log" 2>&1 &
     pids+=($!)
   done

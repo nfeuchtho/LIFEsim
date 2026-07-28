@@ -9,12 +9,54 @@ order to visualize how the required mission time depends on these trade-space
 parameters.
 """
 
+import os
+import re
+
 import matplotlib as mpl
 import cmocean.cm as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import LogNorm
 from scipy.interpolate import RegularGridInterpolator
+
+_RESUME_HEAD = re.compile(r'>> TSE Run No\. (\d+) / (\d+)')
+_RESUME_CUT = re.compile(r'>> Budget CUTOFF found: (\d+) ph/s')
+_RESUME_IMP = re.compile(r'>> Impossible to reach MT target')
+
+
+def recover_scan_progress(log_path):
+    """Recover completed grid points from an interrupted scan's log.
+
+    A scan is hours long and writes nothing but its figure at the end, so an
+    interruption loses everything. Each grid point does announce its run number
+    and then its verdict, and the loop visits points in a fixed order, so the
+    run number alone identifies the cell. Returns ``{run_index: cutoff}`` with
+    run indices zero-based, an infeasible point recorded as ``0.0``.
+
+    Resuming from this is exact rather than approximate: the only state the loop
+    carries between points is ``upper_limits`` and ``j_cutoff``, and both are
+    pure functions of the cutoffs already found, so replaying the recorded
+    values rebuilds them precisely.
+    """
+    done = {}
+    if not log_path:
+        return done
+    if not os.path.exists(log_path):
+        # Silently returning nothing here means an unnoticed full recomputation,
+        # which is hours. Say so instead.
+        print(f'>> WARNING: resume log not found, computing every point: {log_path}',
+              flush=True)
+        return done
+    with open(log_path, errors='replace') as fh:
+        txt = fh.read()
+    for m in _RESUME_HEAD.finditer(txt):
+        tail = txt[m.end(): m.end() + 4000]
+        cut, imp = _RESUME_CUT.search(tail), _RESUME_IMP.search(tail)
+        if cut and (imp is None or cut.start() < imp.start()):
+            done[int(m.group(1)) - 1] = float(cut.group(1))
+        elif imp:
+            done[int(m.group(1)) - 1] = 0.0
+    return done
 from scipy.optimize import fsolve
 
 # Interactive exploration wants a GUI backend, but importing this module must not
@@ -418,7 +460,7 @@ class TradeSpaceExplorer:
         else:
             plt.show()
 
-    def plot_cutoff_for_mag(self, MT_goal, save_path=None):
+    def plot_cutoff_for_mag(self, MT_goal, save_path=None, resume_from=None):
         """
         Maps the iso-mission-time additive leakage budget over limiting magnitude and
         field of regard.
@@ -464,11 +506,26 @@ class TradeSpaceExplorer:
 
         upper_limits = np.ones(RES) * 50_000
 
+        done = recover_scan_progress(resume_from)
+        if done:
+            print(f'>> Resuming: {len(done)} of {RES**2} grid points recovered from '
+                  f'{resume_from}', flush=True)
+
         j_cutoff = RES
         for (i, mag) in enumerate(limmag):
             ams.lim_mag = mag
             for (j, forr) in enumerate(fors):
-                print(f'\n>> TSE Run No. {i*RES + j + 1} / {RES**2} (M={mag:.2f}mag, FoR={round(forr)}°) :')
+                idx = i * RES + j
+                print(f'\n>> TSE Run No. {idx + 1} / {RES**2} (M={mag:.2f}mag, FoR={round(forr)}°) :')
+                if idx in done:
+                    cutoff = done[idx]
+                    cutoffs[i, j] = cutoff
+                    # Reproduce the state the live path would have left behind.
+                    upper_limits[j:][upper_limits[j:] > cutoff] = cutoff
+                    if cutoff == 0:
+                        j_cutoff = min(j_cutoff, j)
+                    print(f'>> Recovered from log: {cutoff:.0f} ph/s')
+                    continue
                 if j >= j_cutoff:
                     print('>> Impossible to reach MT target, no budget permissible.')
                     cutoffs[i, j] = 0
@@ -505,7 +562,7 @@ class TradeSpaceExplorer:
         else:
             plt.show()
 
-    def plot_cutoff_for_slewtime(self, MT_goal, save_path=None):
+    def plot_cutoff_for_slewtime(self, MT_goal, save_path=None, resume_from=None):
         """
         Maps the iso-mission-time additive leakage budget over slew time and field of regard.
 
@@ -546,11 +603,26 @@ class TradeSpaceExplorer:
 
         upper_limits = np.ones(RES) * 50_000
 
+        done = recover_scan_progress(resume_from)
+        if done:
+            print(f'>> Resuming: {len(done)} of {RES**2} grid points recovered from '
+                  f'{resume_from}', flush=True)
+
         j_cutoff = RES
         for (i, slew) in enumerate(slews):
             ams.slew_time = slew * 60 * 60
             for (j, forr) in enumerate(fors):
-                print(f'\n>> TSE Run No. {i*RES + j + 1} / {RES**2} (ST={round(slew)}hrs, FoR={round(forr)}°) :')
+                idx = i * RES + j
+                print(f'\n>> TSE Run No. {idx + 1} / {RES**2} (ST={round(slew)}hrs, FoR={round(forr)}°) :')
+                if idx in done:
+                    cutoff = done[idx]
+                    cutoffs[i, j] = cutoff
+                    # Reproduce the state the live path would have left behind.
+                    upper_limits[j:][upper_limits[j:] > cutoff] = cutoff
+                    if cutoff == 0:
+                        j_cutoff = min(j_cutoff, j)
+                    print(f'>> Recovered from log: {cutoff:.0f} ph/s')
+                    continue
                 if j >= j_cutoff:
                     print('>> Impossible to reach MT target, no budget permissible.')
                     cutoffs[i, j] = 0

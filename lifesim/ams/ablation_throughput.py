@@ -519,7 +519,7 @@ def run_physical(catalogs, upper_start, n_cpu=None, design='triple6'):
     print(f'\nPhysical-architecture results: {PHYSICAL_RESULTS}', flush=True)
 
 
-def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000):
+def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000, resume_dir=None):
     """Two-dimensional operating-point scans with the physical combiner.
 
     Each scan is a grid of endpoint searches -- 15 x 15 for the magnitude and
@@ -558,15 +558,27 @@ def run_stage_b(catalogs, scans, n_cpu=None, upper_start=5000):
             tse = TradeSpaceExplorer(ams, opt, instrument)
             tag = f'phys_{catalog}_{scan}_{str(target).replace(".", "p")}'
             out = os.path.join(PHYSICAL_FIGDIR, tag + '.pdf')
+            # A scan is hours long and writes only its figure, so an interrupted
+            # run loses everything unless its log is replayed back in.
+            # Resolve against REPO_ROOT: importing lifesim changes the working
+            # directory to lifesim/gui, so a relative path given on the command
+            # line would silently resolve to nothing and quietly disable resume.
+            resume_from = None
+            if resume_dir:
+                base = (resume_dir if os.path.isabs(resume_dir)
+                        else os.path.join(REPO_ROOT, resume_dir))
+                resume_from = os.path.join(base, f'stageb6_{scan}_{catalog}.log')
 
             print(f'\n=== hab2{catalog} | scan {scan} | target {target} yr | '
                   f'n_cpu {bus.data.options.other["n_cpu"]} ===', flush=True)
             t0 = time.time()
             if scan == 'mag':
-                tse.plot_cutoff_for_mag(target, save_path=out)
+                tse.plot_cutoff_for_mag(target, save_path=out, resume_from=resume_from)
             elif scan == 'slew':
-                tse.plot_cutoff_for_slewtime(target, save_path=out)
+                tse.plot_cutoff_for_slewtime(target, save_path=out, resume_from=resume_from)
             elif scan == 'linear':
+                # The linear scan is one evaluation per point rather than a
+                # search, so a restart is cheap and no resume path exists.
                 tse.plot_linear_regression_additive(save_path=out)
             else:
                 raise ValueError(f'unknown scan: {scan}')
@@ -583,6 +595,11 @@ def main():
                     help='Repeatable; default both.')
     ap.add_argument('--null-order', type=int, default=4)
     ap.add_argument('--upper-start', type=int, default=5000)
+    ap.add_argument('--resume-dir', type=str, default=None,
+                    help='Directory holding logs from an interrupted --stage-b '
+                         'run. Grid points already decided there are replayed '
+                         'rather than recomputed; the loop state they imply is '
+                         'rebuilt exactly, so resuming is not an approximation.')
     ap.add_argument('--sweep', action='store_true',
                     help='Run the zero-budget throughput sensitivity sweep '
                          'instead of the endpoint-search ablation.')
@@ -651,7 +668,7 @@ def main():
 
     if args.stage_b:
         run_stage_b(catalogs, args.stage_b, n_cpu=args.n_cpu,
-                    upper_start=args.upper_start)
+                    upper_start=args.upper_start, resume_dir=args.resume_dir)
         return
 
     for catalog in catalogs:
