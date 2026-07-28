@@ -66,11 +66,13 @@ Data: `thesis/reproducibility/physical_architecture.tsv`, figures in
 
 ## What this obsoletes
 
-The throughput ablation, the throughput sweep and the break-even criterion
-(Sections 5.7 and parts of 6.1, plus their abstract sentences) all interrogated
-the proxy. The question they answered — what throughput must a fourth-order
-design retain — is now answered by running the design. That material needs
-replacing, not amending.
+The throughput ablation, the throughput sweep and the break-even criterion all
+interrogated the proxy. The question they answered -- what throughput must a
+fourth-order design retain -- is now answered by running the design instead.
+**This replacement is done**: Section 5.7 is now "Comparing Realizable
+Architectures", and the discussion, conclusion and abstract follow it. Their data
+files remain under `thesis/reproducibility/` but are no longer cited by the
+thesis. Do not reinstate them.
 
 ## Still true and still needed
 
