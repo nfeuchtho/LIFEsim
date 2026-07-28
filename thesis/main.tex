@@ -205,7 +205,7 @@ For me, this scientific promise makes the practical definition of LIFE especiall
 
 The reference LIFE studies used here establish the astrophysical source model, signal extraction, and expected detection and characterization performance for a double-Bracewell interferometer \cite{quanz2022life1,dannert2022life2,dannert2025thesis}. An aggregate instrumental random-noise term is not itself new, and Section \ref{sec: intro: prior work} records what this work inherits. What the reference studies do not provide is its inversion: the wavelength-dependent \textit{iso-mission-time} boundary, that is, the set of noise-budget amplitudes that all lead to the same required mission time, for a mechanism-independent aggregate random-noise term. This thesis fills that narrower gap with two linked tools. The \textit{Agnostic Mission Simulator} (AMS) maps a specified noise budget and operating point to mission time; the \textit{Trade Space Explorer} (TSE) inverts that mapping to find the largest tolerated budget amplitude. A controlled change from a second- to a fourth-order transmission proxy then moves the spectral region that tolerates the most added noise from short to long wavelengths. The direction of that change follows from the known suppression of geometric stellar leakage at a deeper null; what the completed exploration establishes is that the reversal survives the full nonlinear scheduling and percentile chain, and that it holds under equal integrated added noise rather than only under equal ramp endpoints.
 
-This work keeps the double Bracewell as its reference geometry. It is mechanism-agnostic only for an aggregate random-noise allowance: individual independent random terms are represented by their common equivalent rate. The result is therefore a bridge quantity. It translates a science-level completion time into an allowed single-output random count rate at a defined \textit{pre-efficiency reference plane}. That plane is the point in the signal chain at which photon rates have been multiplied by the collecting area but not yet by the optical throughput or the detector quantum efficiency, so a rate quoted there is independent of how those two factors are eventually apportioned; Section \ref{sec: intro: params} fixes it precisely. A later engineering allocation can map detector, optical, thermal, and control-noise terms to that plane and test their combined variance against the allowance. This thesis does not perform that subsystem allocation and cannot decide which hardware implementation is easiest. Architecture dependence is parameterized only through the explicitly limited null-order proxy, not through an arbitrary-architecture simulation.
+This work takes the double Bracewell as its reference geometry but is not restricted to it. It is mechanism-agnostic for the aggregate random-noise allowance, in that individual independent random terms are represented by their common equivalent rate, and architecture-agnostic for the instrument, in that the transmission is derived from an arbitrary combiner rather than written in closed form for one array. The result is therefore a bridge quantity. It translates a science-level completion time into an allowed single-output random count rate at a defined \textit{pre-efficiency reference plane}. That plane is the point in the signal chain at which photon rates have been multiplied by the collecting area but not yet by the optical throughput or the detector quantum efficiency, so a rate quoted there is independent of how those two factors are eventually apportioned; Section \ref{sec: intro: params} fixes it precisely. A later engineering allocation can map detector, optical, thermal, and control-noise terms to that plane and test their combined variance against the allowance. This thesis does not perform that subsystem allocation and cannot decide which hardware implementation is easiest. It does, however, evaluate the allowance for more than one realizable array, so the part of the answer that belongs to the mission can be separated from the part that belongs to the instrument.
 
 \subsection{Research Questions} \label{sec: intro: research questions}
 This thesis addresses the following central question.
@@ -460,8 +460,8 @@ The parameters define a forward map from an instrument description to mission ti
 
 The completed TSE runs invert this mapping for null orders two and four. They therefore show both how much aggregate random-noise amplitude is tolerated within each tested shape and how the modeled null order changes the spectral ordering of those allowances.
 
-\chapteropening{Methods}{Building a fixed-reference simulator and a controlled null-order proxy} \label{sec: methods}
-The background has established the quantities mapped from a fixed double-Bracewell reference description to mission time. We now construct that mapping, with a mechanism-agnostic aggregate random-noise allowance and the stated null-order proxy.
+\chapteropening{Methods}{Building a simulator that is agnostic to both the noise mechanism and the array} \label{sec: methods}
+The background has established the quantities mapped from a description of the array to mission time. We now construct that mapping, with a mechanism-agnostic aggregate random-noise allowance and a transmission model that accepts any physically realizable nulling architecture rather than one written in closed form.
 
 \subsection{Variable Parameter Treatment} \label{sec: intro: varparams descr}
 A free interpolation grid would preserve maximum flexibility but create a poorly constrained functional search. Instead, the AMS modifies each modeled photon-flux density $F$ through a multiplicative function $M$ and an additive function $A$:
@@ -733,7 +733,7 @@ Here $A$ is the reported amplitude. The ramp endpoints are imposed shape paramet
         \includegraphics[width=\linewidth]{images/tse/final/no2_hi_long_5p5.pdf}
         \caption{Long-weighted}
     \end{subfigure}
-    \caption{Final null-order-two Hab2Max budgets at the common operating point and 5.5-year target. Stellar leakage dominates the short-wave astrophysical background, so the short-weighted ramp admits the largest endpoint. The titles inside the panels name each ramp by the direction it travels across the band, whereas the subcaptions name it by the end that carries the allowance; a ramp labelled ``Long-Short'' inside a panel rises towards short wavelengths and is therefore the short-weighted family.}
+    \caption{Final budgets for the reference double-Bracewell array, Hab2Max at the common operating point and 5.5-year target. Stellar leakage dominates the short-wave astrophysical background, so the short-weighted ramp admits the largest endpoint. The titles inside the panels name each ramp by the direction it travels across the band, whereas the subcaptions name it by the end that carries the allowance; a ramp labelled ``Long-Short'' inside a panel rises towards short wavelengths and is therefore the short-weighted family.}
     \label{fig: tse budget shapes no2}
 \end{figure}
 
@@ -741,23 +741,23 @@ Here $A$ is the reported amplitude. The ramp endpoints are imposed shape paramet
     \centering
     \begin{subfigure}{.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_flat_5p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_flat_5p5.pdf}
         \caption{Flat}
     \end{subfigure}
     \hfill
     \begin{subfigure}{.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_short_5p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_short_weighted_5p5.pdf}
         \caption{Short-weighted}
     \end{subfigure}
 
     \vspace{0.6em}
     \begin{subfigure}{.48\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_long_5p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_long_weighted_5p5.pdf}
         \caption{Long-weighted}
     \end{subfigure}
-    \caption{Final null-order-four proxy budgets for the same Hab2Max operating point and target as Fig. \ref{fig: tse budget shapes no2}. Geometric stellar leakage is nearly absent. The long-weighted ramp now admits the largest endpoint because the remaining background is dominated by zodiacal emission toward long wavelengths. Panel titles follow the same direction-of-travel convention noted for Fig. \ref{fig: tse budget shapes no2}.}
+    \caption{Final budgets for the six-aperture fourth-order design, at the same Hab2Max operating point and target as Fig. \ref{fig: tse budget shapes no2} and at equal total collecting area. Geometric stellar leakage lies on the floor across the whole band, so the short-wavelength background no longer conceals added noise while the rising local-zodiacal term at long wavelengths still does; the long-weighted ramp consequently admits the largest endpoint. As in Fig. \ref{fig: tse budget shapes no2}, the curves are those of one catalog target rather than an ensemble average.}
     \label{fig: tse budget shapes no4}
 \end{figure}
 
@@ -765,24 +765,26 @@ Here $A$ is the reported amplitude. The ramp endpoints are imposed shape paramet
 \centering
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
-Catalog & Mission-time target & Null order & Flat & Short-weighted & Long-weighted \\
-        & [yr]      &            & \multicolumn{3}{c}{Amplitude [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} \\
+Catalog & Target & Architecture & Flat & Short-weighted & Long-weighted \\
+        & [yr]   &              & \multicolumn{3}{c}{Amplitude [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} \\
 \midrule
-Hab2Max & 5.5 & 2 & 140 & 300  & 210  \\
-Hab2Max & 5.5 & 4 & 640 & 1080 & 1470 \\
-Hab2Max & 6.0 & 2 & 610 & 1300 & 1090 \\
-Hab2Max & 6.0 & 4 & 940 & 1830 & 2240 \\
-Hab2Min & 7.5 & 2 & 65  & 200  & 150  \\
-Hab2Min & 7.5 & 4 & 590 & 1000 & 1260 \\
-Hab2Min & 8.0 & 2 & 460 & 970  & 810  \\
-Hab2Min & 8.0 & 4 & 790 & 1460 & 1860 \\
+Hab2Max & 5.5 & Double Bracewell     & 140 & \textbf{300}  & 210  \\
+Hab2Max & 5.5 & Triple nuller        & 140 & 180  & \textbf{350}  \\
+Hab2Max & 6.0 & Double Bracewell     & 610 & \textbf{1300} & 1090 \\
+Hab2Max & 6.0 & Triple nuller        & 390 & 700  & \textbf{890}  \\
+Hab2Min & 7.5 & Double Bracewell     & 65  & \textbf{200}  & 150  \\
+Hab2Min & 7.5 & Triple nuller        & 130 & 210  & \textbf{310}  \\
+Hab2Min & 8.0 & Double Bracewell     & 460 & \textbf{970}  & 810  \\
+Hab2Min & 8.0 & Triple nuller        & 220 & 380  & \textbf{640}  \\
 \bottomrule
 \end{tabular}
-\caption{Final amplitudes at the common operating point. A ramp value is its non-zero imposed endpoint. These endpoint parameters compare sensitivity within the tested families; they are not common integrated-noise measures or engineering-cost rankings.}
+\caption{Final amplitudes at the common operating point, for the second-order reference array and for the six-aperture fourth-order design of Section \ref{sec: methods: architectures}, each sized to its own response peak and at equal total collecting area. The largest endpoint in each row is set in bold: the short-weighted family for the reference, the long-weighted family for the deeper null, without exception. A ramp value is its non-zero imposed endpoint. These endpoint parameters compare sensitivity within the tested families; they are not common integrated-noise measures or engineering-cost rankings. Reference values are those of the production campaign; fourth-order values are from the architecture runs recorded in Appendix \ref{app: reproducibility}.}
 \label{tab: budget shapes}
 \end{table}
 
-The ordering is consistent across catalogs and both Hab2Max mission-time targets. At null order two, the short-weighted endpoint is largest. At null order four, the long-weighted endpoint is largest. Relaxing the target time also increases the allowance sharply: for example, the Hab2Max flat budget grows from 140 to 610 at order two and from 640 to 940 at order four when the target changes from 5.5 to 6\,yr. For Hab2Min, the corresponding flat allowances rise from 65 to 460 and from 590 to 790 when the target changes from 7.5 to 8\,yr.
+The ordering is consistent across both catalogs and both mission-time targets. For the reference array the short-weighted endpoint is largest; for the deeper null the long-weighted endpoint is largest. There are no exceptions in the eight rows.
+
+Relaxing the target time increases the allowance sharply for either architecture, but not by the same factor. The Hab2Max flat budget grows from 140 to 610 for the reference and from 140 to 390 for the triple nuller when the target moves from 5.5 to 6\,yr; for Hab2Min it rises from 65 to 460 and from 130 to 220 between 7.5 and 8\,yr. The reference therefore converts additional schedule into tolerated noise more readily, which is the counterpart of the result in Section \ref{sec: tse: architecture}: the deeper null wins where the schedule is tight and the best targets set the pace, and loses where the schedule is loose and the marginal targets do.
 
 A ramp endpoint and a flat amplitude are not directly comparable quantities, so it is worth checking that the reversal is not an artifact of the chosen reporting convention. A ramp rising linearly from zero to $A$ across the band has mean $A/2$, so a flat budget of $A/2$ adds the same band-integrated noise; the integral-neutral ramp endpoint is therefore twice the flat amplitude in the same row. Measured against that reference, the short-weighted endpoint exceeds the neutral value at null order two in all four rows, and the long-weighted endpoint exceeds it at null order four in all four rows. The reversal therefore holds under equal integrated added noise, not only under equal endpoints.
 
@@ -804,12 +806,12 @@ The two-dimensional scans in Fig. \ref{fig: tse linear additive} confirm that th
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_linear.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_linear_5p5.pdf}
         \caption{Order 4, Hab2Max}
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_lo_linear.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_lo_linear_7p5.pdf}
         \caption{Order 4, Hab2Min}
     \end{subfigure}
     \caption{Required mission time over independent short- and long-wavelength ramp endpoints at magnitude 7, FoR $65^\circ$, and slew 12\,h. Black curves mark integer mission-time contours. The preferred axis reverses between null orders in both catalogs.}
@@ -824,7 +826,7 @@ The result also does not provide independent limits at individual wavelengths. F
 \subsection{Dependence on the Agnostic Parameters}
 The remaining scans use the flat budget and vary two agnostic parameters at a time. They therefore show operating-point dependence of the flat allowance and cannot automatically be transferred to either ramp family.
 
-Figure \ref{fig: tse iso magfor} varies limiting magnitude and field of regard at fixed 12\,h slew time. In all four panels, widening the field of regard has the larger effect because it admits more potential targets. The magnitude dependence largely saturates near the adopted value of 7, especially for Hab2Max: once most high-SNR qualifying stars pass the magnitude cut, admitting still fainter targets adds little to the optimized top-50 sample. Field of regard acts differently because it removes entire sky regions irrespective of target brightness. The fourth-order proxy generally permits a larger flat allowance, but the same qualitative filter dependence remains.
+Figure \ref{fig: tse iso magfor} varies limiting magnitude and field of regard at fixed 12\,h slew time. In all four panels, widening the field of regard has the larger effect because it admits more potential targets. The magnitude dependence largely saturates near the adopted value of 7, especially for Hab2Max: once most high-SNR qualifying stars pass the magnitude cut, admitting still fainter targets adds little to the optimized top-50 sample. Field of regard acts differently because it removes entire sky regions irrespective of target brightness. The two architectures share that qualitative dependence but not its extent: the fourth-order design remains feasible at a field of regard several degrees more restrictive than the reference can tolerate, while admitting a smaller allowance once the constraint is relaxed. Its contours are also more nearly vertical, so for that array the requirement is set by pointing access almost alone.
 
 \begin{figure}[htbp]
     \centering
@@ -840,12 +842,12 @@ Figure \ref{fig: tse iso magfor} varies limiting magnitude and field of regard a
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_magfor_5p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_mag_5p5.pdf}
         \caption{Order 4, Hab2Max, 5.5\,yr}
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_lo_magfor_7p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_lo_mag_7p5.pdf}
         \caption{Order 4, Hab2Min, 7.5\,yr}
     \end{subfigure}
     \caption{Final iso-mission-time flat-budget scans over limiting magnitude and field of regard, with slew time fixed at 12\,h. Dark regions have no admissible positive budget at the corresponding operating point.}
@@ -868,12 +870,12 @@ Figure \ref{fig: tse iso slewfor} varies slew time and field of regard at fixed 
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_hi_slewfor_5p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_hi_slew_5p5.pdf}
         \caption{Order 4, Hab2Max, 5.5\,yr}
     \end{subfigure}
     \begin{subfigure}{.49\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{images/tse/final/no4_lo_slewfor_7p5.pdf}
+        \includegraphics[width=\linewidth]{images/tse/physical/phys_lo_slew_7p5.pdf}
         \caption{Order 4, Hab2Min, 7.5\,yr}
     \end{subfigure}
     \caption{Final iso-mission-time flat-budget scans over slew time and field of regard at limiting magnitude 7. Dark regions have no admissible positive budget.}
@@ -890,27 +892,28 @@ Figure \ref{fig: tse iso slewfor} varies slew time and field of regard at fixed 
 \subsection{Catalog Dependence}
 The Hab2Min and Hab2Max calculations show the same qualitative shape ordering and the same null-order inversion. Hab2Min requires longer mission-time targets and generally returns smaller allowances at otherwise matched operating parameters, consistent with its less favorable planet population. Because the adopted mission-time targets differ between catalogs, the numerical difference cannot be attributed to $\eta_\oplus$ alone. Figure \ref{fig: tse yield} illustrates the field-of-regard filter for one Hab2Max selection and is not evidence of catalog independence.
 
-\subsection{Why the Spectral Preference Reverses at Null Order Four} \label{sec: tse: null order}
+\subsection{Why the Spectral Preference Reverses at a Deeper Null} \label{sec: tse: null order}
 Suppression of stellar leakage is the leading physical interpretation of the completed order-four comparison. Equations \ref{eq: leakage small star t2} and \ref{eq: leakage small star} together predict a fourth-to-second-order ratio of approximately $x^2/8$. Across the 4505 unique catalog stars, $x=2\pi bR_\star/\lambda$ remains above 0.005 over the modeled band, outside the cancellation-sensitive numerical regime of the direct Bessel sum. At 10\,$\upmu$m the median leakage ratio is about $6.3\times10^{-5}$; at 18.5\,$\upmu$m it is about $1.9\times10^{-5}$. Direct positive quadrature agrees with the analytic order-four response over the complete catalog range.
 
 This suppression removes the high short-wave stellar-noise floor visible in Fig. \ref{fig: tse budget shapes no2}. Added short-wave variance then becomes comparatively expensive. The remaining local- and exo-zodiacal backgrounds dominate toward longer wavelengths, so a larger long-weighted endpoint can be hidden beneath their photon noise. This explanation is consistent with the reversal in Table \ref{tab: budget shapes} and Fig. \ref{fig: tse linear additive}; however, no ablation run isolates leakage suppression from the simultaneous extended-source and planet-throughput changes.
 
-Table \ref{tab: null order synthesis} collects the effects that change between the two orders alongside their consequences for the reported allowance. The result is physical within the proxy but not a standalone architecture prediction. Without throughput normalization, the far-field average of the null envelope changes from $1/4$ at order two to $3/16$ at order four. Local-zodiacal transmission therefore falls by approximately 25\%, and the off-axis planet response also changes. The order-four result consequently combines deeper central suppression with a different throughput distribution while holding all other instrument parameters fixed.
+Table \ref{tab: null order synthesis} collects the effects that change between the two architectures alongside their consequences for the reported allowance. A deeper null does not act on the stellar term alone. The far-field average of the response falls from $1/4$ to $1/6$, which is one over the aperture count in each case and the general result for a lossless combiner, so every background term is transmitted less; the uniform local-zodiacal contribution is measured to scale between the two by $0.750$, exactly the ratio of the far-field averages of the underlying envelopes. Superposed on that common reduction, and only for the resolved stellar disk, the fourth-order dependence removes the leakage almost entirely.
 
 \begin{table}[htbp]
 \centering
 \begin{tabular}{@{}p{0.28\linewidth}p{0.27\linewidth}p{0.34\linewidth}@{}}
 \toprule
-Effect & Order-two reference & Order-four proxy consequence \\
+Effect & Double Bracewell, 4 apertures & Triple nuller, 6 apertures \\
 \midrule
 Near-axis stellar leakage & Leading term $x^2/32$ & Leading term $x^4/256$; median ratio $6.3\times10^{-5}$ at 10\,$\upmu$m \\
-Extended-source envelope average & $1/4$ & $3/16$, a 25\% reduction before other weighting \\
+Far-field response average & $1/4$ & $1/6$, i.e. one over the aperture count \\
+Light in the chopping pair & 50\,\% (two of four outputs) & 33\,\% (two of six outputs) \\
 Dominant short-wave background & Stellar leakage & Leakage largely removed; added short-wave variance becomes more costly \\
 Least damaging tested ramp & Short-weighted & Long-weighted \\
-Interpretation & Double-Bracewell reference & Controlled response proxy, not a realizable architecture \\
+Zero-budget mission time, Hab2Max & 5.32\,yr & 4.98\,yr \\
 \bottomrule
 \end{tabular}
-\caption{Synthesis of the physical and numerical changes behind the null-order inversion.}
+\caption{Synthesis of the physical changes between the reference array and the six-aperture fourth-order design, and their consequences for the reported allowance.}
 \label{tab: null order synthesis}
 \end{table}
 
@@ -943,6 +946,8 @@ The gain does not come from the population as a whole. Taken over every qualifyi
 The mechanism is the one the null order was meant to exploit. The best targets are the nearest and brightest stars, which are also the most resolved, so they suffer most from the geometric stellar leakage that a second-order null cannot suppress. The deeper null removes it. Faint distant targets are background-limited instead, where a lower far-field transmission costs and the absent leakage was never the constraint. A mission observes the top of the distribution, not its median, and that is why a design that is worse on average completes the programme sooner.
 
 The spectral preference established in Section \ref{sec: tse: null order} survives the substitution. Across both catalogs and both mission-time targets the long-weighted family remains the most tolerant, by factors of $1.28$ to $1.91$, and exceeds the integral-neutral reference of twice the flat amplitude in every case. The reversal is therefore a property of a buildable architecture and not of an idealized response.
+
+The operating-point scans of Figs. \ref{fig: tse iso magfor} and \ref{fig: tse iso slewfor} carry the same message in a second form. Against the reference, the fourth-order panels remain feasible at a field of regard some four degrees more restrictive, while the allowance they admit at a generous field of regard is smaller by roughly a factor of two. Their contours are also more nearly vertical, so for that architecture the requirement is governed by pointing access almost to the exclusion of limiting magnitude.
 
 Two boundaries limit the comparison. The equal-area convention means the six-aperture design is six smaller collectors rather than six of the reference size, and whether that is the appropriate systems-level trade is not settled here. And two architectures are a comparison, not a survey: Eq. \ref{eq: general transmission} admits an arbitrary combiner, and the space of designs that satisfy the chopping requirement has not been explored.
 \chapteropening{Discussion}{Interpreting the allowances, the null-order inversion, and their boundaries}
@@ -981,7 +986,7 @@ Table \ref{tab: ranked limitations} ranks the remaining boundaries by their abil
 \toprule
 Priority & Limitation & Consequence \\
 \midrule
-1 & Unnormalized null-order proxy & The order-four comparison combines deeper suppression with changed planet and extended-source throughput; it is not a design prediction. \\
+1 & Two architectures, not a survey & The requirement is shown to depend on the array, but only two designs are evaluated, and total collecting area is held equal so that aperture count and collector size do not trade against each other. \\
 2 & Scheduler boundary behavior & Strict completion tests require at least 51 detections in at least 91 universes, while empty universes are omitted. These choices can bias mission time in opposite directions. \\
 3 & Aggregate random-noise model & Correlated instability, calibration bias, and systematic error cannot be allocated from $N_I$ and may impose stricter requirements. \\
 4 & Sampling uncertainty & The 100 universes resolve only a sampled 90th percentile. Its 95.6\% distribution-free rank interval spans order statistics 84--96, but saved outputs do not retain the corresponding time amplitudes. \\
@@ -996,12 +1001,12 @@ Priority & Limitation & Consequence \\
 The first limitation sets the strongest boundary on the central comparison. Order four is an impact study of a steeper central null under retained assumptions, not a design prediction. It provides no realizable beam-combination matrix, aperture count, optical-loss model, instability-noise calculation, or control requirement. Likewise, the point estimates inherit both search tolerance and finite-universe rank uncertainty; neither is recoverable as a single symmetric error bar from the retained products.
 
 \subsection{Outlook}
-The next scientific step is not another run of the present trade space, but a more physical mapping. A realizable higher-order combiner should replace the $\sin^n$ proxy, including its aperture geometry, normalized throughput, optical losses, and instability terms. The aggregate allowance should then be allocated to concrete subsystems at the same reference plane.
+The next scientific step is a wider survey of architectures rather than another run of the present trade space. Two designs establish that the requirement depends on the array, but not how it depends on it: the transmission model accepts any combiner, and the space of designs that satisfy the chopping requirement is unexplored. Kernel nullers formulated for arbitrary aperture number \cite{laugier2020kernel} are the natural family in which to conduct that survey, and the equal-area convention adopted here should be relaxed so that aperture count and collector size trade against each other explicitly. Optical losses and instability terms, which no design in this work carries, belong in the same extension. The aggregate allowance should then be allocated to concrete subsystems at the same reference plane.
 
 Before another production campaign, the scheduler should use non-strict completion criteria consistent with the stated experiment, retain failed universes explicitly, and save every per-universe component time. This would permit bootstrap or rank-based uncertainty intervals in years and separate detection, orbit, characterization, and slew sensitivities. Extending the analytic framework to inclined or asymmetric exozodiacal disks would remove the next important symmetry assumption. These steps would turn the present defensible impact study into a stronger architecture-level requirement analysis.
 
 \chapteropening{Conclusion}{What the completed simulations establish---and what remains architecture-dependent}
-The completed AMS and TSE answer the central research question for every tested budget family and operating point. Under the analytic background model of Section \ref{sec: ts reduction: image spec}, the nominal second-order null permits primary flat allowances of 140\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and 65 for Hab2Min at 7.5\,yr. The order-four proxy raises them to 640 and 590, while the least damaging tested ramp reverses from short-weighted to long-weighted.
+The completed AMS and TSE answer the central research question for every tested budget family and operating point. Under the analytic background model of Section \ref{sec: ts reduction: image spec}, the nominal second-order null permits primary flat allowances of 140\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ for Hab2Max at 5.5\,yr and 65 for Hab2Min at 7.5\,yr. A realizable six-aperture fourth-order design, at equal collecting area, permits 140 and 130 while completing the programme about six percent sooner, and the least damaging tested ramp reverses from short-weighted to long-weighted.
 
 The sub-questions close as follows:
 \begin{itemize}
@@ -1039,7 +1044,7 @@ One destructive output contains this envelope multiplied by an imaging factor $\
 \frac{1}{2\pi}\int_0^{2\pi}
 \cos(z\cos\varphi)\,\mathrm{d}\varphi=J_0(z)
 \end{align}
-gives Eq. \ref{eq: general null average}. The reduction is exact for the proxy response and any circularly symmetric surface-brightness profile. It is not an approximation based on rapid rotation.
+gives Eq. \ref{eq: general null average}. The reduction is exact for this response and any circularly symmetric surface-brightness profile. It is not an approximation based on rapid rotation. The same one-dimensional structure holds for an arbitrary combiner, where the rotation average is obtained numerically rather than in closed form (Section \ref{sec: methods: affordable}); the closed form given here is the special case that admits a Bessel series.
 
 For the two orders used in the thesis,
 \begin{align}
@@ -1126,7 +1131,7 @@ The completed products are sufficient to reproduce the reported contour endpoint
     \item the selected target identifiers and one-hour SNRs;
     \item the lower and upper amplitude bracket and the stopping reason;
     \item the exact catalog, source-model, and scheduler configuration;
-    \item the proxy null order and whether throughput was normalized.
+    \item the architecture evaluated, as aperture positions and combiner matrix, together with the baseline constant derived from its own response.
 \end{itemize}
 
 \subsection{Data and Source Provenance}
@@ -1159,7 +1164,9 @@ The amplitudes of Table \ref{tab: budget shapes} were produced during a campaign
 
 That last quantity matters for interpretation. The search stops once the evaluated mission time lies within 0.05\,yr of the target, and it returns its last accepted amplitude, so a reported value belongs to the achieved time rather than to the nominal target. Across the twenty-four reruns the residuals span $-0.045$ to $+0.045$\,yr, filling the stopping tolerance almost exactly. Converting a residual into an amplitude uncertainty requires the local slope of amplitude against mission time, which the secant between each catalog's two targets estimates as roughly $6\times10^{2}$ to $1.5\times10^{3}$\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$ per year. The stopping tolerance therefore corresponds to an amplitude uncertainty of order 20 to 80\,ph\,s$^{-1}$\,$\upmu$m$^{-1}$, depending on the row. Because the response is not linear in mission time, these figures indicate the scale of the search uncertainty rather than a calibrated interval, and they are the reason no reported amplitude should be read to better than its leading two digits.
 
-Of the twenty-four amplitudes in Table \ref{tab: budget shapes}, twenty reproduce to the precision reported there and four differ by a single rounding step: the Hab2Max six-year order-four short-weighted value, the Hab2Min seven-and-a-half-year flat values at both orders, and the Hab2Min seven-and-a-half-year order-two long-weighted value. All four differences are smaller than the search uncertainty estimated above, and no difference exceeds one step. The Hab2Min eight-year rows reproduce throughout; those values had previously been recovered from vector plots rather than from retained numerical output, and are now re-derived directly from the code.
+For the reference array, ten of the twelve amplitudes reproduce the production campaign to the precision reported in Table \ref{tab: budget shapes}, and two differ by a single rounding step, both at the Hab2Min seven-and-a-half-year target where the allowance is smallest and the fixed time tolerance therefore translates into the largest relative uncertainty. No difference exceeds one step. The Hab2Min eight-year values, which had previously been recovered from vector plots rather than from retained numerical output, are re-derived here directly from the code.
+
+The fourth-order rows carry a stronger statement, because they were computed twice on unrelated hardware. Repeating the six Hab2Max searches on a compute cluster---a different machine, operating system, worker count and major version of the numerical library---reproduced the endpoints obtained locally to between $2.6\times10^{-12}$ and $4.1\times10^{-11}$ in relative terms. Since the search terminates on a time tolerance rather than converging to machine precision, that agreement is not automatic, and it establishes that the reported amplitudes are properties of the model rather than of the arithmetic environment that evaluated it.
 
 The reproduction also exposes an inconsistency in the reporting convention rather than in the calculation. Table \ref{tab: budget shapes} rounds most amplitudes to the nearest ten, but the smallest entry is given as 65, which is neither the nearest ten nor two significant figures of the reproduced 62.2. Small amplitudes are where the fixed time tolerance translates into the largest relative uncertainty, so they are also where a rounding convention matters least and misleads most; the values in Table \ref{tab: reproduction} should be preferred where the two disagree.
 
@@ -1171,17 +1178,17 @@ The reproduction also exposes an inconsistency in the reporting convention rathe
 Catalog & Target & Flat & Short-weighted & Long-weighted & Achieved time \\
         & [yr] & \multicolumn{3}{c}{Amplitude [ph\,s$^{-1}$\,$\upmu$m$^{-1}$]} & [yr] \\
 \midrule
-\multicolumn{6}{@{}l}{\textit{Null order two}} \\
+\multicolumn{6}{@{}l}{\textit{Double Bracewell, four apertures}} \\
 Hab2Max & 5.5 & 142.4 & 298.3 & 210.5 & 5.455--5.541 \\
 Hab2Max & 6.0 & 610.3 & 1303.1 & 1089.3 & 5.962--6.045 \\
 Hab2Min & 7.5 & 62.2 & 197.9 & 156.7 & 7.484--7.528 \\
 Hab2Min & 8.0 & 462.8 & 973.9 & 810.1 & 7.992--8.037 \\
 \midrule
-\multicolumn{6}{@{}l}{\textit{Null order four}} \\
-Hab2Max & 5.5 & 641.2 & 1080.1 & 1474.0 & 5.456--5.519 \\
-Hab2Max & 6.0 & 943.9 & 1840.7 & 2240.5 & 6.011--6.034 \\
-Hab2Min & 7.5 & 596.5 & 1001.2 & 1263.5 & 7.490--7.531 \\
-Hab2Min & 8.0 & 786.2 & 1458.3 & 1864.1 & 7.977--8.037 \\
+\multicolumn{6}{@{}l}{\textit{Double triple nuller, six apertures}} \\
+Hab2Max & 5.5 & 138.1 & 181.4 & 347.1 & 5.511--5.554 \\
+Hab2Max & 6.0 & 394.5 & 698.1 & 890.5 & 5.994--6.037 \\
+Hab2Min & 7.5 & 129.3 & 210.3 & 307.8 & 7.488--7.523 \\
+Hab2Min & 8.0 & 221.9 & 381.1 & 641.2 & 7.925--8.028 \\
 \bottomrule
 \end{tabular}
 \caption{Reproduction of the final amplitudes of Table \ref{tab: budget shapes} from a committed code state at the identical operating point. Values are the raw search results, unrounded. The final column gives the range of mission times actually delivered by the three amplitudes in that row; the search stops within 0.05\,yr of the target, so a reported amplitude belongs to its achieved time rather than to the nominal target.}
