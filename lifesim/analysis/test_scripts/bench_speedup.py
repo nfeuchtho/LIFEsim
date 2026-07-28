@@ -12,6 +12,8 @@ import os, sys, time
 TAG = sys.argv[1]
 ROOT = os.path.abspath(sys.argv[2])
 N_PLANETS = int(sys.argv[3]) if len(sys.argv) > 3 else 400
+IMG = int(sys.argv[4]) if len(sys.argv) > 4 else 100
+NCPU = int(sys.argv[5]) if len(sys.argv) > 5 else 8
 
 sys.path.insert(0, ROOT)
 import matplotlib
@@ -33,7 +35,7 @@ bus.data.options.set_scenario('baseline')
 bus.data.catalog_from_ppop(input_path=CAT)
 
 # identical instrument settings for both trees
-bus.data.options.set_manual(image_size=256, spec_res=20, n_cpu=1)
+bus.data.options.set_manual(image_size=IMG, spec_res=20, n_cpu=NCPU)
 
 instrument = lifesim.Instrument(name='inst')
 transm = lifesim.TransmissionMap(name='transm')
@@ -52,7 +54,7 @@ cat = bus.data.catalog
 bus.data.catalog = cat.iloc[:N_PLANETS].reset_index(drop=True)
 n = len(bus.data.catalog)
 n_stars = bus.data.catalog.nstar.nunique()
-print(f'[{TAG}] {n} planets, {n_stars} unique stars, image_size=256', flush=True)
+print(f'[{TAG}] {n} planets, {n_stars} unique stars, image_size={IMG}, n_cpu={NCPU}', flush=True)
 
 t0 = time.time()
 instrument.get_snr()
@@ -60,4 +62,8 @@ dt = time.time() - t0
 
 print(f'[{TAG}] Instrument.get_snr: {dt:.2f} s '
       f'({1000*dt/n:.2f} ms/planet, {1000*dt/n_stars:.2f} ms/star)', flush=True)
-print(f'[{TAG}] extrapolated to 729,927 planets: {dt/n*729927/60:.1f} min', flush=True)
+# The costly work is per star -- transmission map and background integrals --
+# and amortizes over that star's planets. The subset here has far fewer planets
+# per star than the full catalog (162), so extrapolating per planet would
+# overstate the full-catalog cost by that ratio. Extrapolate per star.
+print(f'[{TAG}] extrapolated to 4505 stars: {dt/n_stars*4505/60:.2f} min', flush=True)
