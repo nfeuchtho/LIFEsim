@@ -1,4 +1,89 @@
-# Handover — state as of 2026-07-28
+# Handover — state as of 2026-07-28 (evening: the aperture-sizing correction)
+
+## READ THIS FIRST — the headline architecture result changed sign, twice
+
+Grading round 3 (`thesis/reviews/ROUND3_SYNTHESIS.md`, grades 5.00 / 5.25 /
+5.25) exposed a real physics error, since fixed.
+
+`instrument.py:92-105` derives the collecting area **and** the single-aperture
+field of view from the same `diameter` option, and `settings.yaml` pinned
+`num_apertures: 4, diameter: 4.0` for every run. The six-aperture design was
+therefore charged the four-aperture array's area while keeping a 4 m collector's
+beam. That is no physical instrument. `ams.py` now takes the aperture count from
+the architecture, so area and field of view always come from the same
+collectors.
+
+Three self-consistent readings exist, and the published one was none of them:
+
+| Convention | Area | Hab2Max zero-budget | vs reference |
+|---|---|---|---|
+| Reference, 4 x 4.0 m | 50.3 m^2 | 5.3193 yr | -- |
+| **As published (wrong)** | 50.3 m^2 | 4.9800 yr | -6.4 % |
+| Equal total area, 6 x 3.266 m | 50.3 m^2 | 6.1823 yr | **+16.2 %** |
+| **Chosen: equal collector size, 6 x 4.0 m** | 75.4 m^2 | **3.7191 yr** | **-30.1 %** |
+
+The author chose the last. The thesis now states the area cost explicitly and
+gives the equal-area number as a bracketing contrast, so the schedule gain is
+attributed to aperture count rather than to null depth.
+
+Hab2Min: reference 7.4097, six-aperture 5.0851 yr (-31.4 %).
+
+## Operating points now follow a stated rule
+
+The lowest half year above that configuration's own zero-budget time, with the
+second target half a year above the first. That rule reproduces the existing
+5.5/6.0 and 7.5/8.0 exactly, and gives **4.0/4.5** (Hab2Max) and **5.5/6.0**
+(Hab2Min) for the six-aperture design. Running the deeper null at the
+reference's targets puts it far from its own boundary and **saturates the
+search**: a first attempt returned exactly the 5000 ph/s/um ceiling. Stage B now
+runs at ceiling 20000.
+
+## Results after the correction
+
+Both architectures from the same general-combiner provenance:
+
+| Catalog | Architecture | Target | Flat | Short-wt | Long-wt |
+|---|---|---|---|---|---|
+| Hab2Max | Bracewell | 5.5 | 142 | **300** | 211 |
+| Hab2Max | Bracewell | 6.0 | 584 | **1300** | 1090 |
+| Hab2Max | Triple nuller | 4.0 | 241 | 403 | **557** |
+| Hab2Max | Triple nuller | 4.5 | 702 | 1380 | **1760** |
+| Hab2Min | Bracewell | 7.5 | 60.6 | **198** | 157 |
+| Hab2Min | Bracewell | 8.0 | 461 | **855** | 812 |
+| Hab2Min | Triple nuller | 5.5 | 177 | 226 | **602** |
+| Hab2Min | Triple nuller | 6.0 | 409 | 734 | **1310** |
+
+- **The spectral reversal survives, 8/8.** This is the central result and it is
+  robust to the sizing convention.
+- Integral-neutral test: clean 4/4 at order four. At order two it **fails** for
+  Hab2Min 8.0 yr (855 against neutral 923) where the production run gave 970 --
+  two runs agreeing to 1.2e-4 in mission time disagree by 12 % here, so the
+  verdict flips. Reported as the amplification result changing a conclusion.
+- **Per-target mechanism re-measured and the old reading withdrawn.** Median SNR
+  ratio is now **1.31**, not 0.93, and only 8 % of targets are worse, not 71 %.
+  Top-50 gain 1.54. Since area alone gives sqrt(1.5)=1.22, the excess at the top
+  is what null depth buys. `snr_shift_architectures.py`.
+- Section 6.1 background is now per-architecture and realizable: 4300 (order
+  two) and 3110 (six-aperture) ph/s/um. Far-field ratio 1/4 to **1/6**, not the
+  proxy's 3/16. `run_background_context` previously passed no architecture.
+
+## In flight
+
+Six Stage B scans, launched by `lifesim/ams/run_stage_b_local.sh 2 20000`, at
+the design's own targets. Measured ~140 s per feasible grid point early on;
+blended with the infeasible majority this is **5-9 h**. Logs
+`thesis/reproducibility/stageb6_<scan>_<cat>.log`, figures land in
+`thesis/images/tse/physical/`. Parallelism is across scans, not inside a run --
+n_cpu 4/8/16/32 all time the same after the analytic rewrite.
+
+**Until they land, Sections 5.4 and 5.5 and their figures still describe the
+old, wrongly sized fourth-order runs.** Their captions quote 61 degrees, 331 and
+210 ph/s/um, 41.8 %/39.1 % feasibility; all must be regenerated from
+`recover_stageb_grids.py` against the new logs.
+
+---
+
+# Handover — earlier state, 2026-07-28
 
 Written so a session with no memory of the preceding work can pick this up. The
 thesis is `thesis/main.tex`; the revision plan is `thesis/REVIEW_CHECKLIST.md`;
