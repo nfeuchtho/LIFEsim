@@ -1,0 +1,22 @@
+#	Decomposition of the "Targets Lost" annotation in the ecliptic yield figure.
+#	Produced by lifesim/analysis/test_scripts/decompose_target_loss.py on 2026-07-28.
+#	The plot annotates interesting_invisible/exp_stars, where a star is invisible if
+#	it fails EITHER cut of the single mask at lifesim/ams/core/ams.py:393. Both cuts
+#	act on stellar columns only, so the split needs no SNR evaluation.
+#	"Interesting" here is Experiment_1 eligibility alone, which is what reproduces
+#	the annotated 26.7 %; including Experiment_2 gives 4493 stars and 36.0 %.
+catalog	lim_mag	for_deg	experiment	quantity	n_stars	percent
+hab2hi	7.0	65.0	Experiment_1	eligible_host_stars	3605	100.0
+hab2hi	7.0	65.0	Experiment_1	lost_to_either_cut	964	26.7
+hab2hi	7.0	65.0	Experiment_1	field_of_regard_only	226	6.3
+hab2hi	7.0	65.0	Experiment_1	magnitude_limit_only	692	19.2
+hab2hi	7.0	65.0	Experiment_1	both_cuts	46	1.3
+hab2hi	7.0	65.0	Experiment_1	field_of_regard_marginal	272	7.5
+hab2hi	7.0	65.0	Experiment_1	magnitude_limit_marginal	738	20.5
+hab2hi	7.0	65.0	Experiment_1+2	eligible_host_stars	4493	100.0
+hab2hi	7.0	65.0	Experiment_1+2	lost_to_either_cut	1617	36.0
+hab2hi	7.0	65.0	Experiment_1+2	field_of_regard_only	241	5.4
+hab2hi	7.0	65.0	Experiment_1+2	magnitude_limit_only	1290	28.7
+hab2hi	7.0	65.0	Experiment_1+2	both_cuts	86	1.9
+hab2hi	7.0	65.0	Experiment_1+2	field_of_regard_marginal	327	7.3
+hab2hi	7.0	65.0	Experiment_1+2	magnitude_limit_marginal	1376	30.6

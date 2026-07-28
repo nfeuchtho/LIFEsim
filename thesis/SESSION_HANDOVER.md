@@ -134,14 +134,53 @@ would conceal exactly what it demonstrates.
 
 ## Remaining before a grading re-run
 
-- Sections 5.4 and 5.5 caption the six regenerated operating-point scans
-  generically; they should describe what the physical architecture shows.
-- Figure 5.6's axes are undecodable and its 26.7 % figure is unsourced, both
-  open from the first review round.
 - The budget-breakdown figures still show a single catalogue planet while their
   captions imply an ensemble; see the open issue below. The
   `--background-context` mode already computes ensemble-median curves and would
   make a more honest Figure 4.1.
+
+### Done 2026-07-28, evening
+
+**The operating-point scans are now described from their own data.** The
+two-dimensional scans wrote only figures, so the numbers behind them existed
+only as colours. They are recoverable from the cluster logs, which print each
+grid point's parameters and its located cutoff or its failure;
+`lifesim/analysis/test_scripts/recover_stageb_grids.py` parses all four back and
+writes `thesis/reproducibility/stageb_grids.tsv`, 900 cells. What that showed:
+
+- Along magnitude at the adopted field of regard, the fourth-order allowance
+  moves by only 1.21x (Hab2Max) and 1.86x (Hab2Min) across the whole range, and
+  is *exactly constant* above magnitude 6.4 for Hab2Max. Along field of regard
+  at fixed magnitude it moves 2.44x and 2.80x. The near-vertical contours were
+  asserted before; they are now measured.
+- The lowest feasible field of regard does not move with limiting magnitude at
+  all: 61 degrees at every magnitude, both catalogs.
+- The claim that the fourth-order design tolerates pointing "several degrees"
+  more restrictive was overstated. It is **one grid step**, 61 against 65
+  degrees at 3.6-degree spacing, so the margin is resolved but not measured.
+  The caption now says so.
+- Slew time dominates magnitude by a wide margin: at fixed field of regard the
+  allowance moves 14.4x and 24.0x across the slew range against 1.21x and 1.86x
+  across magnitude. Only 41.8 % and 39.1 % of the slew grids are feasible at
+  any noise level.
+- **The colour scales differ between panels** and the captions now say so; the
+  fourth-order maps look darker mostly because their peaks are lower.
+
+**Figure 5.6 is decoded and its percentage is sourced, with a correction.** The
+radial axis is host-star distance in parsec and the polar angle is ecliptic
+*latitude*, with longitude beyond 180 degrees reflected through the origin, so
+longitude is not resolved and the figure is not a sky map. The annotated 26.7 %
+counts eligible hosts zeroed by the single mask at `ams.py:393`, which combines
+the magnitude limit and the field of regard. Reproduced exactly by
+`decompose_target_loss.py` and decomposed: field of regard 7.5 points, magnitude
+limit 20.5 points. **The loss is dominated by the cut the figure does not draw.**
+That also explains the saturation in Section 5.4 -- the magnitude cut removes
+far more stars but removes faint ones, which a top-50 sample does not want.
+Reproducing 26.7 % also confirms that "interesting" there means Experiment 1
+alone; including Experiment 2 gives 4493 stars and 36.0 %. Data in
+`thesis/reproducibility/target_loss_decomposition.tsv`.
+
+Thesis now 70 pages, no undefined references, no errors.
 
 ## In flight as of 2026-07-28, early morning
 
