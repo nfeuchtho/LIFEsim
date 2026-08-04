@@ -2,11 +2,20 @@
 sizing convention (shared 4 m collectors, so the six-aperture design carries
 75.4 m^2 against 50.3). The previously reported median ratio of 0.93 and the
 top-50 gain were measured when both designs shared a total area, so they do not
-survive the convention change and are re-measured here."""
+survive the convention change and are re-measured here.
+
+Equal-area ablation (exact, no third run): every photon rate in the SNR chain
+-- planet signal, stellar leakage, local- and exozodiacal backgrounds -- is
+linear in the per-aperture collecting area, so a global area rescale multiplies
+SNR by sqrt(area ratio) exactly. Dividing the measured per-target ratio by
+sqrt(75.4/50.3) = sqrt(1.5) therefore isolates the combiner change (null
+depth, response shape, and science-pair fraction together) at equal collecting
+area. Writes thesis/reproducibility/snr_shift_architectures.tsv."""
 import os
 import sys
 
 import numpy as np
+import pandas as pd
 
 REPO = r'C:\Users\nicol\Desktop\LIFE\LIFESim'
 sys.path.insert(0, REPO)
@@ -35,6 +44,8 @@ for cat in ('hi', 'lo'):
     vis = a > 0
     a, b = a[vis], b[vis]
     r = b / a
+    sqrt_area = np.sqrt(75.4 / 50.3)
+    q = r / sqrt_area                     # equal-area combiner factor
     top = a.sort_values(ascending=False).index[:50]
     print(f'\nhab2{cat}: {len(a)} visible host stars')
     print(f'  median per-target SNR ratio (six-aperture / reference) {np.median(r):.4f}')
@@ -42,3 +53,16 @@ for cat in ('hi', 'lo'):
     print(f'  ratio over the reference top-50 targets, median         {np.median(b[top]/a[top]):.4f}')
     print(f'  16th-84th percentile of the ratio                       '
           f'{np.percentile(r,16):.3f} to {np.percentile(r,84):.3f}')
+    print(f'  equal-area (/{sqrt_area:.4f}) median combiner factor    {np.median(q):.4f}')
+    print(f'  equal-area top-50 median combiner factor                '
+          f'{np.median(b[top]/a[top])/sqrt_area:.4f}')
+    print(f'  equal-area fraction of targets below 1                  {100*(q < 1).mean():.1f} %')
+    print(f'  equal-area 16th-84th percentile                         '
+          f'{np.percentile(q,16):.3f} to {np.percentile(q,84):.3f}')
+    out = pd.DataFrame({'nstar': a.index, 'snr_ref': a.values, 'snr_t6': b.values,
+                        'ratio': r.values, 'ratio_equal_area': q.values,
+                        'in_ref_top50': a.index.isin(top)})
+    dst = os.path.join(REPO, 'thesis', 'reproducibility',
+                       f'snr_shift_architectures_{cat}.tsv')
+    out.to_csv(dst, sep='\t', index=False, float_format='%.6g')
+    print(f'  written: {dst}')

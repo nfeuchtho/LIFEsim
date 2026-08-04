@@ -1,0 +1,26 @@
+>> bracewell4 hab2hi 5.5 yr flat
+>> bracewell4 hab2hi 5.5 yr short_weighted
+>> bracewell4 hab2hi 5.5 yr long_weighted
+>> bracewell4 hab2hi 6.0 yr flat
+>> bracewell4 hab2hi 6.0 yr short_weighted
+>> bracewell4 hab2hi 6.0 yr long_weighted
+>> bracewell4 hab2lo 7.5 yr flat
+>> bracewell4 hab2lo 7.5 yr short_weighted
+>> bracewell4 hab2lo 7.5 yr long_weighted
+>> bracewell4 hab2lo 8.0 yr flat
+>> bracewell4 hab2lo 8.0 yr short_weighted
+>> bracewell4 hab2lo 8.0 yr long_weighted
+>> triple6 hab2hi 4.0 yr flat
+>> triple6 hab2hi 4.0 yr short_weighted
+>> triple6 hab2hi 4.0 yr long_weighted
+>> triple6 hab2hi 4.5 yr flat
+>> triple6 hab2hi 4.5 yr short_weighted
+>> triple6 hab2hi 4.5 yr long_weighted
+>> triple6 hab2lo 5.5 yr flat
+>> triple6 hab2lo 5.5 yr short_weighted
+>> triple6 hab2lo 5.5 yr long_weighted
+>> triple6 hab2lo 6.0 yr flat
+>> triple6 hab2lo 6.0 yr short_weighted
+>> triple6 hab2lo 6.0 yr long_weighted
+launched 24 cells, concurrency 6, 14 replicates each
+all cells finished

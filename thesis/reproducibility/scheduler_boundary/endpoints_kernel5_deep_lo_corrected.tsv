@@ -1,0 +1,7 @@
+design	catalog	target_yr	family	endpoint_ph_s_um	mtime_achieved_yr	search_status	bracket_lo	bracket_hi	search_its	scheduler	wall_s
+kernel5_deep	hab2lo	8.0	flat	87.3380	8.0207	converged	0.0000	100.1075	7	corrected	590.7
+kernel5_deep	hab2lo	8.0	short_weighted	197.9342	7.9916	converged	0.0000	273.7372	5	corrected	437.2
+kernel5_deep	hab2lo	8.0	long_weighted	291.0901	8.0350	converged	0.0000	382.9195	5	corrected	423.6
+kernel5_deep	hab2lo	8.5	flat	310.7312	8.5384	converged	0.0000	413.2888	5	corrected	431.2
+kernel5_deep	hab2lo	8.5	short_weighted	523.2475	8.5101	converged	0.0000	550.3426	6	corrected	507.4
+kernel5_deep	hab2lo	8.5	long_weighted	771.1522	8.4884	converged	0.0000	885.2474	5	corrected	426.3

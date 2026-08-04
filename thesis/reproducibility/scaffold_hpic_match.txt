@@ -1,0 +1,5 @@
+Scaffold-vs-HPIC identifier cross-match, 2026-08-02
+HPIC source: VizieR J/AJ/167/139/t_hpic (Tuchow, Stark & Mamajek 2024)
+HPIC rows: 12944; scaffold stars: 4505 (4415 TIC + 90 Gaia DR3)
+TIC matches: 4415/4415; GaiaDR3 matches: 90/90
+Result: 4505/4505 scaffold stars are HPIC members (strict subset).

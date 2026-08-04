@@ -1,3 +1,4 @@
+>> resuming from thesis/reproducibility/stageb6_crashed
 >> launching mag/hi at 4.0 yr, 2 workers, ceiling 20000 -> thesis/reproducibility/stageb6_mag_hi.log
 >> launching mag/lo at 5.5 yr, 2 workers, ceiling 20000 -> thesis/reproducibility/stageb6_mag_lo.log
 >> launching slew/hi at 4.0 yr, 2 workers, ceiling 20000 -> thesis/reproducibility/stageb6_slew_hi.log
@@ -5,5 +6,6 @@
 >> launching linear/hi at 4.0 yr, 2 workers, ceiling 20000 -> thesis/reproducibility/stageb6_linear_hi.log
 >> launching linear/lo at 5.5 yr, 2 workers, ceiling 20000 -> thesis/reproducibility/stageb6_linear_lo.log
 
-launched 6 jobs: 198 199 200 201 202 203
+launched 6 jobs: 762 763 764 765 766 767
 figures land in thesis/images/tse/physical/ as phys_<cat>_<scan>_<target>.pdf
+all Stage B scans finished

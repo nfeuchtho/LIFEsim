@@ -1,0 +1,98 @@
+alabaster==1.0.0
+astroconst==0.0.14
+astropy==7.2.0
+astropy-iers-data==0.2026.2.9.0.50.33
+astroquery==0.4.11
+babel==2.18.0
+beautifulsoup4==4.15.0
+blosc2==4.0.0
+certifi==2026.1.4
+charset-normalizer==3.4.4
+cimport==0.3.1rc0
+cmocean==4.0.3
+colorama==0.4.6
+contourpy @ file:///C:/miniconda3/conda-bld/contourpy_1763643943275/work
+cycler @ file:///C:/Users/task_176606794786808/croot/cycler_1766068049869/work
+Cython==3.2.4
+docutils==0.22.4
+fonttools @ file:///C:/miniconda3/conda-bld/fonttools_1765445216921/work
+gitdb @ file:///C:/b/abs_1bkmriimss/croot/gitdb_1753362133190/work
+GitPython @ file:///C:/Users/task_176787402835022/croot/gitpython_1767874169598/work
+h5py==3.16.0
+html5lib==1.1
+idna==3.11
+ImageIO==2.37.2
+imagesize==2.0.0
+jaraco.classes==3.4.0
+jaraco.context==6.1.2
+jaraco.functools==4.5.0
+Jinja2 @ file:///C:/b/abs_920kup4e6u/croot/jinja2_1741711580669/work
+joblib @ file:///C:/Users/task_176786740206630/croot/joblib_1767868144069/work
+joblib-progress==1.0.6
+keyring==25.7.0
+kiwisolver @ file:///C:/miniconda3/conda-bld/kiwisolver_1764159385651/work
+lazy_loader==0.4
+-e git+https://github.com/nfeuchtho/LIFEsim.git@dd4710150f48a02d4eb1e102fb45bc1acf89548c#egg=LIFEsim
+lxml==6.1.1
+markdown-it-py==4.0.0
+MarkupSafe @ file:///C:/b/abs_a0ma7ge0jc/croot/markupsafe_1738584052792/work
+matplotlib==3.10.8
+mdurl==0.1.2
+mkl-service==2.5.2
+mkl_fft @ file:///C:/miniconda3/conda-bld/mkl_fft_1761592917950/work
+mkl_random @ file:///C:/miniconda3/conda-bld/mkl_random_1761593166070/work
+more-itertools==11.1.0
+mpld3 @ file:///C:/miniconda3/conda-bld/mpld3_1761144513108/work
+msgpack==1.1.2
+ndindex==1.10.1
+networkx==3.6.1
+numexpr @ file:///C:/miniconda3/conda-bld/numexpr_1762165727877/work
+numpy @ file:///C:/b/abs_81ri0q57xq/croot/numpy_and_numpy_base_1755590863635/work/dist/numpy-1.26.4-cp312-cp312-win_amd64.whl#sha256=25017eafd3ba63ea40adb7c5a5cfa81cae4261c08825fb5981d999986f74579e
+packaging @ file:///C:/miniconda3/conda-bld/packaging_1761049137378/work
+pandas==2.3.3
+pillow @ file:///C:/b/abs_b50vowcrzo/croot/pillow_1738010273782/work
+planets==0.9.1
+platformdirs==4.10.0
+pooch==1.9.0
+py-cpuinfo @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/py-cpuinfo_1699495567147/work
+pyerfa==2.0.1.5
+Pygments==2.19.2
+pyparsing @ file:///C:/miniconda3/conda-bld/pyparsing_1763973902692/work
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.2
+PyQt5_sip==12.18.0
+python-dateutil @ file:///C:/b/abs_3au_koqnbs/croot/python-dateutil_1716495777160/work
+python-pptx==1.0.2
+pytz==2026.1.post1
+pyvo==1.9.1
+pywin32-ctypes==0.2.3
+PyYAML==6.0.3
+requests==2.32.5
+rich==14.3.2
+roman-numerals==4.1.0
+scikit-image==0.26.0
+scipy @ file:///C:/miniconda3/conda-bld/scipy_1762194966620/work/dist/scipy-1.16.3-cp312-cp312-win_amd64.whl#sha256=70cdefacf51774d888f17da3a8230fdf07ffd1b5b39ffa0b247ff8d69e8529f6
+setuptools==80.10.2
+six @ file:///C:/b/abs_149wuyuo1o/croot/six_1744271521515/work
+smmap @ file:///C:/b/abs_85z04amxrn/croot/smmap_1752748960667/work
+snowballstemmer==3.1.1
+soupsieve==2.8.4
+spectres @ git+https://github.com/fdannert/SpectRes.git@7a8c83025096c8907de30db633cca30c6f4b97ce
+Sphinx==9.1.0
+sphinx_rtd_theme==3.1.0
+sphinxcontrib-applehelp==2.0.0
+sphinxcontrib-devhelp==2.0.0
+sphinxcontrib-htmlhelp==2.1.0
+sphinxcontrib-jquery==4.1
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==2.0.0
+sphinxcontrib-serializinghtml==2.0.0
+tables==3.10.2
+tifffile==2026.1.28
+tqdm==4.67.3
+typing_extensions==4.15.0
+tzdata @ file:///home/task_176829656558347/croot/python-tzdata_1768296637279/work
+urllib3==2.6.3
+webencodings==0.5.1
+wheel==0.46.3
+xlsxwriter==3.2.9

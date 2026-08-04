@@ -86,48 +86,6 @@ class AgnosticMissionSimulator:
         if self.verbose:
             print('[!]', msg)
 
-    def get_baseline(hz_center, dist_s, wl_opt, min_bl, max_bl):
-        """
-        Computes the nulling baseline that places the first transmission peak at the center
-        of the habitable zone, clipped to the array's allowed baseline range.
-
-        Parameters
-        ----------
-        hz_center : float
-            Angular separation of the habitable-zone center, in arcsec.
-        dist_s : float
-            Distance to the star, in pc.
-        wl_opt : float
-            Optimal/reference wavelength used for the baseline computation, in micron.
-        min_bl : float
-            Minimum allowed baseline length, in m.
-        max_bl : float
-            Maximum allowed baseline length, in m.
-
-        Returns
-        -------
-        float
-            The baseline length in m, clipped to ``[min_bl, max_bl]``.
-
-        Notes
-        -----
-        The constant ``0.589645`` places the first transmission peak of a double Bracewell
-        array (nulling order 2) onto the habitable-zone center; see Dannert et al. 2022 for
-        its derivation.
-        """
-        hz_center_rad = hz_center / dist_s / (3600 * 180) * np.pi  # in rad
-
-        # put first transmission peak of optimal wl on center of HZ
-        # for the origin of the value 0.5.. see Dannert+2022
-        bl = (0.589645 / hz_center_rad * wl_opt * 10 ** (-6))
-
-        if bl < min_bl:
-            bl = min_bl
-        elif bl > max_bl:
-            bl = max_bl
-
-        return bl
-
     def __init__(self,
                  nulling_order,
                  lim_mag,
@@ -443,7 +401,15 @@ class AgnosticMissionSimulator:
         columns = ['detection', 'orbit', 'characterization', 'total']
         for exp in exps:
             columns.append('n_' + exp)
-        time_sheet = pd.DataFrame(index=np.unique(cat_det.nuniverse),
+        # Universes with zero surviving detections are historically absent from this
+        # index and therefore from the percentile below.
+        # optimization['retain_empty_universes'] = True keeps every universe in the
+        # catalog, with zero follow-up time.
+        if bus.data.options.optimization.get('retain_empty_universes', False):
+            sheet_index = np.unique(bus.data.catalog.nuniverse)
+        else:
+            sheet_index = np.unique(cat_det.nuniverse)
+        time_sheet = pd.DataFrame(index=sheet_index,
                                   columns=columns)
 
         # 1. get total time for detection campaign from every universe
@@ -485,6 +451,9 @@ class AgnosticMissionSimulator:
             time_sheet.loc[nu, 'characterization'] = cat_det.loc[mask_followup, 't_char'].sum()
 
         # 4. get total time
+        # No-op on the historical index; fills the retained empty universes with zero
+        # follow-up time.
+        time_sheet = time_sheet.fillna(0.)
         time_sheet['total'] = time_sheet['detection'] + time_sheet['orbit'] + time_sheet['characterization']
 
         # 5. copy to original catalog
@@ -505,6 +474,10 @@ class AgnosticMissionSimulator:
 
         # To judge the success of missions, make a Gaussian distribution of time
         distribution = time_sheet['total'].to_numpy()
+
+        # Retained for inspection: per-universe component times behind the returned
+        # percentile.
+        self.last_time_sheet = time_sheet
 
         # We take a cutoff such that 90% of missions are included, i.e., successful
         return np.percentile(distribution, 90) / 60 / 60 / 24 / 365.25

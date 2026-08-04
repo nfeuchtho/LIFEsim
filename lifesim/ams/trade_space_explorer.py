@@ -164,6 +164,8 @@ class TradeSpaceExplorer:
         if high_mtime < cutoff or abs(high_mtime - cutoff) <= epsilon:
             print('>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)')
             print(f'>> Budget CUTOFF found: {int(upper_start)} ph/s (1 iteration)')
+            self.last_search = dict(status='censored_upper', lower=lower,
+                                    upper=upper_start, mtime=high_mtime, its=1)
             return upper_start
 
         setter_func(lower)
@@ -171,11 +173,30 @@ class TradeSpaceExplorer:
         print(f' > Lower Bound MT: {low_mtime:.2f} yrs @ {int(lower)} ph/s')
         if low_mtime >= cutoff or abs(low_mtime - cutoff) <= epsilon:
             print('>> Cancelling procedure: lower bound matches or is above MT target (2 iterations)')
+            self.last_search = dict(status='zero_budget_at_or_above_target', lower=0,
+                                    upper=upper_start, mtime=low_mtime, its=2)
             return 0
 
         print(' > Ready to start iterations')
 
+        # Mission time is a step function of the budget, because detections are
+        # discrete, so a target falling between two steps admits no amplitude
+        # within `epsilon`. The bracket then stops shrinking -- the exponential
+        # fit returns a guess equal to the lower bound, which is reassigned to
+        # itself -- and the loop above never exits. Observed at 1395 iterations
+        # with the bracket frozen 12 wide. Stop on stagnation or on a cap and
+        # report the best bracket instead of spinning.
+        max_its = 200
+        stalled = 0
         while abs(cutoff - mtime) > epsilon and upper_start - lower > 10:
+            if its >= max_its or stalled >= 3:
+                print(f'>> Stopping: no amplitude reaches the target to within '
+                      f'{epsilon} yr; bracket [{int(lower)}, {int(upper_start)}] '
+                      f'after {its} iterations. Reporting the bracket midpoint.')
+                self.last_search = dict(status='bracket_midpoint', lower=lower,
+                                        upper=upper_start, mtime=mtime, its=its)
+                return 0.5 * (lower + upper_start)
+            prev_bracket = (lower, upper_start)
             print('---------------------------')
             print(f' > Iteration {its + 1}')
             print('---------------------------')
@@ -205,13 +226,18 @@ class TradeSpaceExplorer:
                 print(f'REJECTED (too pessimistic)')
                 lower = guess
                 low_mtime = mtime
+            stalled = stalled + 1 if (lower, upper_start) == prev_bracket else 0
             its += 1
 
         if abs(mtime - cutoff) > epsilon and lower == 0:
             print(f'>> MT target is not realizable: no extra photons permissible ({its} iterations)')
+            self.last_search = dict(status='unreachable', lower=0,
+                                    upper=upper_start, mtime=mtime, its=its)
             return 0
 
         print(f'>> Budget CUTOFF found: {int(guess)} ph/s ({its} iterations)')
+        self.last_search = dict(status='converged', lower=lower,
+                                upper=upper_start, mtime=mtime, its=its)
 
         if plot_data is None:
             return guess
@@ -380,9 +406,17 @@ class TradeSpaceExplorer:
 
         plt.show()
 
-    def plot_linear_regression_additive(self, save_path=None):
+    def plot_linear_regression_additive(self, save_path=None,
+                                        title='Additive TSE with Linear Noise Budget',
+                                        grid_out=None, grid_meta=None):
         """
         Scans the required mission time over a grid of linear additive leakage budgets.
+
+        ``title`` overrides the panel title (empty string for none). When
+        ``grid_out`` is given, every evaluated grid point is appended to that
+        TSV as ``design catalog target_yr short_budget long_budget mtime_yr``
+        using the identifying fields of the ``grid_meta`` dict, so the raw
+        grid behind the figure is retained.
 
         Fixes ``self.ams.lim_mag = 7``, ``self.ams.field_of_regard = 65°`` and
         ``self.ams.slew_time = 12 hrs``. For a 15x15 logarithmic grid of "leading"
@@ -435,6 +469,21 @@ class TradeSpaceExplorer:
                     times[i, j:] = time
                     break
 
+        if grid_out is not None:
+            meta = grid_meta or {}
+            header = not os.path.exists(grid_out)
+            with open(grid_out, 'a') as fh:
+                if header:
+                    fh.write('design\tcatalog\ttarget_yr\tshort_budget\t'
+                             'long_budget\tmtime_yr\n')
+                for (i, leading) in enumerate(addspace):
+                    for (j, terminating) in enumerate(addspace):
+                        fh.write(f'{meta.get("design", "?")}\t'
+                                 f'{meta.get("catalog", "?")}\t'
+                                 f'{meta.get("target_yr", "?")}\t'
+                                 f'{leading:.4f}\t{terminating:.4f}\t'
+                                 f'{times[i, j]:.4f}\n')
+
         X, Y = np.meshgrid(addspace, addspace)
 
         fig, ax = plt.subplots(1, 1)
@@ -452,7 +501,8 @@ class TradeSpaceExplorer:
 
         ax.set_xlabel('Long-Wavelength Budget [ph s$^{-1}$ micron$^{-1}$]')
         ax.set_ylabel('Short-Wavelength Budget [ph s$^{-1}$ micron$^{-1}$]')
-        ax.set_title('Additive TSE with Linear Noise Budget')
+        if title:
+            ax.set_title(title)
 
         if save_path:
             plt.savefig(save_path, bbox_inches='tight')

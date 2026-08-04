@@ -1,0 +1,7 @@
+design	catalog	target_yr	family	endpoint_ph_s_um	mtime_achieved_yr	search_status	bracket_lo	bracket_hi	search_its	scheduler	wall_s
+collinear4	hab2lo	5.0	flat	41.0023	4.9982	converged	0.0000	63.9634	5	corrected	432.3
+collinear4	hab2lo	5.0	short_weighted	73.6408	5.0005	converged	0.0000	163.5412	5	corrected	425.1
+collinear4	hab2lo	5.0	long_weighted	125.0003	4.9705	converged	0.0000	362.0083	4	corrected	354.1
+collinear4	hab2lo	5.5	flat	530.0753	5.4884	converged	0.0000	1536.9770	4	corrected	356.5
+collinear4	hab2lo	5.5	short_weighted	863.2079	5.4588	converged	803.4598	1069.3879	6	corrected	500.8
+collinear4	hab2lo	5.5	long_weighted	1127.4862	5.3754	converged	1127.4862	1133.4039	10	corrected	780.1

@@ -1,0 +1,7 @@
+design	catalog	target_yr	family	endpoint_ph_s_um	mtime_achieved_yr	search_status	bracket_lo	bracket_hi	search_its	scheduler	wall_s
+collinear4	hab2hi	3.5	flat	0.0000	3.4993	zero_budget_at_or_above_target	0.0000	20000.0000	2	corrected	232.4
+collinear4	hab2hi	3.5	short_weighted	0.0000	3.4993	zero_budget_at_or_above_target	0.0000	20000.0000	2	corrected	234.2
+collinear4	hab2hi	3.5	long_weighted	0.0000	3.4993	zero_budget_at_or_above_target	0.0000	20000.0000	2	corrected	234.0
+collinear4	hab2hi	4.0	flat	679.6914	4.0211	converged	0.0000	815.5124	5	corrected	457.0
+collinear4	hab2hi	4.0	short_weighted	1489.7879	4.0127	converged	0.0000	1814.0233	5	corrected	461.3
+collinear4	hab2hi	4.0	long_weighted	1568.8628	4.0225	converged	0.0000	2631.1812	4	corrected	387.2

@@ -1,0 +1,18 @@
+# Convention ledger (one lossless-combiner convention throughout)
+architecture	n_apertures	collecting_area_m2	mean_response_per_output	mean_response_value	science_pair_fraction	uniform_bg_invariant_NAapR_m2
+bracewell4	4	50.3	1/4	0.25	0.5	12.5664
+triple6	6	75.4	1/6	0.166667	0.3333	12.5664
+
+# Idealized sin^(2p) proxy sky-averages (Appendix A): order2 = 1/4, order4 = 3/16; ratio 0.750 -- proxy-only.
+# Realizable per-output averages: 1/4 and 1/6; ratio 2/3. For a uniform background the absolute rate is N*A_ap*<R> = A_ap, identical between designs.
+
+# Measured background ratios, order 4 / order 2, from background_context.tsv
+catalog	term	ratio_4_over_2_median	ratio_min	ratio_max
+hab2hi	localzodi	1.0	0.9999	1.0
+hab2hi	exozodi	0.7599	0.5794	0.871
+hab2hi	star	0.0001	0.0	0.0002
+hab2hi	total	0.7243	0.0121	0.9937
+hab2lo	localzodi	1.0	0.9999	1.0
+hab2lo	exozodi	0.7394	0.5565	0.858
+hab2lo	star	0.0001	0.0	0.0002
+hab2lo	total	0.7199	0.0104	0.9937

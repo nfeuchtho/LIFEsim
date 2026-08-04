@@ -22,8 +22,9 @@ scales the delivered instrumental noise consistently with the signal and the
 astrophysical background; the comparison stays at a single reference plane.
 
 Deliberately not varied (one variable at a time): the baseline prescription
-constant 0.589645 (ams.py:114-122) is derived for a second-order double
-Bracewell and is retained at order four, so neither arm is baseline-optimal.
+constant 0.589645 (`Instrument.adjust_bl_to_hz` in instrument/instrument.py) is
+derived for a second-order double Bracewell and is retained at order four, so
+neither arm is baseline-optimal.
 
 Usage, from anywhere (LIFEsim must be pip-installed, `pip install -e . --no-deps`):
 
@@ -80,11 +81,14 @@ COLUMNS = ('timestamp arm catalog null_order mtime_target_yr budget_family '
            'wall_s').split()
 
 
-def build_bus(catalog, throughput):
+def build_bus(catalog, throughput, catalog_path=None):
     """Assemble the bus as runner.py does, overriding `throughput` before
     `apply_options()` computes eff_tot = quantum_eff * throughput
-    (instrument.py:94)."""
-    cat_pth = os.path.join(CATALOG_DIR, f'catalog_hab2{catalog}.txt')
+    (instrument.py:94). `catalog_path` overrides the default catalog file,
+    e.g. to load an independently generated P-Pop realization; `catalog`
+    still selects the scenario conventions."""
+    cat_pth = (catalog_path if catalog_path is not None
+               else os.path.join(CATALOG_DIR, f'catalog_hab2{catalog}.txt'))
     if not os.path.exists(cat_pth):
         raise FileNotFoundError(cat_pth)
 

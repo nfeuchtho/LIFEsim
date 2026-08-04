@@ -21,9 +21,17 @@ import numpy as np
 HEAD = re.compile(r">> TSE Run No\. (\d+) / (\d+) \((\w+)=([\d.]+)\D*, FoR=(\d+)")
 CUT = re.compile(r">> Budget CUTOFF found: (\d+) ph/s")
 IMPOSS = re.compile(r">> Impossible to reach MT target")
+# A resumed scan replays already-decided points instead of recomputing them, and
+# announces them differently. Without this the whole recovered prefix parses as
+# missing, which is most of the grid after an interrupted run.
+RECOV = re.compile(r">> Recovered from log: ([\d.]+) ph/s")
 
-SCANS = [('mag', 'hi', 5.5), ('mag', 'lo', 7.5),
-         ('slew', 'hi', 5.5), ('slew', 'lo', 7.5)]
+# Targets are each architecture's own primary operating point, the lowest half
+# year above its zero-budget time. Override with the third argument when
+# recovering a run made at different ones.
+SCANS = [('mag', 'hi', 4.0), ('mag', 'lo', 5.5),
+         ('slew', 'hi', 4.0), ('slew', 'lo', 5.5)]
+PREFIX = 'stageb6'
 
 
 def parse(path):
@@ -35,13 +43,16 @@ def parse(path):
         # header; a point that neither locates a cutoff nor reports failure is
         # left as NaN rather than silently counted as zero.
         tail = txt[m.end(): m.end() + 4000]
-        cut, imp = CUT.search(tail), IMPOSS.search(tail)
-        if cut and (imp is None or cut.start() < imp.start()):
-            val = float(cut.group(1))
-        elif imp:
-            val = 0.0
-        else:
+        # Take whichever verdict marker appears first after the header. A point
+        # that carries none of them is left NaN rather than counted as zero.
+        cands = [(mm.start(), kind, mm) for kind, mm in
+                 (('cut', CUT.search(tail)), ('rec', RECOV.search(tail)),
+                  ('imp', IMPOSS.search(tail))) if mm]
+        if not cands:
             val = np.nan
+        else:
+            _, kind, mm = min(cands)
+            val = 0.0 if kind == 'imp' else float(mm.group(1))
         pts.append((float(m.group(4)), float(m.group(5)), val))
     if not pts:
         return None
@@ -57,7 +68,7 @@ def parse(path):
 def main(logdir, out):
     rows = ['catalog\tscan\ttarget_yr\tparam\tparam_value\tfor_deg\tbudget_ph_s_um']
     for scan, cat, target in SCANS:
-        path = os.path.join(logdir, f'stageb_{scan}_{cat}.log')
+        path = os.path.join(logdir, f'{PREFIX}_{scan}_{cat}.log')
         got = parse(path)
         if got is None:
             print(f'  {os.path.basename(path)}: no grid points', file=sys.stderr)

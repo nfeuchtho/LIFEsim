@@ -382,6 +382,64 @@ def angel_cross(bl):
     return positions, U, (1, None)
 
 
+def kernel5(bl, pair='deep'):
+    """Five apertures on a regular pentagon with the 5-point DFT combiner.
+
+    Row 0 is bright; rows j and 5-j are complex conjugates, giving two
+    kernel/chopping pairs on the same hardware: (1, 4) couples to the
+    fundamental harmonic of the aperture ring and nulls to second order,
+    while (2, 3) has a vanishing first moment by harmonic orthogonality and
+    nulls to fourth order (measured 2.0000 and 4.0000; see
+    analysis/test_scripts/kernel5_check.py). The fourth-order pair carries
+    2/5 of the collected light and modulates off-axis, so a five-aperture
+    array supports the output subtraction at fourth order --- the
+    counterexample to the six-aperture-minimum statement.
+
+    ``pair='deep'`` returns the fourth-order pair (2, 3); ``pair='shallow'``
+    the second-order pair (1, 4). Both matrices are identical; only the
+    designated chopping pair differs, which makes the two configurations a
+    null-depth comparison with every resource variable held fixed.
+
+    The nuller family is due to Martinache & Ireland (2018) and Laugier et
+    al. (2020); designating the fourth-order conjugate pair for LIFE-style
+    chopping is what this work adds.
+    """
+    phi = 2.0 * np.pi * np.arange(5) / 5.0
+    positions = (bl / 2.0) * np.column_stack([np.cos(phi), np.sin(phi)])
+    U = np.array([[np.exp(2j * np.pi * j * k / 5) / np.sqrt(5.0)
+                   for k in range(5)] for j in range(5)])
+    return positions, U, ((2, 3) if pair == 'deep' else (1, 4))
+
+
+def collinear4(bl):
+    """Four apertures equally spaced on a line, with a fourth-order kernel pair.
+
+    Real moment-cancelling rows give outputs of intensity order 2, 4 and 6
+    (the 1-D ``2(N-1)`` rule at the deepest). The order-4 and order-6 rows
+    remix losslessly into the conjugate pair ``(o4 +- i*o6)/sqrt(2)``, both of
+    intensity order four, whose difference modulates off-axis: a four-aperture
+    fourth-order array that supports LIFE-style output subtraction, carrying
+    half the collected light (see analysis/test_scripts/collinear4_check.py).
+
+    Together with ``kernel5`` this replaces the six-aperture-minimum claim:
+    a fourth-order chop pair requires two rows whose amplitudes vanish to at
+    least second order, and any two such rows can be remixed into one. The
+    practical limit is the baseline envelope, not the aperture count: the
+    pair's response peaks at x ~ 6.35 against the double Bracewell's 1.85, so
+    at the mission's 100 m cap most catalog stars sit off-peak.
+    """
+    d = bl / 3.0
+    positions = np.column_stack([np.arange(4) * d - 1.5 * d, np.zeros(4)])
+    bright = np.ones(4) / 2.0
+    o2 = np.array([3.0, 1.0, -1.0, -3.0]) / np.sqrt(20.0)
+    o4 = np.array([1.0, -1.0, -1.0, 1.0]) / 2.0
+    o6 = np.array([1.0, -3.0, 3.0, -1.0]) / np.sqrt(20.0)
+    U = np.array([bright, o2,
+                  (o4 + 1j * o6) / np.sqrt(2.0),
+                  (o4 - 1j * o6) / np.sqrt(2.0)], dtype=complex)
+    return positions, U, (2, 3)
+
+
 def double_triple_nuller(bl, ratio):
     """Six apertures giving a choppable fourth-order null.
 

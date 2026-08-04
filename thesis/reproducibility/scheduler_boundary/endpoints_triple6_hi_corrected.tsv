@@ -1,0 +1,7 @@
+design	catalog	target_yr	family	endpoint_ph_s_um	mtime_achieved_yr	search_status	bracket_lo	bracket_hi	search_its	scheduler	wall_s
+triple6	hab2hi	4.0	flat	346.6326	4.0053	converged	0.0000	403.0558	5	corrected	218.4
+triple6	hab2hi	4.0	short_weighted	457.0710	3.9725	converged	0.0000	544.8556	6	corrected	243.7
+triple6	hab2hi	4.0	long_weighted	893.7616	4.0269	converged	0.0000	1768.9595	4	corrected	171.5
+triple6	hab2hi	4.5	flat	890.8235	4.5172	converged	0.0000	1153.0875	5	corrected	220.2
+triple6	hab2hi	4.5	short_weighted	1570.2029	4.5161	converged	1530.0694	1685.6726	8	corrected	321.2
+triple6	hab2hi	4.5	long_weighted	2105.2568	4.4882	converged	0.0000	2245.1281	5	corrected	194.4

@@ -209,6 +209,26 @@ class AhgsModule(SlopeModule):
                         + ') yrs observed')
             return out
 
+        # Completion test for one experiment. The historical (strict) form marks a
+        # universe complete only when its detections exceed the sample size, and the
+        # experiment complete only when the count of such universes exceeds
+        # opt_limit_factor * num_universe -- at sample size 50, factor 0.9 and 100
+        # universes that is 51 detections in 91 universes. The stated experiment is met
+        # at >= sample_size and >= ceil(factor * num_universe), which
+        # optimization['strict_completion'] = False selects.
+        strict = opt.get('strict_completion', True)
+        uni_target = opt['opt_limit_factor'] * self._num_universe
+        if strict:
+            def exp_complete(exp):
+                return ((self.data.optm['exp_detected_uni'][exp][1, :]
+                         > opt['experiments'][exp]['sample_size']).sum() > uni_target)
+        else:
+            uni_target_int = int(np.ceil(uni_target - 1e-9))
+
+            def exp_complete(exp):
+                return ((self.data.optm['exp_detected_uni'][exp][1, :]
+                         >= opt['experiments'][exp]['sample_size']).sum() >= uni_target_int)
+
         run_bool = True
         iter_count = 0
 
@@ -259,20 +279,11 @@ class AhgsModule(SlopeModule):
             if iter_count % 200 == 0:
                 print('\r' + status_string(), end='')
 
-            if any([
-                ((self.data.optm['exp_detected_uni'][exp][1, :]
-                 > opt['experiments'][exp]['sample_size']).sum() >
-                (opt['opt_limit_factor']
-                        * self._num_universe)) and not self.data.optm['hit_limit'][exp]
-                for exp in self.data.optm['exp_detected_uni']]):
+            if any([exp_complete(exp) and not self.data.optm['hit_limit'][exp]
+                    for exp in self.data.optm['exp_detected_uni']]):
                 over_limit_experiments = [
                     exp for exp in self.data.optm['exp_detected_uni']
-                    if
-                    (self.data.optm['exp_detected_uni'][exp][1, :]
-                     > opt['experiments'][exp]['sample_size']).sum() >
-                    (opt['opt_limit_factor']
-                            * self._num_universe)
-                    and not self.data.optm['hit_limit'][exp]
+                    if exp_complete(exp) and not self.data.optm['hit_limit'][exp]
                 ]
 
                 for exp in over_limit_experiments:
