@@ -1,0 +1,28 @@
+physics_model: analytic_symmetric_backgrounds_with_local_zodi_4_over_pi_correction
+catalogs:
+  - Hab2Min
+  - Hab2Max
+null_orders:
+  - 2
+  - 4
+spectral_budget_families:
+  - flat
+  - short_weighted_linear_ramp
+  - long_weighted_linear_ramp
+default_operating_point:
+  limiting_k_magnitude: 7
+  field_of_regard_degrees: 65
+  slew_time_hours: 12
+mission_time_targets_years:
+  Hab2Max:
+    - 5.5
+    - 6.0
+  Hab2Min:
+    - 7.5
+    - 8.0
+result_source: "C:/Users/nicol/Desktop/LIFE/Master Thesis/Plots/TSE Linear"
+known_retention_limits:
+  - Raw per-evaluation grids and scheduler logs are unavailable.
+  - Per-universe component-time vectors were not retained for every amplitude.
+  - No complete environment lock or immutable public archive exists.
+  - Order-four Hab2Min 8-year ramp values were recovered from vector PDFs and cross-checked against 7.5-year values.

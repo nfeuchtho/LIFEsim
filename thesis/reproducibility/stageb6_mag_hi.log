@@ -1,0 +1,1031 @@
+Processed line 0 of 729927Processed line 10000 of 729927Processed line 20000 of 729927Processed line 30000 of 729927Processed line 40000 of 729927Processed line 50000 of 729927Processed line 60000 of 729927Processed line 70000 of 729927Processed line 80000 of 729927Processed line 90000 of 729927Processed line 100000 of 729927Processed line 110000 of 729927Processed line 120000 of 729927Processed line 130000 of 729927Processed line 140000 of 729927Processed line 150000 of 729927Processed line 160000 of 729927Processed line 170000 of 729927Processed line 180000 of 729927Processed line 190000 of 729927Processed line 200000 of 729927Processed line 210000 of 729927Processed line 220000 of 729927Processed line 230000 of 729927Processed line 240000 of 729927Processed line 250000 of 729927Processed line 260000 of 729927Processed line 270000 of 729927Processed line 280000 of 729927Processed line 290000 of 729927Processed line 300000 of 729927Processed line 310000 of 729927Processed line 320000 of 729927Processed line 330000 of 729927Processed line 340000 of 729927Processed line 350000 of 729927Processed line 360000 of 729927Processed line 370000 of 729927Processed line 380000 of 729927Processed line 390000 of 729927Processed line 400000 of 729927Processed line 410000 of 729927Processed line 420000 of 729927Processed line 430000 of 729927Processed line 440000 of 729927Processed line 450000 of 729927Processed line 460000 of 729927Processed line 470000 of 729927Processed line 480000 of 729927Processed line 490000 of 729927Processed line 500000 of 729927Processed line 510000 of 729927Processed line 520000 of 729927Processed line 530000 of 729927Processed line 540000 of 729927Processed line 550000 of 729927Processed line 560000 of 729927Processed line 570000 of 729927Processed line 580000 of 729927Processed line 590000 of 729927Processed line 600000 of 729927Processed line 610000 of 729927Processed line 620000 of 729927Processed line 630000 of 729927Processed line 640000 of 729927Processed line 650000 of 729927Processed line 660000 of 729927Processed line 670000 of 729927Processed line 680000 of 729927Processed line 690000 of 729927Processed line 700000 of 729927Processed line 710000 of 729927Processed line 720000 of 729927Processed line 729927 of 729927
+
+=== hab2hi | scan mag | target 4.0 yr | n_cpu 2 ===
+>> Resuming: 137 of 225 grid points recovered from C:\Users\nicol\Desktop\LIFE\LIFESim\thesis/reproducibility/stageb6_crashed\stageb6_mag_hi.log
+
+>> TSE Run No. 1 / 225 (M=9.00mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 2 / 225 (M=9.00mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 3 / 225 (M=9.00mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 4 / 225 (M=9.00mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 5 / 225 (M=9.00mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 6 / 225 (M=9.00mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 7 / 225 (M=9.00mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 8 / 225 (M=9.00mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 9 / 225 (M=9.00mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 10 / 225 (M=9.00mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 11 / 225 (M=9.00mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 12 / 225 (M=9.00mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 13 / 225 (M=9.00mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 14 / 225 (M=9.00mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 15 / 225 (M=9.00mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 16 / 225 (M=8.79mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 17 / 225 (M=8.79mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 18 / 225 (M=8.79mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 19 / 225 (M=8.79mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 20 / 225 (M=8.79mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 21 / 225 (M=8.79mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 22 / 225 (M=8.79mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 23 / 225 (M=8.79mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 24 / 225 (M=8.79mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 25 / 225 (M=8.79mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 26 / 225 (M=8.79mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 27 / 225 (M=8.79mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 28 / 225 (M=8.79mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 29 / 225 (M=8.79mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 30 / 225 (M=8.79mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 31 / 225 (M=8.57mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 32 / 225 (M=8.57mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 33 / 225 (M=8.57mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 34 / 225 (M=8.57mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 35 / 225 (M=8.57mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 36 / 225 (M=8.57mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 37 / 225 (M=8.57mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 38 / 225 (M=8.57mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 39 / 225 (M=8.57mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 40 / 225 (M=8.57mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 41 / 225 (M=8.57mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 42 / 225 (M=8.57mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 43 / 225 (M=8.57mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 44 / 225 (M=8.57mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 45 / 225 (M=8.57mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 46 / 225 (M=8.36mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 47 / 225 (M=8.36mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 48 / 225 (M=8.36mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 49 / 225 (M=8.36mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 50 / 225 (M=8.36mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 51 / 225 (M=8.36mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 52 / 225 (M=8.36mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 53 / 225 (M=8.36mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 54 / 225 (M=8.36mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 55 / 225 (M=8.36mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 56 / 225 (M=8.36mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 57 / 225 (M=8.36mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 58 / 225 (M=8.36mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 59 / 225 (M=8.36mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 60 / 225 (M=8.36mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 61 / 225 (M=8.14mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 62 / 225 (M=8.14mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 63 / 225 (M=8.14mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 64 / 225 (M=8.14mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 65 / 225 (M=8.14mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 66 / 225 (M=8.14mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 67 / 225 (M=8.14mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 68 / 225 (M=8.14mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 69 / 225 (M=8.14mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 70 / 225 (M=8.14mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 71 / 225 (M=8.14mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 72 / 225 (M=8.14mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 73 / 225 (M=8.14mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 74 / 225 (M=8.14mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 75 / 225 (M=8.14mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 76 / 225 (M=7.93mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 77 / 225 (M=7.93mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 78 / 225 (M=7.93mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 79 / 225 (M=7.93mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 80 / 225 (M=7.93mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 81 / 225 (M=7.93mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 82 / 225 (M=7.93mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 83 / 225 (M=7.93mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 84 / 225 (M=7.93mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 85 / 225 (M=7.93mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 86 / 225 (M=7.93mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 87 / 225 (M=7.93mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 88 / 225 (M=7.93mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 89 / 225 (M=7.93mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 90 / 225 (M=7.93mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 91 / 225 (M=7.71mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 92 / 225 (M=7.71mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 93 / 225 (M=7.71mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 94 / 225 (M=7.71mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 95 / 225 (M=7.71mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 96 / 225 (M=7.71mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 97 / 225 (M=7.71mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 98 / 225 (M=7.71mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 99 / 225 (M=7.71mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 100 / 225 (M=7.71mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 101 / 225 (M=7.71mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 102 / 225 (M=7.71mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 103 / 225 (M=7.71mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 104 / 225 (M=7.71mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 105 / 225 (M=7.71mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 106 / 225 (M=7.50mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 107 / 225 (M=7.50mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 108 / 225 (M=7.50mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 109 / 225 (M=7.50mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 110 / 225 (M=7.50mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 111 / 225 (M=7.50mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 112 / 225 (M=7.50mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 113 / 225 (M=7.50mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 114 / 225 (M=7.50mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 115 / 225 (M=7.50mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 116 / 225 (M=7.50mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 117 / 225 (M=7.50mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 118 / 225 (M=7.50mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 119 / 225 (M=7.50mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 120 / 225 (M=7.50mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 121 / 225 (M=7.29mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 122 / 225 (M=7.29mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 123 / 225 (M=7.29mag, FoR=83°) :
+>> Recovered from log: 516 ph/s
+
+>> TSE Run No. 124 / 225 (M=7.29mag, FoR=79°) :
+>> Recovered from log: 392 ph/s
+
+>> TSE Run No. 125 / 225 (M=7.29mag, FoR=76°) :
+>> Recovered from log: 308 ph/s
+
+>> TSE Run No. 126 / 225 (M=7.29mag, FoR=72°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 127 / 225 (M=7.29mag, FoR=69°) :
+>> Recovered from log: 255 ph/s
+
+>> TSE Run No. 128 / 225 (M=7.29mag, FoR=65°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 129 / 225 (M=7.29mag, FoR=61°) :
+>> Recovered from log: 241 ph/s
+
+>> TSE Run No. 130 / 225 (M=7.29mag, FoR=58°) :
+>> Recovered from log: 39 ph/s
+
+>> TSE Run No. 131 / 225 (M=7.29mag, FoR=54°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 132 / 225 (M=7.29mag, FoR=51°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 133 / 225 (M=7.29mag, FoR=47°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 134 / 225 (M=7.29mag, FoR=44°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 135 / 225 (M=7.29mag, FoR=40°) :
+>> Recovered from log: 0 ph/s
+
+>> TSE Run No. 136 / 225 (M=7.07mag, FoR=90°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 137 / 225 (M=7.07mag, FoR=86°) :
+>> Recovered from log: 560 ph/s
+
+>> TSE Run No. 138 / 225 (M=7.07mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_30784_ac2f2594f90649308621bdad3582888f_9eefc499bf1a40e88b4f392afd8c4220\30784-2363227233680-a99429b002e04a7ba29f596d996b26d9.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+C:\Users\nicol\.conda\envs\LIFEsim\Lib\site-packages\joblib\externals\loky\backend\resource_tracker.py:343: UserWarning: resource_tracker: C:\Users\nicol\AppData\Local\Temp\joblib_memmapping_folder_30784_ac2f2594f90649308621bdad3582888f_9eefc499bf1a40e88b4f392afd8c4220\30784-2363227233680-74c32238c0374569993b72d9ae14c59e.pkl: PermissionError(13, 'Der Prozess kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird')
+  warnings.warn(
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.67  -  0.8 yrs observedExperiment_1: 55.75  -  1.3 yrs observedExperiment_1: 60.57  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 139 / 225 (M=7.07mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.9  -  1.3 yrs observedExperiment_1: 61.46  -  1.6 yrs observed
+ > Upper Bound MT: 4.00 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 140 / 225 (M=7.07mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.65  -  0.8 yrs observedExperiment_1: 55.74  -  1.3 yrs observedExperiment_1: 61.99  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 141 / 225 (M=7.07mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.56  -  1.3 yrs observedExperiment_1: 61.8  -  1.6 yrs observed
+ > Upper Bound MT: 3.97 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 142 / 225 (M=7.07mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.78  -  0.8 yrs observedExperiment_1: 55.67  -  1.3 yrs observedExperiment_1: 61.93  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 143 / 225 (M=7.07mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.77  -  0.4 yrs observedExperiment_1: 41.76  -  0.8 yrs observedExperiment_1: 55.41  -  1.3 yrs observedExperiment_1: 61.42  -  1.6 yrs observed
+ > Upper Bound MT: 4.04 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 144 / 225 (M=7.07mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.62  -  0.4 yrs observedExperiment_1: 41.6  -  0.8 yrs observedExperiment_1: 55.18  -  1.3 yrs observedExperiment_1: 60.02  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 145 / 225 (M=7.07mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 40.94  -  0.8 yrs observedExperiment_1: 54.31  -  1.3 yrs observedExperiment_1: 60.94  -  1.6 yrs observed
+ > Upper Bound MT: 4.05 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 146 / 225 (M=7.07mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 147 / 225 (M=7.07mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 148 / 225 (M=7.07mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 149 / 225 (M=7.07mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 150 / 225 (M=7.07mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 151 / 225 (M=6.86mag, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.01  -  1.3 yrs observedExperiment_1: 60.62  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 152 / 225 (M=6.86mag, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.1  -  1.3 yrs observedExperiment_1: 60.47  -  1.5 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 153 / 225 (M=6.86mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.67  -  0.8 yrs observedExperiment_1: 55.75  -  1.3 yrs observedExperiment_1: 60.57  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 154 / 225 (M=6.86mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.9  -  1.3 yrs observedExperiment_1: 61.46  -  1.6 yrs observed
+ > Upper Bound MT: 4.00 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 155 / 225 (M=6.86mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.65  -  0.8 yrs observedExperiment_1: 55.74  -  1.3 yrs observedExperiment_1: 61.99  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 156 / 225 (M=6.86mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.56  -  1.3 yrs observedExperiment_1: 61.8  -  1.6 yrs observed
+ > Upper Bound MT: 3.97 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 157 / 225 (M=6.86mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.78  -  0.8 yrs observedExperiment_1: 55.67  -  1.3 yrs observedExperiment_1: 61.93  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 158 / 225 (M=6.86mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.77  -  0.4 yrs observedExperiment_1: 41.76  -  0.8 yrs observedExperiment_1: 55.41  -  1.3 yrs observedExperiment_1: 61.42  -  1.6 yrs observed
+ > Upper Bound MT: 4.04 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 159 / 225 (M=6.86mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.62  -  0.4 yrs observedExperiment_1: 41.6  -  0.8 yrs observedExperiment_1: 55.18  -  1.3 yrs observedExperiment_1: 60.02  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 160 / 225 (M=6.86mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 40.94  -  0.8 yrs observedExperiment_1: 54.31  -  1.3 yrs observedExperiment_1: 60.94  -  1.6 yrs observed
+ > Upper Bound MT: 4.05 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 161 / 225 (M=6.86mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 162 / 225 (M=6.86mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 163 / 225 (M=6.86mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 164 / 225 (M=6.86mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 165 / 225 (M=6.86mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 166 / 225 (M=6.64mag, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.01  -  1.3 yrs observedExperiment_1: 60.62  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 167 / 225 (M=6.64mag, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.1  -  1.3 yrs observedExperiment_1: 60.47  -  1.5 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 168 / 225 (M=6.64mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.67  -  0.8 yrs observedExperiment_1: 55.75  -  1.3 yrs observedExperiment_1: 60.57  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 169 / 225 (M=6.64mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.9  -  1.3 yrs observedExperiment_1: 61.46  -  1.6 yrs observed
+ > Upper Bound MT: 4.00 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 170 / 225 (M=6.64mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.65  -  0.8 yrs observedExperiment_1: 55.74  -  1.3 yrs observedExperiment_1: 61.99  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 171 / 225 (M=6.64mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.56  -  1.3 yrs observedExperiment_1: 61.8  -  1.6 yrs observed
+ > Upper Bound MT: 3.97 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 172 / 225 (M=6.64mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.78  -  0.8 yrs observedExperiment_1: 55.67  -  1.3 yrs observedExperiment_1: 61.93  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 173 / 225 (M=6.64mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.77  -  0.4 yrs observedExperiment_1: 41.76  -  0.8 yrs observedExperiment_1: 55.41  -  1.3 yrs observedExperiment_1: 61.42  -  1.6 yrs observed
+ > Upper Bound MT: 4.04 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 174 / 225 (M=6.64mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.62  -  0.4 yrs observedExperiment_1: 41.6  -  0.8 yrs observedExperiment_1: 55.18  -  1.3 yrs observedExperiment_1: 60.02  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 175 / 225 (M=6.64mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 40.94  -  0.8 yrs observedExperiment_1: 54.31  -  1.3 yrs observedExperiment_1: 60.94  -  1.6 yrs observed
+ > Upper Bound MT: 4.05 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 176 / 225 (M=6.64mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 177 / 225 (M=6.64mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 178 / 225 (M=6.64mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 179 / 225 (M=6.64mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 180 / 225 (M=6.64mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 181 / 225 (M=6.43mag, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.08  -  1.3 yrs observedExperiment_1: 60.55  -  1.5 yrs observed
+ > Upper Bound MT: 3.94 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 182 / 225 (M=6.43mag, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.12  -  1.3 yrs observedExperiment_1: 60.4  -  1.5 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 183 / 225 (M=6.43mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.67  -  0.8 yrs observedExperiment_1: 55.81  -  1.3 yrs observedExperiment_1: 60.5  -  1.6 yrs observed
+ > Upper Bound MT: 3.94 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 184 / 225 (M=6.43mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.92  -  1.3 yrs observedExperiment_1: 61.39  -  1.6 yrs observed
+ > Upper Bound MT: 3.99 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 185 / 225 (M=6.43mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.65  -  0.8 yrs observedExperiment_1: 55.75  -  1.3 yrs observedExperiment_1: 61.92  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 186 / 225 (M=6.43mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.72  -  1.3 yrs observedExperiment_1: 61.73  -  1.6 yrs observed
+ > Upper Bound MT: 3.96 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 187 / 225 (M=6.43mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.78  -  0.8 yrs observedExperiment_1: 55.69  -  1.3 yrs observedExperiment_1: 61.86  -  1.6 yrs observed
+ > Upper Bound MT: 4.02 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 188 / 225 (M=6.43mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.77  -  0.4 yrs observedExperiment_1: 41.76  -  0.8 yrs observedExperiment_1: 55.54  -  1.3 yrs observedExperiment_1: 61.35  -  1.6 yrs observed
+ > Upper Bound MT: 4.04 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 189 / 225 (M=6.43mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.62  -  0.4 yrs observedExperiment_1: 41.6  -  0.8 yrs observedExperiment_1: 55.16  -  1.3 yrs observedExperiment_1: 59.95  -  1.6 yrs observed
+ > Upper Bound MT: 4.03 yrs @ 241 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 241 ph/s (1 iteration)
+
+>> TSE Run No. 190 / 225 (M=6.43mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 41.01  -  0.8 yrs observedExperiment_1: 54.42  -  1.3 yrs observedExperiment_1: 60.86  -  1.6 yrs observed
+ > Upper Bound MT: 4.04 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 191 / 225 (M=6.43mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 192 / 225 (M=6.43mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 193 / 225 (M=6.43mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 194 / 225 (M=6.43mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 195 / 225 (M=6.43mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 196 / 225 (M=6.21mag, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.08  -  1.3 yrs observedExperiment_1: 60.39  -  1.5 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 197 / 225 (M=6.21mag, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.12  -  1.3 yrs observedExperiment_1: 60.24  -  1.5 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 198 / 225 (M=6.21mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.67  -  0.8 yrs observedExperiment_1: 55.82  -  1.3 yrs observedExperiment_1: 60.34  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 199 / 225 (M=6.21mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.97  -  1.3 yrs observedExperiment_1: 61.17  -  1.6 yrs observed
+ > Upper Bound MT: 3.98 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 200 / 225 (M=6.21mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.65  -  0.8 yrs observedExperiment_1: 55.72  -  1.3 yrs observedExperiment_1: 61.64  -  1.6 yrs observed
+ > Upper Bound MT: 4.01 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 201 / 225 (M=6.21mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 55.77  -  1.3 yrs observedExperiment_1: 61.45  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 202 / 225 (M=6.21mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.78  -  0.8 yrs observedExperiment_1: 55.6  -  1.3 yrs observedExperiment_1: 61.47  -  1.6 yrs observed
+ > Upper Bound MT: 4.00 yrs @ 255 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 255 ph/s (1 iteration)
+
+>> TSE Run No. 203 / 225 (M=6.21mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.77  -  0.4 yrs observedExperiment_1: 41.76  -  0.8 yrs observedExperiment_1: 55.72  -  1.3 yrs observedExperiment_1: 61.58  -  1.6 yrs observed
+ > Upper Bound MT: 4.08 yrs @ 241 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 26.22  -  0.4 yrs observedExperiment_1: 42.17  -  0.8 yrs observedExperiment_1: 56.17  -  1.3 yrs observedExperiment_1: 60.3  -  1.5 yrs observed
+ > Lower Bound MT: 3.70 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 192 ph/s | Upper Bound: 241 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.78  -  0.4 yrs observedExperiment_1: 41.87  -  0.8 yrs observedExperiment_1: 55.78  -  1.3 yrs observedExperiment_1: 60.96  -  1.6 yrs observed
+ > Retrieved Guess MT: 3.96 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 192 ph/s (3 iterations)
+
+>> TSE Run No. 204 / 225 (M=6.21mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.61  -  0.4 yrs observedExperiment_1: 41.52  -  0.8 yrs observedExperiment_1: 55.4  -  1.3 yrs observedExperiment_1: 60.14  -  1.6 yrs observed
+ > Upper Bound MT: 3.98 yrs @ 192 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 192 ph/s (1 iteration)
+
+>> TSE Run No. 205 / 225 (M=6.21mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 40.97  -  0.8 yrs observedExperiment_1: 54.63  -  1.3 yrs observedExperiment_1: 60.16  -  1.6 yrs observed
+ > Upper Bound MT: 4.02 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 206 / 225 (M=6.21mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 207 / 225 (M=6.21mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 208 / 225 (M=6.21mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 209 / 225 (M=6.21mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 210 / 225 (M=6.21mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 211 / 225 (M=6.00mag, FoR=90°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.77  -  0.8 yrs observedExperiment_1: 56.19  -  1.3 yrs observedExperiment_1: 60.67  -  1.6 yrs observed
+ > Upper Bound MT: 3.98 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 212 / 225 (M=6.00mag, FoR=86°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.29  -  0.4 yrs observedExperiment_1: 41.82  -  0.8 yrs observedExperiment_1: 56.2  -  1.3 yrs observedExperiment_1: 60.52  -  1.5 yrs observed
+ > Upper Bound MT: 3.97 yrs @ 560 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 560 ph/s (1 iteration)
+
+>> TSE Run No. 213 / 225 (M=6.00mag, FoR=83°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 41.75  -  0.8 yrs observedExperiment_1: 56.01  -  1.3 yrs observedExperiment_1: 59.68  -  1.5 yrs observed
+ > Upper Bound MT: 3.94 yrs @ 516 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 516 ph/s (1 iteration)
+
+>> TSE Run No. 214 / 225 (M=6.00mag, FoR=79°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 26.03  -  0.4 yrs observedExperiment_1: 41.74  -  0.8 yrs observedExperiment_1: 55.99  -  1.3 yrs observedExperiment_1: 60.93  -  1.6 yrs observed
+ > Upper Bound MT: 3.95 yrs @ 392 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 392 ph/s (1 iteration)
+
+>> TSE Run No. 215 / 225 (M=6.00mag, FoR=76°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.9  -  0.4 yrs observedExperiment_1: 41.71  -  0.8 yrs observedExperiment_1: 55.93  -  1.3 yrs observedExperiment_1: 62.05  -  1.6 yrs observed
+ > Upper Bound MT: 4.00 yrs @ 308 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 308 ph/s (1 iteration)
+
+>> TSE Run No. 216 / 225 (M=6.00mag, FoR=72°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.89  -  0.4 yrs observedExperiment_1: 41.74  -  0.8 yrs observedExperiment_1: 56.0  -  1.3 yrs observedExperiment_1: 63.07  -  1.6 yrs observed
+ > Upper Bound MT: 4.11 yrs @ 255 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 26.3  -  0.4 yrs observedExperiment_1: 42.05  -  0.8 yrs observedExperiment_1: 57.19  -  1.3 yrs observedExperiment_1: 61.03  -  1.4 yrs observed
+ > Lower Bound MT: 3.69 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 192 ph/s | Upper Bound: 255 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.76  -  0.4 yrs observedExperiment_1: 41.87  -  0.8 yrs observedExperiment_1: 56.35  -  1.3 yrs observedExperiment_1: 62.03  -  1.6 yrs observed
+ > Retrieved Guess MT: 3.92 yrs
+ > Iteration Result: GUESS REJECTED (too pessimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 192 ph/s | Guess: 219 ph/s | Upper Bound: 255 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.99  -  0.4 yrs observedExperiment_1: 41.91  -  0.8 yrs observedExperiment_1: 56.28  -  1.3 yrs observedExperiment_1: 61.46  -  1.6 yrs observed
+ > Retrieved Guess MT: 3.93 yrs
+ > Iteration Result: GUESS REJECTED (too pessimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 219 ph/s | Guess: 234 ph/s | Upper Bound: 255 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.94  -  0.4 yrs observedExperiment_1: 41.82  -  0.8 yrs observedExperiment_1: 56.17  -  1.3 yrs observedExperiment_1: 61.26  -  1.6 yrs observed
+ > Retrieved Guess MT: 3.94 yrs
+ > Iteration Result: GUESS REJECTED (too pessimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 234 ph/s | Guess: 241 ph/s | Upper Bound: 255 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.92  -  0.4 yrs observedExperiment_1: 41.8  -  0.8 yrs observedExperiment_1: 56.13  -  1.3 yrs observedExperiment_1: 63.12  -  1.6 yrs observed
+ > Retrieved Guess MT: 4.09 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+>> Budget CUTOFF found: 241 ph/s (6 iterations)
+
+>> TSE Run No. 217 / 225 (M=6.00mag, FoR=69°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.93  -  0.4 yrs observedExperiment_1: 41.92  -  0.8 yrs observedExperiment_1: 56.26  -  1.3 yrs observedExperiment_1: 62.24  -  1.6 yrs observed
+ > Upper Bound MT: 4.06 yrs @ 241 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 26.28  -  0.4 yrs observedExperiment_1: 42.15  -  0.8 yrs observedExperiment_1: 56.91  -  1.3 yrs observedExperiment_1: 60.99  -  1.5 yrs observed
+ > Lower Bound MT: 3.72 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 202 ph/s | Upper Bound: 241 ph/s
+Number of planets detected for each experiment:
+Experiment_1: 25.97  -  0.4 yrs observedExperiment_1: 42.01  -  0.8 yrs observedExperiment_1: 56.39  -  1.3 yrs observedExperiment_1: 61.98  -  1.6 yrs observed
+ > Retrieved Guess MT: 4.01 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 202 ph/s (3 iterations)
+
+>> TSE Run No. 218 / 225 (M=6.00mag, FoR=65°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.78  -  0.4 yrs observedExperiment_1: 41.9  -  0.8 yrs observedExperiment_1: 56.22  -  1.3 yrs observedExperiment_1: 60.76  -  1.5 yrs observed
+ > Upper Bound MT: 3.93 yrs @ 192 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 192 ph/s (1 iteration)
+
+>> TSE Run No. 219 / 225 (M=6.00mag, FoR=61°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.61  -  0.4 yrs observedExperiment_1: 41.48  -  0.8 yrs observedExperiment_1: 55.75  -  1.3 yrs observedExperiment_1: 59.43  -  1.5 yrs observed
+ > Upper Bound MT: 3.93 yrs @ 192 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 192 ph/s (1 iteration)
+
+>> TSE Run No. 220 / 225 (M=6.00mag, FoR=58°) :
+ > Finding budget CUTOFF for MT target (4.0 yrs)
+Number of planets detected for each experiment:
+Experiment_1: 25.26  -  0.4 yrs observedExperiment_1: 41.09  -  0.8 yrs observedExperiment_1: 55.06  -  1.3 yrs observedExperiment_1: 59.84  -  1.6 yrs observed
+ > Upper Bound MT: 4.02 yrs @ 39 ph/s
+>> Cancelling procedure: upper bound matches or is below MT target (fluctuation?)
+>> Budget CUTOFF found: 39 ph/s (1 iteration)
+
+>> TSE Run No. 221 / 225 (M=6.00mag, FoR=54°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 222 / 225 (M=6.00mag, FoR=51°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 223 / 225 (M=6.00mag, FoR=47°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 224 / 225 (M=6.00mag, FoR=44°) :
+>> Impossible to reach MT target, no budget permissible.
+
+>> TSE Run No. 225 / 225 (M=6.00mag, FoR=40°) :
+>> Impossible to reach MT target, no budget permissible.
+>> mag done in 0.69 h -> C:\Users\nicol\Desktop\LIFE\LIFESim\thesis\images\tse\physical\phys_hi_mag_4p0.pdf

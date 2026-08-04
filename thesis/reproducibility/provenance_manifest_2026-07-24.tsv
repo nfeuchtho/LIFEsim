@@ -1,0 +1,6 @@
+artifact	path	size_or_count	sha256	notes
+Hab2Min catalog	lifesim/catalogs/catalog_hab2lo.txt	126552381 bytes	8a43af800ed5bb7540a0656506057dbb4f9dabc6be553fcf510f767ccd751aee	Exact production input
+Hab2Max catalog	lifesim/catalogs/catalog_hab2hi.txt	190077716 bytes	c372e4f665856ceb2ea7dc4c0e059b8447a119586e75e74e98001c3425da9799	Exact production input
+Production source closure	repository working tree at commit 2fd5142529d232ca359f0e17cb4946a88ef2aa88	recorded file closure	00751d7dca7c095819401bd95c8ccfb64a5778ccd39469c9935eb29673b12b90	Commit alone is insufficient because production tree was dirty
+Complete final result tree	C:/Users/nicol/Desktop/LIFE/Master Thesis/Plots/TSE Linear	52 files; 1895071 bytes	61889403be458b5ac65bc7c63bde4eebf260a6251d5ed4bca3e0c2dd1d3181cc	Only authoritative final plot/value source
+Validation scripts	recorded validation script closure	recorded file closure	040dd0bca26ba14c17a2b8cbed2745e0fa444d0c8956c851e388e442fc1897b1	Numerical checks reported in thesis

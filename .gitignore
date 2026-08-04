@@ -1,0 +1,39 @@
+/life_sim.py
+/__init__.py
+/lifesim/archive/
+/archive/
+/lifesim/gui/Earth_Clear_R1000_10pc_Björn_Konrad.txt
+/lifesim/parametric_models/
+LIFEsim.egg-info/
+__pycache__/
+*.pyc
+/kira_testing/
+.idea/
+.ai/
+/lifesim/catalogs/
+/lifesim/analysis/test_scripts/*_out/
+
+# scratch and generated trees
+/tmp/
+/output/
+/graphify-out/
+/code_review_backups/
+/thesis/output/
+/thesis/graphify-out/
+
+# LaTeX build artifacts (main.pdf and main_diff.pdf are kept deliberately)
+*.aux
+*.log
+# ...but run logs from the data-collection scripts are records, not artifacts
+!thesis/reproducibility/*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+thesis/_diff.tex
+thesis/main_draft2*.pdf

@@ -1,0 +1,5 @@
+operating points: 25 total, 8 original, 17 held out
+classifier variable: flat-family relative spread (zeros included, as in cell_stats)
+Spearman(z, rel spread), original points: -0.976 [-0.952, -0.524] (95% bootstrap over points)
+Spearman, held-out points: -0.944
+held-out z>=3 with rel spread <40%: 15/15; held-out z<3 with rel spread >=40%: 2/2

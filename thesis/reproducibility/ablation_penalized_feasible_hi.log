@@ -1,0 +1,855 @@
+﻿
+Processed line 0 of 729927
+Processed line 10000 of 729927
+Processed line 20000 of 729927
+Processed line 30000 of 729927
+Processed line 40000 of 729927
+Processed line 50000 of 729927
+Processed line 60000 of 729927
+Processed line 70000 of 729927
+Processed line 80000 of 729927
+Processed line 90000 of 729927
+Processed line 100000 of 729927
+Processed line 110000 of 729927
+Processed line 120000 of 729927
+Processed line 130000 of 729927
+Processed line 140000 of 729927
+Processed line 150000 of 729927
+Processed line 160000 of 729927
+Processed line 170000 of 729927
+Processed line 180000 of 729927
+Processed line 190000 of 729927
+Processed line 200000 of 729927
+Processed line 210000 of 729927
+Processed line 220000 of 729927
+Processed line 230000 of 729927
+Processed line 240000 of 729927
+Processed line 250000 of 729927
+Processed line 260000 of 729927
+Processed line 270000 of 729927
+Processed line 280000 of 729927
+Processed line 290000 of 729927
+Processed line 300000 of 729927
+Processed line 310000 of 729927
+Processed line 320000 of 729927
+Processed line 330000 of 729927
+Processed line 340000 of 729927
+Processed line 350000 of 729927
+Processed line 360000 of 729927
+Processed line 370000 of 729927
+Processed line 380000 of 729927
+Processed line 390000 of 729927
+Processed line 400000 of 729927
+Processed line 410000 of 729927
+Processed line 420000 of 729927
+Processed line 430000 of 729927
+Processed line 440000 of 729927
+Processed line 450000 of 729927
+Processed line 460000 of 729927
+Processed line 470000 of 729927
+Processed line 480000 of 729927
+Processed line 490000 of 729927
+Processed line 500000 of 729927
+Processed line 510000 of 729927
+Processed line 520000 of 729927
+Processed line 530000 of 729927
+Processed line 540000 of 729927
+Processed line 550000 of 729927
+Processed line 560000 of 729927
+Processed line 570000 of 729927
+Processed line 580000 of 729927
+Processed line 590000 of 729927
+Processed line 600000 of 729927
+Processed line 610000 of 729927
+Processed line 620000 of 729927
+Processed line 630000 of 729927
+Processed line 640000 of 729927
+Processed line 650000 of 729927
+Processed line 660000 of 729927
+Processed line 670000 of 729927
+Processed line 680000 of 729927
+Processed line 690000 of 729927
+Processed line 700000 of 729927
+Processed line 710000 of 729927
+Processed line 720000 of 729927
+Processed line 729927 of 729927
+
+=== hab2hi | penalized | throughput=0.075 | eff_tot=0.045 | order=4 ===
+ > Finding budget CUTOFF for MT target (8.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.18  -  0.5 yrs observed
+Experiment_1: 25.02  -  1.2 yrs observed
+Experiment_1: 32.47  -  2.1 yrs observed
+Experiment_1: 39.25  -  2.9 yrs observed
+Experiment_1: 45.47  -  3.9 yrs observed
+Experiment_1: 51.37  -  5.0 yrs observed
+Experiment_1: 56.44  -  6.1 yrs observed
+Experiment_1: 60.1  -  6.8 yrs observed
+ > Upper Bound MT: 19.82 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 232 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.74  -  0.4 yrs observed
+Experiment_1: 30.12  -  1.0 yrs observed
+Experiment_1: 39.96  -  1.6 yrs observed
+Experiment_1: 49.05  -  2.3 yrs observed
+Experiment_1: 57.14  -  3.0 yrs observed
+Experiment_1: 62.02  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.90 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 68 ph/s | Upper Bound: 232 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.02  -  0.4 yrs observed
+Experiment_1: 30.66  -  1.0 yrs observed
+Experiment_1: 40.18  -  1.6 yrs observed
+Experiment_1: 49.75  -  2.2 yrs observed
+Experiment_1: 57.61  -  2.9 yrs observed
+Experiment_1: 62.66  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.15 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 48 ph/s | Upper Bound: 68 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.02  -  0.4 yrs observed
+Experiment_1: 30.72  -  1.0 yrs observed
+Experiment_1: 40.37  -  1.6 yrs observed
+Experiment_1: 49.69  -  2.2 yrs observed
+Experiment_1: 57.65  -  2.9 yrs observed
+Experiment_1: 62.7  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.09 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 38 ph/s | Upper Bound: 48 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.06  -  0.4 yrs observed
+Experiment_1: 30.79  -  1.0 yrs observed
+Experiment_1: 40.37  -  1.6 yrs observed
+Experiment_1: 49.63  -  2.2 yrs observed
+Experiment_1: 57.69  -  2.9 yrs observed
+Experiment_1: 62.48  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.01 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 38 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 20.06  -  0.4 yrs observed
+Experiment_1: 30.79  -  1.0 yrs observed
+Experiment_1: 40.37  -  1.6 yrs observed
+Experiment_1: 49.63  -  2.2 yrs observed
+Experiment_1: 57.69  -  2.9 yrs observed
+Experiment_1: 62.48  -  3.4 yrs observed
+>> 8.0 yr | flat: 38.405318868285676 ph/s/um | achieved 8.0143 yr (residual +0.0143) (103.6 s)
+ > Finding budget CUTOFF for MT target (8.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.93  -  0.5 yrs observed
+Experiment_1: 26.2  -  1.1 yrs observed
+Experiment_1: 34.6  -  1.8 yrs observed
+Experiment_1: 41.64  -  2.6 yrs observed
+Experiment_1: 48.51  -  3.5 yrs observed
+Experiment_1: 55.19  -  4.4 yrs observed
+Experiment_1: 61.12  -  5.4 yrs observed
+Experiment_1: 61.66  -  5.4 yrs observed
+ > Upper Bound MT: 14.38 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 351 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.82  -  0.4 yrs observed
+Experiment_1: 30.39  -  1.0 yrs observed
+Experiment_1: 39.96  -  1.6 yrs observed
+Experiment_1: 49.25  -  2.3 yrs observed
+Experiment_1: 57.05  -  3.0 yrs observed
+Experiment_1: 62.0  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.41 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 164 ph/s | Upper Bound: 351 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.93  -  0.4 yrs observed
+Experiment_1: 30.62  -  1.0 yrs observed
+Experiment_1: 40.21  -  1.6 yrs observed
+Experiment_1: 49.5  -  2.2 yrs observed
+Experiment_1: 57.68  -  2.9 yrs observed
+Experiment_1: 62.46  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.05 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 142 ph/s | Upper Bound: 164 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.93  -  0.4 yrs observed
+Experiment_1: 30.62  -  0.9 yrs observed
+Experiment_1: 40.22  -  1.6 yrs observed
+Experiment_1: 49.54  -  2.2 yrs observed
+Experiment_1: 57.69  -  2.9 yrs observed
+Experiment_1: 62.17  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.00 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 142 ph/s (5 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.93  -  0.4 yrs observed
+Experiment_1: 30.62  -  0.9 yrs observed
+Experiment_1: 40.22  -  1.6 yrs observed
+Experiment_1: 49.54  -  2.2 yrs observed
+Experiment_1: 57.69  -  2.9 yrs observed
+Experiment_1: 62.17  -  3.4 yrs observed
+>> 8.0 yr | long_weighted: 142.58711983012404 ph/s/um | achieved 7.9998 yr (residual -0.0002) (79.4 s)
+ > Finding budget CUTOFF for MT target (8.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 17.94  -  0.5 yrs observed
+Experiment_1: 27.96  -  1.1 yrs observed
+Experiment_1: 36.86  -  1.9 yrs observed
+Experiment_1: 44.58  -  2.7 yrs observed
+Experiment_1: 51.76  -  3.6 yrs observed
+Experiment_1: 58.14  -  4.5 yrs observed
+Experiment_1: 60.39  -  4.8 yrs observed
+ > Upper Bound MT: 13.86 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 373 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.74  -  0.4 yrs observed
+Experiment_1: 30.29  -  1.0 yrs observed
+Experiment_1: 40.39  -  1.6 yrs observed
+Experiment_1: 49.61  -  2.3 yrs observed
+Experiment_1: 57.59  -  3.0 yrs observed
+Experiment_1: 62.11  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.78 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 120 ph/s | Upper Bound: 373 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.06  -  0.4 yrs observed
+Experiment_1: 30.63  -  1.0 yrs observed
+Experiment_1: 40.46  -  1.6 yrs observed
+Experiment_1: 49.75  -  2.2 yrs observed
+Experiment_1: 57.73  -  2.9 yrs observed
+Experiment_1: 62.47  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.16 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 83 ph/s | Upper Bound: 120 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.06  -  0.4 yrs observed
+Experiment_1: 30.77  -  1.0 yrs observed
+Experiment_1: 40.3  -  1.6 yrs observed
+Experiment_1: 49.81  -  2.2 yrs observed
+Experiment_1: 57.71  -  2.9 yrs observed
+Experiment_1: 62.73  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.19 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 54 ph/s | Upper Bound: 83 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.05  -  0.4 yrs observed
+Experiment_1: 30.8  -  1.0 yrs observed
+Experiment_1: 40.49  -  1.6 yrs observed
+Experiment_1: 49.76  -  2.2 yrs observed
+Experiment_1: 57.73  -  2.9 yrs observed
+Experiment_1: 62.41  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.01 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 54 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 20.05  -  0.4 yrs observed
+Experiment_1: 30.8  -  1.0 yrs observed
+Experiment_1: 40.49  -  1.6 yrs observed
+Experiment_1: 49.76  -  2.2 yrs observed
+Experiment_1: 57.73  -  2.9 yrs observed
+Experiment_1: 62.41  -  3.4 yrs observed
+>> 8.0 yr | short_weighted: 54.70301617229366 ph/s/um | achieved 8.0123 yr (residual +0.0123) (90.0 s)
+ > Finding budget CUTOFF for MT target (8.5 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.18  -  0.5 yrs observed
+Experiment_1: 25.02  -  1.2 yrs observed
+Experiment_1: 32.47  -  2.1 yrs observed
+Experiment_1: 39.25  -  2.9 yrs observed
+Experiment_1: 45.47  -  3.9 yrs observed
+Experiment_1: 51.37  -  5.0 yrs observed
+Experiment_1: 56.44  -  6.1 yrs observed
+Experiment_1: 60.1  -  6.8 yrs observed
+ > Upper Bound MT: 19.82 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 551 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.15  -  0.4 yrs observed
+Experiment_1: 29.56  -  1.0 yrs observed
+Experiment_1: 39.23  -  1.7 yrs observed
+Experiment_1: 47.69  -  2.4 yrs observed
+Experiment_1: 55.32  -  3.1 yrs observed
+Experiment_1: 60.85  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.57 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 258 ph/s | Upper Bound: 551 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.65  -  0.4 yrs observed
+Experiment_1: 30.14  -  1.0 yrs observed
+Experiment_1: 39.8  -  1.6 yrs observed
+Experiment_1: 48.86  -  2.3 yrs observed
+Experiment_1: 56.98  -  3.0 yrs observed
+Experiment_1: 61.99  -  3.5 yrs observed
+ > Retrieved Guess MT: 9.00 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 167 ph/s | Upper Bound: 258 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.84  -  0.4 yrs observed
+Experiment_1: 30.25  -  1.0 yrs observed
+Experiment_1: 40.24  -  1.6 yrs observed
+Experiment_1: 49.53  -  2.3 yrs observed
+Experiment_1: 57.16  -  3.0 yrs observed
+Experiment_1: 62.72  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.60 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 149 ph/s | Upper Bound: 167 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.84  -  0.4 yrs observed
+Experiment_1: 30.21  -  1.0 yrs observed
+Experiment_1: 40.15  -  1.6 yrs observed
+Experiment_1: 49.42  -  2.3 yrs observed
+Experiment_1: 57.1  -  3.0 yrs observed
+Experiment_1: 63.07  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.61 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 7
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 134 ph/s | Upper Bound: 149 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.88  -  0.4 yrs observed
+Experiment_1: 30.33  -  1.0 yrs observed
+Experiment_1: 40.22  -  1.6 yrs observed
+Experiment_1: 49.5  -  2.3 yrs observed
+Experiment_1: 57.28  -  3.0 yrs observed
+Experiment_1: 63.11  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.54 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 134 ph/s (7 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.88  -  0.4 yrs observed
+Experiment_1: 30.33  -  1.0 yrs observed
+Experiment_1: 40.22  -  1.6 yrs observed
+Experiment_1: 49.5  -  2.3 yrs observed
+Experiment_1: 57.28  -  3.0 yrs observed
+Experiment_1: 63.11  -  3.5 yrs observed
+>> 8.5 yr | flat: 134.0452630647819 ph/s/um | achieved 8.5399 yr (residual +0.0399) (95.0 s)
+ > Finding budget CUTOFF for MT target (8.5 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.93  -  0.5 yrs observed
+Experiment_1: 26.2  -  1.1 yrs observed
+Experiment_1: 34.6  -  1.8 yrs observed
+Experiment_1: 41.64  -  2.6 yrs observed
+Experiment_1: 48.51  -  3.5 yrs observed
+Experiment_1: 55.19  -  4.4 yrs observed
+Experiment_1: 61.12  -  5.4 yrs observed
+Experiment_1: 61.66  -  5.4 yrs observed
+ > Upper Bound MT: 14.38 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 831 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.3  -  0.4 yrs observed
+Experiment_1: 29.65  -  1.0 yrs observed
+Experiment_1: 39.1  -  1.6 yrs observed
+Experiment_1: 47.89  -  2.3 yrs observed
+Experiment_1: 55.82  -  3.0 yrs observed
+Experiment_1: 61.63  -  3.6 yrs observed
+ > Retrieved Guess MT: 9.00 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 538 ph/s | Upper Bound: 831 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.68  -  0.4 yrs observed
+Experiment_1: 30.1  -  1.0 yrs observed
+Experiment_1: 39.89  -  1.6 yrs observed
+Experiment_1: 49.03  -  2.3 yrs observed
+Experiment_1: 56.76  -  3.0 yrs observed
+Experiment_1: 61.8  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.67 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 451 ph/s | Upper Bound: 538 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.73  -  0.4 yrs observed
+Experiment_1: 30.14  -  1.0 yrs observed
+Experiment_1: 40.01  -  1.6 yrs observed
+Experiment_1: 49.11  -  2.3 yrs observed
+Experiment_1: 57.01  -  3.0 yrs observed
+Experiment_1: 62.29  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.59 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 411 ph/s | Upper Bound: 451 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.75  -  0.4 yrs observed
+Experiment_1: 30.26  -  1.0 yrs observed
+Experiment_1: 40.01  -  1.6 yrs observed
+Experiment_1: 49.16  -  2.3 yrs observed
+Experiment_1: 57.07  -  3.0 yrs observed
+Experiment_1: 61.76  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.48 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 411 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.75  -  0.4 yrs observed
+Experiment_1: 30.26  -  1.0 yrs observed
+Experiment_1: 40.01  -  1.6 yrs observed
+Experiment_1: 49.16  -  2.3 yrs observed
+Experiment_1: 57.07  -  3.0 yrs observed
+Experiment_1: 61.76  -  3.4 yrs observed
+>> 8.5 yr | long_weighted: 411.39864096189854 ph/s/um | achieved 8.4810 yr (residual -0.0190) (81.4 s)
+ > Finding budget CUTOFF for MT target (8.5 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 17.94  -  0.5 yrs observed
+Experiment_1: 27.96  -  1.1 yrs observed
+Experiment_1: 36.86  -  1.9 yrs observed
+Experiment_1: 44.58  -  2.7 yrs observed
+Experiment_1: 51.76  -  3.6 yrs observed
+Experiment_1: 58.14  -  4.5 yrs observed
+Experiment_1: 60.39  -  4.8 yrs observed
+ > Upper Bound MT: 13.86 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 883 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.4  -  0.4 yrs observed
+Experiment_1: 30.12  -  1.0 yrs observed
+Experiment_1: 39.93  -  1.7 yrs observed
+Experiment_1: 48.53  -  2.4 yrs observed
+Experiment_1: 56.36  -  3.1 yrs observed
+Experiment_1: 61.77  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.61 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 407 ph/s | Upper Bound: 883 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.74  -  0.4 yrs observed
+Experiment_1: 30.43  -  1.0 yrs observed
+Experiment_1: 40.41  -  1.6 yrs observed
+Experiment_1: 49.55  -  2.3 yrs observed
+Experiment_1: 57.41  -  3.0 yrs observed
+Experiment_1: 62.02  -  3.5 yrs observed
+ > Retrieved Guess MT: 8.86 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 291 ph/s | Upper Bound: 407 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.84  -  0.4 yrs observed
+Experiment_1: 30.44  -  1.0 yrs observed
+Experiment_1: 40.34  -  1.6 yrs observed
+Experiment_1: 49.61  -  2.3 yrs observed
+Experiment_1: 57.53  -  3.0 yrs observed
+Experiment_1: 61.68  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.65 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 248 ph/s | Upper Bound: 291 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.87  -  0.4 yrs observed
+Experiment_1: 30.37  -  1.0 yrs observed
+Experiment_1: 40.41  -  1.6 yrs observed
+Experiment_1: 49.57  -  2.3 yrs observed
+Experiment_1: 57.59  -  3.0 yrs observed
+Experiment_1: 61.75  -  3.4 yrs observed
+ > Retrieved Guess MT: 8.47 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 248 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.87  -  0.4 yrs observed
+Experiment_1: 30.37  -  1.0 yrs observed
+Experiment_1: 40.41  -  1.6 yrs observed
+Experiment_1: 49.57  -  2.3 yrs observed
+Experiment_1: 57.59  -  3.0 yrs observed
+Experiment_1: 61.75  -  3.4 yrs observed
+>> 8.5 yr | short_weighted: 248.84416834081458 ph/s/um | achieved 8.4667 yr (residual -0.0333) (90.3 s)
+ > Finding budget CUTOFF for MT target (9.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.18  -  0.5 yrs observed
+Experiment_1: 25.02  -  1.2 yrs observed
+Experiment_1: 32.47  -  2.1 yrs observed
+Experiment_1: 39.25  -  2.9 yrs observed
+Experiment_1: 45.47  -  3.9 yrs observed
+Experiment_1: 51.37  -  5.0 yrs observed
+Experiment_1: 56.44  -  6.1 yrs observed
+Experiment_1: 60.1  -  6.8 yrs observed
+ > Upper Bound MT: 19.82 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 851 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 18.88  -  0.4 yrs observed
+Experiment_1: 29.23  -  1.0 yrs observed
+Experiment_1: 38.48  -  1.7 yrs observed
+Experiment_1: 46.69  -  2.4 yrs observed
+Experiment_1: 54.38  -  3.2 yrs observed
+Experiment_1: 61.61  -  4.0 yrs observed
+Experiment_1: 62.14  -  4.1 yrs observed
+ > Retrieved Guess MT: 10.63 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 420 ph/s | Upper Bound: 851 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.44  -  0.4 yrs observed
+Experiment_1: 29.9  -  1.0 yrs observed
+Experiment_1: 39.64  -  1.6 yrs observed
+Experiment_1: 48.28  -  2.3 yrs observed
+Experiment_1: 56.19  -  3.1 yrs observed
+Experiment_1: 61.71  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.43 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 326 ph/s | Upper Bound: 420 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.56  -  0.4 yrs observed
+Experiment_1: 29.96  -  1.0 yrs observed
+Experiment_1: 39.87  -  1.6 yrs observed
+Experiment_1: 48.65  -  2.3 yrs observed
+Experiment_1: 56.55  -  3.1 yrs observed
+Experiment_1: 62.44  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.26 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 277 ph/s | Upper Bound: 326 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.62  -  0.4 yrs observed
+Experiment_1: 30.07  -  1.0 yrs observed
+Experiment_1: 39.88  -  1.6 yrs observed
+Experiment_1: 48.74  -  2.3 yrs observed
+Experiment_1: 56.79  -  3.1 yrs observed
+Experiment_1: 61.89  -  3.6 yrs observed
+ > Retrieved Guess MT: 9.05 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 277 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.62  -  0.4 yrs observed
+Experiment_1: 30.07  -  1.0 yrs observed
+Experiment_1: 39.88  -  1.6 yrs observed
+Experiment_1: 48.74  -  2.3 yrs observed
+Experiment_1: 56.79  -  3.1 yrs observed
+Experiment_1: 61.89  -  3.6 yrs observed
+>> 9.0 yr | flat: 277.81626754826647 ph/s/um | achieved 9.0464 yr (residual +0.0464) (87.4 s)
+ > Finding budget CUTOFF for MT target (9.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 16.93  -  0.5 yrs observed
+Experiment_1: 26.2  -  1.1 yrs observed
+Experiment_1: 34.6  -  1.8 yrs observed
+Experiment_1: 41.64  -  2.6 yrs observed
+Experiment_1: 48.51  -  3.5 yrs observed
+Experiment_1: 55.19  -  4.4 yrs observed
+Experiment_1: 61.12  -  5.4 yrs observed
+Experiment_1: 61.66  -  5.4 yrs observed
+ > Upper Bound MT: 14.38 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 1284 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 18.89  -  0.4 yrs observed
+Experiment_1: 29.33  -  1.0 yrs observed
+Experiment_1: 38.3  -  1.6 yrs observed
+Experiment_1: 46.89  -  2.3 yrs observed
+Experiment_1: 54.77  -  3.1 yrs observed
+Experiment_1: 61.72  -  3.9 yrs observed
+ > Retrieved Guess MT: 9.53 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 950 ph/s | Upper Bound: 1284 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.25  -  0.4 yrs observed
+Experiment_1: 29.53  -  1.0 yrs observed
+Experiment_1: 38.88  -  1.6 yrs observed
+Experiment_1: 47.6  -  2.3 yrs observed
+Experiment_1: 55.49  -  3.1 yrs observed
+Experiment_1: 61.65  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.11 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 885 ph/s | Upper Bound: 950 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.3  -  0.4 yrs observed
+Experiment_1: 29.62  -  1.0 yrs observed
+Experiment_1: 39.0  -  1.6 yrs observed
+Experiment_1: 47.84  -  2.3 yrs observed
+Experiment_1: 55.73  -  3.1 yrs observed
+Experiment_1: 61.67  -  3.7 yrs observed
+ > Retrieved Guess MT: 9.08 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 6
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 837 ph/s | Upper Bound: 885 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.3  -  0.4 yrs observed
+Experiment_1: 29.65  -  1.0 yrs observed
+Experiment_1: 39.1  -  1.6 yrs observed
+Experiment_1: 47.9  -  2.3 yrs observed
+Experiment_1: 55.81  -  3.0 yrs observed
+Experiment_1: 61.6  -  3.6 yrs observed
+ > Retrieved Guess MT: 9.01 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 837 ph/s (6 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.3  -  0.4 yrs observed
+Experiment_1: 29.65  -  1.0 yrs observed
+Experiment_1: 39.1  -  1.6 yrs observed
+Experiment_1: 47.9  -  2.3 yrs observed
+Experiment_1: 55.81  -  3.0 yrs observed
+Experiment_1: 61.6  -  3.6 yrs observed
+>> 9.0 yr | long_weighted: 837.931808002346 ph/s/um | achieved 9.0081 yr (residual +0.0081) (87.4 s)
+ > Finding budget CUTOFF for MT target (9.0 yrs)
+Number of planets detected for each experiment:
+
+Experiment_1: 17.94  -  0.5 yrs observed
+Experiment_1: 27.96  -  1.1 yrs observed
+Experiment_1: 36.86  -  1.9 yrs observed
+Experiment_1: 44.58  -  2.7 yrs observed
+Experiment_1: 51.76  -  3.6 yrs observed
+Experiment_1: 58.14  -  4.5 yrs observed
+Experiment_1: 60.39  -  4.8 yrs observed
+ > Upper Bound MT: 13.86 yrs @ 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 20.0  -  0.4 yrs observed
+Experiment_1: 30.88  -  0.9 yrs observed
+Experiment_1: 40.38  -  1.5 yrs observed
+Experiment_1: 49.79  -  2.2 yrs observed
+Experiment_1: 58.01  -  2.9 yrs observed
+Experiment_1: 61.28  -  3.2 yrs observed
+ > Lower Bound MT: 7.65 yrs @ 0 ph/s
+ > Ready to start iterations
+---------------------------
+ > Iteration 3
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 1364 ph/s | Upper Bound: 5000 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.33  -  0.4 yrs observed
+Experiment_1: 29.78  -  1.0 yrs observed
+Experiment_1: 39.51  -  1.7 yrs observed
+Experiment_1: 48.0  -  2.4 yrs observed
+Experiment_1: 55.72  -  3.2 yrs observed
+Experiment_1: 61.33  -  3.8 yrs observed
+ > Retrieved Guess MT: 10.20 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 4
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 770 ph/s | Upper Bound: 1364 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.54  -  0.4 yrs observed
+Experiment_1: 30.18  -  1.0 yrs observed
+Experiment_1: 40.11  -  1.7 yrs observed
+Experiment_1: 48.68  -  2.4 yrs observed
+Experiment_1: 56.53  -  3.1 yrs observed
+Experiment_1: 60.66  -  3.5 yrs observed
+ > Retrieved Guess MT: 9.30 yrs
+ > Iteration Result: GUESS REJECTED (too optimistic)
+---------------------------
+ > Iteration 5
+---------------------------
+ > Lower Bound: 0 ph/s | Guess: 641 ph/s | Upper Bound: 770 ph/s
+Number of planets detected for each experiment:
+
+Experiment_1: 19.55  -  0.4 yrs observed
+Experiment_1: 30.25  -  1.0 yrs observed
+Experiment_1: 40.32  -  1.6 yrs observed
+Experiment_1: 48.92  -  2.3 yrs observed
+Experiment_1: 56.94  -  3.1 yrs observed
+Experiment_1: 61.48  -  3.6 yrs observed
+ > Retrieved Guess MT: 9.04 yrs
+ > Iteration Result: GUESS ACCEPTED
+>> Budget CUTOFF found: 641 ph/s (5 iterations)
+Number of planets detected for each experiment:
+
+Experiment_1: 19.55  -  0.4 yrs observed
+Experiment_1: 30.25  -  1.0 yrs observed
+Experiment_1: 40.32  -  1.6 yrs observed
+Experiment_1: 48.92  -  2.3 yrs observed
+Experiment_1: 56.94  -  3.1 yrs observed
+Experiment_1: 61.48  -  3.6 yrs observed
+>> 9.0 yr | short_weighted: 641.2267867251102 ph/s/um | achieved 9.0442 yr (residual +0.0442) (74.6 s)
+
+Results: C:\Users\nicol\Desktop\LIFE\LIFESim\thesis\reproducibility\ablation_throughput.tsv

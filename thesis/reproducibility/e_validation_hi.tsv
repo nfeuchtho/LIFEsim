@@ -1,0 +1,9 @@
+catalog	config	category	mean	p16	p84	universes	n_stars	n_planets
+hab2hi	corrected	total	13.840	10.0	17.0	100	234	17259
+hab2hi	corrected	opt_hz	13.640	10.0	17.0	100	234	17259
+hab2hi	corrected	con_hz	6.890	4.8	9.0	100	234	17259
+hab2hi	corrected	eec	4.210	2.0	6.0	100	234	17259
+hab2hi	pre_correction	total	14.930	11.0	18.2	100	234	17259
+hab2hi	pre_correction	opt_hz	14.710	11.0	18.0	100	234	17259
+hab2hi	pre_correction	con_hz	7.500	5.0	10.0	100	234	17259
+hab2hi	pre_correction	eec	4.530	2.0	7.0	100	234	17259

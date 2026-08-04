@@ -1,0 +1,105 @@
+% AMS simulation-phase flowchart, redrawn in TikZ.
+%
+% Replaces images/ams_flowchart_simphase.png, a flat raster whose node text set
+% at about 2.7 pt on the printed landscape page. Vector text at 7.5 pt here.
+% Node text, colours and topology are those of the original drawing; only the
+% placement is changed, so that the two flows occupy the height of the page and
+% no connector crosses another.
+%
+% Column pitch 2.95 cm over eight columns spans 22.65 cm against the 22.86 cm
+% of landscape \textwidth; do not widen without rechecking that.
+\begin{spacing}{1}
+\begin{tikzpicture}[
+    font=\fontsize{7}{8}\selectfont,
+    >={Stealth[length=4pt,width=3pt]},
+    every node/.style={align=center},
+    proc/.style={rectangle, draw=none, fill=fcblue, text=white,
+                 text width=2.4cm, minimum height=0.95cm, inner sep=2pt},
+    calc/.style={rectangle, rounded corners=3pt, draw=none, fill=fcgreen,
+                 text=white, text width=2.4cm, minimum height=0.95cm, inner sep=2pt,
+                 execute at begin node={\hyphenpenalty=10000\relax
+                                        \exhyphenpenalty=10000\relax}},
+    dec/.style={diamond, draw=none, fill=fcamber, text=white, aspect=2.0,
+                inner sep=0pt, text width=1.6cm, minimum height=1.0cm},
+    flow/.style={ellipse, draw=none, fill=fcred, text=white,
+                 minimum width=2.0cm, minimum height=0.9cm, inner sep=1pt},
+    % Terminators are rounded tiles rather than trapezia: TikZ sizes a trapezium
+    % from the node height and the slant angle, which made "Entry" twice the
+    % width of a process box and overlap its neighbour.
+    term/.style={rectangle, rounded corners=9pt, draw=none, fill=fcdark,
+                 text=white, text width=1.7cm, minimum height=0.85cm,
+                 inner sep=3pt, font=\fontsize{7}{8}\bfseries\selectfont},
+    lbl/.style={inner sep=0.5pt, fill=white, font=\fontsize{6.2}{7}\selectfont},
+    link/.style={->, thin, draw=fcline},
+]
+
+% ---- columns (x) and rows (y), in cm -------------------------------------
+\def\ca{1.00}\def\cb{3.95}\def\cc{6.90}\def\cd{9.85}
+\def\ce{12.80}\def\cf{15.75}\def\cg{18.70}\def\ch{21.65}
+\def\ra{5.4}\def\rb{3.6}\def\rc{1.8}\def\rd{0.3}
+\def\re{-1.5}\def\rf{-3.3}\def\rg{-5.1}\def\rh{-6.9}
+
+% ---- simulation (SNR) flow ------------------------------------------------
+\node[term]  (entry) at (\ca,\ra) {Entry};
+\node[dec]   (d1)    at (\ca,\rb) {AMS SNR\\is current?};
+\node[flow]  (s1)    at (\cb,\ra) {SNR flow};
+\node[proc]  (a1)    at (\cc,\ra) {Get next planet /\\star from catalog};
+\node[dec]   (d2)    at (\cd,\ra) {Star seen?};
+\node[calc]  (g1)    at (\cd,\rb) {Compute localzodi,\\baseline, stellar\\leakage};
+
+\node[proc]  (a3)    at (\ce,\rb) {Save stellar data\\to memo dict};
+\node[proc]  (a2)    at (\ce,\ra) {Get localzodi,\\baseline, stellar\\leakage from memo};
+\node[calc]  (g2)    at (\cf,\ra) {Compute planetary\\signal and noise};
+\node[calc]  (g3)    at (\cg,\ra) {Compute total\\SNR};
+\node[proc]  (a4)    at (\cg,\rb) {Store SNR of\\target in SNR array};
+\node[dec]   (d3)    at (\cg,\rc) {Is last\\target?};
+\node[proc]  (a5)    at (\cb,\rd) {Save SNR array as\\AMS SNR array};
+
+% ---- filter flow ----------------------------------------------------------
+\node[flow]  (f1)    at (\cb,\rg) {Filter flow};
+\node[proc]  (b1)    at (\cc,\rg) {Get next planet /\\star from catalog};
+\node[dec]   (d4)    at (\cd,\rg) {Star seen?};
+\node[calc]  (g4)    at (\cd,\rf) {Prepare filter\\values:\\magnitude,\\field of regard};
+\node[proc]  (b2)    at (\ce,\rf) {Save visibility of\\star to memo};
+\node[proc]  (b3)    at (\ce,\rg) {Get visibility of\\star from memo};
+\node[dec]   (d5)    at (\cf,\rg) {Star visible?};
+\node[proc]  (b4)    at (\cf,\rf) {Store AMS SNR of\\target in RESULT\\SNR array};
+\node[proc]  (b5)    at (\cf,\rh) {Store ZERO for\\target in RESULT\\SNR array};
+\node[dec]   (d6)    at (\cg,\re) {Is last\\target?};
+\node[term]  (exit)  at (\ch,\re) {Return\\RESULT\\SNR array};
+
+% ---- connectors: simulation flow ------------------------------------------
+\draw[link] (entry) -- (d1);
+\draw[link] (d1.east) -| node[lbl,pos=0.72] {No} (s1.south);
+\draw[link] (s1) -- node[lbl] {reset} (a1);
+\draw[link] (a1) -- (d2);
+\draw[link] (d2) -- node[lbl] {Yes} (a2);
+\draw[link] (d2) -- node[lbl] {No} (g1);
+\draw[link] (g1) -- (a3);
+\draw[link] (a3) -- (a2);
+\draw[link] (a2) -- (g2);
+\draw[link] (g2) -- (g3);
+\draw[link] (g3) -- (a4);
+\draw[link] (a4) -- (d3);
+\draw[link] (d3.west) -| node[lbl,pos=0.25] {No} (a1.south);
+\draw[link] (d3.south) |- node[lbl,pos=0.72] {Yes} (a5.east);
+\draw[link] (a5.south) -- (f1.north);
+
+% ---- connectors: filter flow ----------------------------------------------
+\draw[link] (d1.south) |- node[lbl,pos=0.30] {Yes} (f1.west);
+\draw[link] (f1) -- node[lbl] {reset} (b1);
+\draw[link] (b1) -- (d4);
+\draw[link] (d4) -- node[lbl] {No} (g4);
+\draw[link] (g4) -- (b2);
+\draw[link] (b2) -- (b3);
+\draw[link] (d4) -- node[lbl] {Yes} (b3);
+\draw[link] (b3) -- (d5);
+\draw[link] (d5) -- node[lbl] {Yes} (b4);
+\draw[link] (d5) -- node[lbl] {No} (b5);
+\draw[link] (b4.east) -| (d6.south);
+\draw[link] (b5.east) -| (d6.south);
+\draw[link] (d6) -- node[lbl] {Yes} (exit);
+\draw[link] (d6.west) -| node[lbl,pos=0.25] {No} (b1.north);
+
+\end{tikzpicture}
+\end{spacing}
